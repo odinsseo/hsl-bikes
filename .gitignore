@@ -1,0 +1,63 @@
+# Byte-compiled / optimized
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Virtual environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+*.egg
+
+# Testing / coverage
+.coverage
+htmlcov/
+.pytest_cache/
+.tox/
+.nox/
+
+# Data (large files — download from HSL)
+data/trips/*
+!data/trips/.gitkeep
+data/merged/*
+!data/merged/.gitkeep
+data/train/*
+!data/train/.gitkeep
+data/validation/*
+!data/validation/.gitkeep
+data/test/*
+!data/test/.gitkeep
+
+# Generated outputs
+**/station_map.html
+
+# Reference (external repo — optional, remove from .gitignore to include)
+reference/
+
+# Logs and temp
+*.log
+*.tmp
+.cache/
