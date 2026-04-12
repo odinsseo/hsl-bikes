@@ -40,16 +40,24 @@ htmlcov/
 .nox/
 
 # Data (large files — download from HSL)
-data/trips/*
-!data/trips/.gitkeep
-data/merged/*
-!data/merged/.gitkeep
-data/train/*
-!data/train/.gitkeep
-data/validation/*
-!data/validation/.gitkeep
-data/test/*
-!data/test/.gitkeep
+data/primary/trips/*
+!data/primary/trips/.gitkeep
+
+# Prepared datasets
+data/prepared/merged/*
+!data/prepared/merged/.gitkeep
+data/prepared/splits/train/*
+!data/prepared/splits/train/.gitkeep
+data/prepared/splits/validation/*
+!data/prepared/splits/validation/.gitkeep
+data/prepared/splits/test/*
+!data/prepared/splits/test/.gitkeep
+
+# Generated artifacts
+data/artifacts/audit/*
+data/artifacts/graphs/*
+data/artifacts/network/*
+data/artifacts/experiments/*
 
 # Generated outputs
 **/station_map.html

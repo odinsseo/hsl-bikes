@@ -1,29 +1,34 @@
 """
-Load and prepare Helsinki/Espoo city bike OD trip data from data/trips (by year/month),
-merge with station coordinates from data/stations, and optionally split into
+Load and prepare Helsinki/Espoo city bike OD trip data from data/primary/trips (by year/month),
+merge with station coordinates from data/primary/stations, and optionally split into
 train/validation/test by time (time-series best practice).
-Output: data/merged/trips_merged.csv and data/train, data/validation, data/test.
+Output: data/prepared/merged/trips_merged.csv and data/prepared/splits/*.
 """
-from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor, as_completed
-from pathlib import Path
+
 import os
 import sys
-import warnings
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from pathlib import Path
 
-import pandas as pd
+import polars as pl
 from tqdm import tqdm
 
 # Ensure project root is on path for config import
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
 from config.constants import RENAMED_STATIONS, STATIONS_TO_DROP_PREFIXES
+
 DATA_DIR = PROJECT_ROOT / "data"
-TRIPS_BASE = DATA_DIR / "trips"
-STATIONS_DIR = DATA_DIR / "stations"
-MERGED_DIR = DATA_DIR / "merged"
-TRAIN_DIR = DATA_DIR / "train"
-VAL_DIR = DATA_DIR / "validation"
-TEST_DIR = DATA_DIR / "test"
+PRIMARY_DIR = DATA_DIR / "primary"
+PREPARED_DIR = DATA_DIR / "prepared"
+
+TRIPS_BASE = PRIMARY_DIR / "trips"
+STATIONS_DIR = PRIMARY_DIR / "stations"
+MERGED_DIR = PREPARED_DIR / "merged"
+SPLITS_DIR = PREPARED_DIR / "splits"
+TRAIN_DIR = SPLITS_DIR / "train"
+VAL_DIR = SPLITS_DIR / "validation"
+TEST_DIR = SPLITS_DIR / "test"
 
 # Column name normalization (OD CSV headers)
 COL_RENAME = {
@@ -36,10 +41,20 @@ COL_RENAME = {
     "Covered distance (m)": "distance_m",
     "Duration (sec.)": "duration_sec",
 }
+CSV_SCHEMA_OVERRIDES = {
+    "Departure station id": pl.String,
+    "Return station id": pl.String,
+    "Departure station name": pl.String,
+    "Return station name": pl.String,
+    "departure_id": pl.String,
+    "return_id": pl.String,
+    "departure_name": pl.String,
+    "return_name": pl.String,
+}
 
 
 def get_trip_csv_paths():
-    """Return list of (path, year, month) for all trip CSVs under data/trips."""
+    """Return list of (path, year, month) for all trip CSVs under data/primary/trips."""
     paths = []
     if not TRIPS_BASE.exists():
         return paths
@@ -58,113 +73,171 @@ def get_trip_csv_paths():
     return paths
 
 
-def load_stations(stations_dir: Path) -> pd.DataFrame:
+def load_stations(stations_dir: Path) -> pl.DataFrame:
     """
-    Load station coordinates from data/stations (one CSV). Returns raw DataFrame
+    Load station coordinates from data/primary/stations (one CSV). Returns raw DataFrame
     with columns Nimi, Name, x (longitude), y (latitude) for building coords map.
     """
     csvs = list(stations_dir.glob("*.csv"))
     if not csvs:
         raise FileNotFoundError(f"No CSV found in {stations_dir}")
-    df = pd.read_csv(csvs[0])
+    df = pl.read_csv(csvs[0], try_parse_dates=True)
     if "x" not in df.columns or "y" not in df.columns:
         raise ValueError(f"Stations CSV must have x, y. Found: {list(df.columns)}")
     return df
 
 
-def build_name_to_coords_from_df(stations_df: pd.DataFrame) -> dict:
+def build_station_coordinates(stations_df: pl.DataFrame) -> pl.DataFrame:
     """
-    Build dict station name -> (lat, lon) from stations DataFrame.
+    Build station_name -> (lat, lon) table from stations DataFrame.
     Uses both Nimi and Name so trip data matches whether it uses Finnish or English names.
     """
-    coords = {}
-    for _, row in stations_df.iterrows():
+    rows: list[dict[str, object]] = []
+    for row in stations_df.iter_rows(named=True):
+        if row.get("x") is None or row.get("y") is None:
+            continue
         lon, lat = float(row["x"]), float(row["y"])
         for col in ("Nimi", "Name"):
-            if col in stations_df.columns and pd.notna(row[col]):
+            if col in stations_df.columns and row.get(col) is not None:
                 name = str(row[col]).strip()
                 if name and name.lower() != "nan":
-                    coords[name] = (lat, lon)
-    return coords
+                    rows.append(
+                        {
+                            "station_name": name,
+                            "latitude": lat,
+                            "longitude": lon,
+                        }
+                    )
+
+    if not rows:
+        raise ValueError("No valid station names with coordinates found.")
+
+    return pl.DataFrame(rows).unique(subset=["station_name"], keep="first")
 
 
-def load_and_rename_one(path: Path) -> pd.DataFrame:
+def load_and_rename_one(path: Path) -> pl.DataFrame:
     """Load a single trip CSV with dtypes/parse_dates and normalize column names."""
-    kwargs = {"low_memory": False}
-    # Speed up read: specify dtypes and parse_dates (only for columns that exist)
-    kwargs["dtype"] = {
-        "Departure station id": str,
-        "Return station id": str,
-        "Departure station name": str,
-        "Return station name": str,
-    }
-    kwargs["parse_dates"] = ["Departure", "Return"]
-    df = pd.read_csv(path, **kwargs)
+    df = pl.read_csv(
+        path,
+        try_parse_dates=True,
+        schema_overrides=CSV_SCHEMA_OVERRIDES,
+    )
+
     rename = {k: v for k, v in COL_RENAME.items() if k in df.columns}
     if rename:
         df = df.rename(columns=rename)
-    if "Covered distance (m)" in df.columns and "distance_m" not in df.columns:
-        df = df.rename(columns={"Covered distance (m)": "distance_m"})
-    if "Duration (sec.)" in df.columns and "duration_sec" not in df.columns:
-        df = df.rename(columns={"Duration (sec.)": "duration_sec"})
+
+    cast_expr = []
+    for col in ("departure_id", "return_id", "departure_name", "return_name"):
+        if col in df.columns:
+            cast_expr.append(pl.col(col).cast(pl.String, strict=False).alias(col))
+    if cast_expr:
+        df = df.with_columns(cast_expr)
+
     return df
 
 
-def clean_trips(df: pd.DataFrame) -> pd.DataFrame:
+def clean_trips(df: pl.DataFrame) -> pl.DataFrame:
     """Apply renames, drop maintenance stations, parse datetimes, add speed."""
-    df = df.copy()
-    # Strip station names
     for col in ("departure_name", "return_name"):
         if col in df.columns:
-            df[col] = df[col].astype(str).str.strip()
-    # Replace renamed stations
-    df["departure_name"] = df["departure_name"].replace(RENAMED_STATIONS)
-    df["return_name"] = df["return_name"].replace(RENAMED_STATIONS)
-    # Drop maintenance / non-public stations
+            df = df.with_columns(
+                pl.col(col)
+                .cast(pl.String)
+                .str.strip_chars()
+                .map_elements(
+                    lambda x: RENAMED_STATIONS.get(x, x) if x is not None else None,
+                    return_dtype=pl.String,
+                )
+                .alias(col)
+            )
+
+    # Drop maintenance / non-public stations.
     for col in ("departure_name", "return_name"):
         if col in df.columns:
+            drop_expr = pl.lit(False)
             for prefix in STATIONS_TO_DROP_PREFIXES:
-                df = df[~df[col].astype(str).str.startswith(prefix)]
-    # Drop rows with missing critical fields
-    df = df.dropna(subset=["departure", "return", "departure_name", "return_name"], how="any")
-    # Parse datetimes (allow ISO and space format)
-    df["departure"] = pd.to_datetime(df["departure"], errors="coerce")
-    df["return"] = pd.to_datetime(df["return"], errors="coerce")
-    df = df.dropna(subset=["departure", "return"])
-    # Numeric distance/duration
-    for col, dtype in [("distance_m", float), ("duration_sec", float)]:
+                drop_expr = drop_expr | pl.col(col).str.starts_with(prefix)
+            df = df.filter(~drop_expr)
+
+    critical = [
+        c
+        for c in ("departure", "return", "departure_name", "return_name")
+        if c in df.columns
+    ]
+    if critical:
+        df = df.drop_nulls(critical)
+
+    for col in ("departure", "return"):
         if col in df.columns:
-            df[col] = pd.to_numeric(df[col], errors="coerce")
-    # Drop invalid duration/distance (e.g. negative or zero duration)
+            df = df.with_columns(
+                pl.col(col)
+                .cast(pl.String, strict=False)
+                .str.strptime(pl.Datetime, strict=False)
+                .alias(col)
+            )
+
+    datetime_cols = [c for c in ("departure", "return") if c in df.columns]
+    if datetime_cols:
+        df = df.drop_nulls(datetime_cols)
+
+    for col in ("distance_m", "duration_sec"):
+        if col in df.columns:
+            df = df.with_columns(pl.col(col).cast(pl.Float64, strict=False).alias(col))
+
     if "duration_sec" in df.columns:
-        df = df[df["duration_sec"] > 0]
+        df = df.filter(pl.col("duration_sec") > 0)
     if "distance_m" in df.columns:
-        df = df[df["distance_m"] >= 0]
-    # Average speed km/h: (distance_m / 1000) / (duration_sec / 3600) = distance_m / duration_sec * 3.6
-    df["speed_kmh"] = (df["distance_m"] / df["duration_sec"]) * 3.6
-    # Duration in minutes for convenience
-    df["duration_min"] = df["duration_sec"] / 60.0
+        df = df.filter(pl.col("distance_m") >= 0)
+
+    if "distance_m" in df.columns and "duration_sec" in df.columns:
+        df = df.with_columns(
+            [
+                ((pl.col("distance_m") / pl.col("duration_sec")) * 3.6).alias(
+                    "speed_kmh"
+                ),
+                (pl.col("duration_sec") / 60.0).alias("duration_min"),
+            ]
+        )
+
     return df
 
 
-def add_station_coordinates(df: pd.DataFrame, name_to_coords: dict) -> pd.DataFrame:
-    """Add departure/return lat/lon via vectorized .map() from name_to_lat/lon dicts."""
-    name_to_lat = {k: v[0] for k, v in name_to_coords.items()}
-    name_to_lon = {k: v[1] for k, v in name_to_coords.items()}
-    df = df.copy()
-    df["departure_latitude"] = df["departure_name"].map(name_to_lat)
-    df["departure_longitude"] = df["departure_name"].map(name_to_lon)
-    df["return_latitude"] = df["return_name"].map(name_to_lat)
-    df["return_longitude"] = df["return_name"].map(name_to_lon)
-    return df
+def add_station_coordinates(
+    df: pl.DataFrame, station_coords: pl.DataFrame
+) -> pl.DataFrame:
+    """Add departure/return coordinates by joining station lookup table."""
+    dep = station_coords.rename(
+        {
+            "station_name": "departure_name",
+            "latitude": "departure_latitude",
+            "longitude": "departure_longitude",
+        }
+    )
+    ret = station_coords.rename(
+        {
+            "station_name": "return_name",
+            "latitude": "return_latitude",
+            "longitude": "return_longitude",
+        }
+    )
+    return df.join(dep, on="departure_name", how="left").join(
+        ret, on="return_name", how="left"
+    )
 
 
-def _load_and_clean_one(path: Path, year: int, month: int) -> pd.DataFrame:
+def _load_and_clean_one(path: Path, year: int, month: int) -> pl.DataFrame:
     """Load one trip CSV, rename, clean per-file; used by parallel workers."""
     df = load_and_rename_one(path)
-    df["_year"] = year
-    df["_month"] = month
+    df = df.with_columns([pl.lit(year).alias("_year"), pl.lit(month).alias("_month")])
     return clean_trips(df)
+
+
+def _parse_datetime(value: str):
+    parsed = pl.Series("ts", [value]).str.strptime(pl.Datetime, strict=False).item()
+    if parsed is None:
+        raise ValueError(f"Could not parse datetime: {value}")
+    return parsed
 
 
 def run(
@@ -185,65 +258,75 @@ def run(
     # Load stations once and build name -> (lat, lon) from it
     print("Loading stations...", end=" ", flush=True)
     stations_df = load_stations(STATIONS_DIR)
-    name_to_coords = build_name_to_coords_from_df(stations_df)
-    print(f"done ({len(name_to_coords)} station names with coordinates).")
+    station_coords = build_station_coordinates(stations_df)
+    print(f"done ({station_coords.height:,} station names with coordinates).")
 
     # Load and clean trip files in parallel (per-file clean), then concat
-    max_workers = min(len(paths), (os.cpu_count() or 2) - 1) or 1
+    max_workers = min(len(paths), max(1, (os.cpu_count() or 2) - 1))
     print(f"Loading and cleaning trip files (workers={max_workers})...")
     frames = []
-    with warnings.catch_warnings():
-        warnings.simplefilter("ignore", category=UserWarning)
-        try:
-            executor = ProcessPoolExecutor(max_workers=max_workers)
-        except (PermissionError, OSError):
-            executor = ThreadPoolExecutor(max_workers=max_workers)
-        try:
-            future_to_path = {
-                executor.submit(_load_and_clean_one, path, y, m): path
-                for path, y, m in paths
-            }
-            for future in tqdm(
-                as_completed(future_to_path),
-                total=len(paths),
-                desc="Trip files",
-                unit="file",
-            ):
-                path = future_to_path[future]
-                try:
-                    frames.append(future.result())
-                except Exception as e:
-                    tqdm.write(f"Skip {path.name}: {e}")
-        finally:
-            executor.shutdown(wait=True)
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        future_to_path = {
+            executor.submit(_load_and_clean_one, path, y, m): path
+            for path, y, m in paths
+        }
+        for future in tqdm(
+            as_completed(future_to_path),
+            total=len(paths),
+            desc="Trip files",
+            unit="file",
+        ):
+            path = future_to_path[future]
+            try:
+                frames.append(future.result())
+            except Exception as e:
+                tqdm.write(f"Skip {path.name}: {e}")
+
+    if not frames:
+        raise RuntimeError("No trip files could be loaded successfully.")
+
     print(f"Concatenating {len(frames)} DataFrames...", flush=True)
-    df = pd.concat(frames, ignore_index=True)
-    print(f"Adding station coordinates ({len(df):,} rows)...", flush=True)
-    df = add_station_coordinates(df, name_to_coords)
+    df = pl.concat(frames, how="vertical_relaxed")
+    print(f"Adding station coordinates ({df.height:,} rows)...", flush=True)
+    df = add_station_coordinates(df, station_coords)
 
     # Optional: drop rows with missing coordinates (stations not in our list)
-    missing_dep = df["departure_latitude"].isna()
-    missing_ret = df["return_latitude"].isna()
-    if missing_dep.any() or missing_ret.any():
-        n_before = len(df)
-        df = df.dropna(subset=["departure_latitude", "departure_longitude", "return_latitude", "return_longitude"])
-        print(f"Dropped {n_before - len(df):,} rows with missing station coordinates.")
+    coord_cols = [
+        "departure_latitude",
+        "departure_longitude",
+        "return_latitude",
+        "return_longitude",
+    ]
+    n_before = df.height
+    df = df.drop_nulls(coord_cols)
+    dropped = n_before - df.height
+    if dropped > 0:
+        print(f"Dropped {dropped:,} rows with missing station coordinates.")
+
     print("Sorting by departure time...", flush=True)
-    df = df.sort_values("departure").reset_index(drop=True)
+    df = df.sort("departure")
 
     if save_merged:
         MERGED_DIR.mkdir(parents=True, exist_ok=True)
         out_path = MERGED_DIR / "trips_merged.csv"
         print(f"Writing merged CSV to {out_path}...", flush=True)
-        df.to_csv(out_path, index=False)
-        print(f"  Saved merged data: {out_path} ({len(df):,} rows)")
+        df.write_csv(out_path)
+        print(f"  Saved merged data: {out_path} ({df.height:,} rows)")
 
     if save_splits:
-        train_end = pd.Timestamp(train_end_date)
-        val_end = pd.Timestamp(val_end_date)
-        train_df = df[df["departure"] < train_end]
-        val_df = df[(df["departure"] >= train_end) & (df["departure"] < val_end)]
-        test_df = df[df["departure"] >= val_end]
+        train_end = _parse_datetime(train_end_date)
+        val_end = _parse_datetime(val_end_date)
+        df = df.with_columns(
+            pl.col("departure")
+            .cast(pl.String, strict=False)
+            .str.strptime(pl.Datetime, strict=False)
+            .alias("departure")
+        ).drop_nulls(["departure"])
+        train_df = df.filter(pl.col("departure") < train_end)
+        val_df = df.filter(
+            (pl.col("departure") >= train_end) & (pl.col("departure") < val_end)
+        )
+        test_df = df.filter(pl.col("departure") >= val_end)
         print("Writing train/validation/test splits...")
         for name, part, dir_path in [
             ("train", train_df, TRAIN_DIR),
@@ -252,8 +335,8 @@ def run(
         ]:
             dir_path.mkdir(parents=True, exist_ok=True)
             fname = dir_path / f"{name}.csv"
-            part.to_csv(fname, index=False)
-            print(f"  {name}: {fname} ({len(part):,} rows)")
+            part.write_csv(fname)
+            print(f"  {name}: {fname} ({part.height:,} rows)")
     print("Done.")
 
     return df
