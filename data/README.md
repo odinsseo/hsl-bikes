@@ -61,6 +61,16 @@ This produces cleaned outputs under `data/prepared/`.
 
 ## Artifact generation workflow
 
+For transform methodology and leakage controls used by experiment artifacts, see:
+
+- `docs/target_preprocessing_methodology.md`
+
+All canonical experiment artifact directories consumed by notebooks are expected to include:
+
+1. `summary.json`
+2. `metadata.json` with preprocessing lineage fields
+3. Canonical results CSV with required schema columns
+
 Data audit:
 
 ```bash

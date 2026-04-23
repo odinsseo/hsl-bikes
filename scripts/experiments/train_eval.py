@@ -9,6 +9,11 @@ from typing import Any
 import numpy as np
 import polars as pl
 
+try:
+    from tqdm.auto import tqdm
+except Exception:  # pragma: no cover
+    tqdm = None
+
 from .config import (
     DATA_DIR,
     DEFAULT_COMMUNITIES,
@@ -17,6 +22,7 @@ from .config import (
     DEFAULT_TRAIN,
     DEFAULT_VALIDATION,
     parse_alpha_grid,
+    parse_int_grid,
 )
 from .data import (
     build_community_series,
@@ -33,6 +39,15 @@ from .models import (
     predict_graph_propagation,
     tune_graph_alpha,
 )
+from .preprocessing import (
+    TargetPreprocessingConfig,
+    apply_target_preprocessing,
+    build_preprocessing_metadata,
+    fit_target_preprocessing,
+    inverse_target_predictions,
+)
+from .provenance import build_run_metadata, write_metadata_sidecar
+from .safeguards import assert_train_graph_source
 
 DEFAULT_OUTPUT_DIR = DATA_DIR / "artifacts" / "experiments" / "train_eval_1h"
 DEFAULT_STATIONS_DIR = DATA_DIR / "primary" / "stations"
@@ -99,6 +114,12 @@ def parse_graph_set(text: str) -> tuple[str, ...]:
     return tuple(deduped)
 
 
+def _resolve_holiday_subdivision(args: argparse.Namespace) -> str | None:
+    if getattr(args, "holiday_national_only", False):
+        return None
+    return args.holiday_subdivision
+
+
 def build_station_cohort_indices(
     train_series: np.ndarray,
     station_index: list[str],
@@ -158,8 +179,339 @@ def metrics_for_indices(
     )
 
 
+def station_wmape_vector(
+    actual: np.ndarray,
+    pred: np.ndarray,
+    indices: np.ndarray,
+) -> np.ndarray:
+    if indices.size == 0:
+        return np.array([], dtype=float)
+
+    actual_subset = actual[:, indices]
+    pred_subset = pred[:, indices]
+    numerator = np.abs(actual_subset - pred_subset).sum(axis=0)
+    denominator = np.abs(actual_subset).sum(axis=0)
+
+    wmape = np.full(numerator.shape, np.nan, dtype=float)
+    valid = denominator > 0.0
+    wmape[valid] = numerator[valid] / denominator[valid]
+    return wmape
+
+
+def bootstrap_mean_ci(
+    values: np.ndarray,
+    *,
+    rng: np.random.Generator,
+    n_bootstrap: int,
+    ci_level: float,
+    batch_size: int = 2048,
+) -> tuple[float, float]:
+    clean = np.asarray(values, dtype=float)
+    clean = clean[np.isfinite(clean)]
+    if clean.size == 0:
+        return (np.nan, np.nan)
+    if clean.size == 1:
+        value = float(clean[0])
+        return (value, value)
+
+    n = int(clean.size)
+    n_bootstrap = max(int(n_bootstrap), 1)
+    batch_size = max(int(batch_size), 1)
+    alpha = (1.0 - float(ci_level)) / 2.0
+    means = np.empty(n_bootstrap, dtype=float)
+
+    written = 0
+    while written < n_bootstrap:
+        chunk = min(batch_size, n_bootstrap - written)
+        sample_idx = rng.integers(0, n, size=(chunk, n))
+        means[written : written + chunk] = clean[sample_idx].mean(axis=1)
+        written += chunk
+
+    lower = float(np.quantile(means, alpha))
+    upper = float(np.quantile(means, 1.0 - alpha))
+    return (lower, upper)
+
+
+def paired_sign_permutation_pvalue(
+    sample: np.ndarray,
+    reference: np.ndarray,
+    *,
+    rng: np.random.Generator,
+    n_permutations: int,
+    batch_size: int = 4096,
+) -> float:
+    sample_arr = np.asarray(sample, dtype=float)
+    reference_arr = np.asarray(reference, dtype=float)
+    mask = np.isfinite(sample_arr) & np.isfinite(reference_arr)
+    diff = sample_arr[mask] - reference_arr[mask]
+    if diff.size == 0:
+        return np.nan
+
+    observed = float(np.abs(np.mean(diff)))
+    if observed == 0.0:
+        return 1.0
+
+    n_permutations = max(int(n_permutations), 1)
+    batch_size = max(int(batch_size), 1)
+    extreme_count = 0
+
+    processed = 0
+    while processed < n_permutations:
+        chunk = min(batch_size, n_permutations - processed)
+        signs = rng.integers(0, 2, size=(chunk, diff.size), dtype=np.int8)
+        signed = signs.astype(np.float32, copy=False)
+        signed *= 2.0
+        signed -= 1.0
+
+        permuted_mean = np.abs(np.mean(signed * diff, axis=1))
+        extreme_count += int(np.sum(permuted_mean >= observed))
+        processed += chunk
+
+    return float((extreme_count + 1) / (n_permutations + 1))
+
+
+def build_station_robustness_rows(
+    *,
+    actual: np.ndarray,
+    predictions: dict[str, np.ndarray],
+    cohorts: dict[str, np.ndarray],
+    graph_set: tuple[str, ...],
+    reference_model: str,
+    rng: np.random.Generator,
+    n_bootstrap: int,
+    n_permutations: int,
+    ci_level: float,
+    progress: bool = False,
+    bootstrap_batch_size: int = 2048,
+    permutation_batch_size: int = 4096,
+) -> list[dict[str, Any]]:
+    if reference_model not in predictions:
+        available = sorted(predictions.keys())
+        raise ValueError(
+            f"Reference model '{reference_model}' is not available in predictions: {available}"
+        )
+
+    rows: list[dict[str, Any]] = []
+    graph_set_text = ",".join(graph_set)
+
+    reference_by_cohort: dict[str, np.ndarray] = {}
+    for cohort_name, idx in cohorts.items():
+        reference_by_cohort[cohort_name] = station_wmape_vector(
+            actual=actual,
+            pred=predictions[reference_model],
+            indices=idx,
+        )
+
+    tasks: list[tuple[str, np.ndarray, str, np.ndarray]] = []
+    for cohort_name, idx in cohorts.items():
+        for model_name, model_pred in predictions.items():
+            tasks.append((cohort_name, idx, model_name, model_pred))
+
+    iterator: Any = tasks
+    if progress and tqdm is not None:
+        iterator = tqdm(tasks, desc="Robustness rows", unit="row")
+
+    for cohort_name, idx, model_name, model_pred in iterator:
+        reference_wmape = reference_by_cohort[cohort_name]
+        model_wmape = station_wmape_vector(
+            actual=actual,
+            pred=model_pred,
+            indices=idx,
+        )
+        wmape_mean = (
+            float(np.nanmean(model_wmape)) if np.isfinite(model_wmape).any() else np.nan
+        )
+        ci_lower, ci_upper = bootstrap_mean_ci(
+            model_wmape,
+            rng=rng,
+            n_bootstrap=n_bootstrap,
+            ci_level=ci_level,
+            batch_size=bootstrap_batch_size,
+        )
+
+        delta_wmape = model_wmape - reference_wmape
+        delta_mean = (
+            float(np.nanmean(delta_wmape)) if np.isfinite(delta_wmape).any() else np.nan
+        )
+        delta_ci_lower, delta_ci_upper = bootstrap_mean_ci(
+            delta_wmape,
+            rng=rng,
+            n_bootstrap=n_bootstrap,
+            ci_level=ci_level,
+            batch_size=bootstrap_batch_size,
+        )
+
+        p_value = (
+            1.0
+            if model_name == reference_model
+            else paired_sign_permutation_pvalue(
+                model_wmape,
+                reference_wmape,
+                rng=rng,
+                n_permutations=n_permutations,
+                batch_size=permutation_batch_size,
+            )
+        )
+
+        rows.append(
+            {
+                "aggregation": "station",
+                "graph_set": graph_set_text,
+                "cohort": cohort_name,
+                "model": model_name,
+                "reference_model": reference_model,
+                "n_nodes": int(idx.size),
+                "n_nodes_used": int(np.isfinite(model_wmape).sum()),
+                "test_station_wmape_mean": wmape_mean,
+                "test_station_wmape_ci_lower": ci_lower,
+                "test_station_wmape_ci_upper": ci_upper,
+                "delta_station_wmape_vs_reference": delta_mean,
+                "delta_ci_lower": delta_ci_lower,
+                "delta_ci_upper": delta_ci_upper,
+                "paired_sign_permutation_pvalue": p_value,
+            }
+        )
+
+    return rows
+
+
+def build_sensitivity_summary_rows(
+    *,
+    results_df: pl.DataFrame,
+    alpha_df: pl.DataFrame,
+    baseline_df: pl.DataFrame,
+    cohort_df: pl.DataFrame,
+    sparse_quantile: float,
+) -> list[dict[str, Any]]:
+    rows: list[dict[str, Any]] = []
+
+    if alpha_df.height > 0:
+        for aggregation in alpha_df.get_column("aggregation").unique().to_list():
+            subset = alpha_df.filter(
+                (pl.col("aggregation") == aggregation)
+                & pl.col("validation_wmape").is_not_null()
+            )
+            if subset.height == 0:
+                continue
+            best = float(subset.select(pl.col("validation_wmape").min()).item())
+            for row in subset.sort("alpha").to_dicts():
+                value = float(row["validation_wmape"])
+                rows.append(
+                    {
+                        "sensitivity_axis": "hyperparameter",
+                        "scope": "graph_propagation_alpha",
+                        "aggregation": aggregation,
+                        "model": "graph_propagation",
+                        "setting": f"alpha={row['alpha']}",
+                        "metric": "validation_wmape",
+                        "value": value,
+                        "reference_value": best,
+                        "delta_vs_reference": value - best,
+                    }
+                )
+
+    if baseline_df.height > 0:
+        clean_baseline = baseline_df.filter(pl.col("validation_wmape").is_not_null())
+        if clean_baseline.height > 0:
+            best_map: dict[tuple[str, str], float] = {}
+            for row in (
+                clean_baseline.sort(["aggregation", "model", "validation_wmape"])
+                .group_by(["aggregation", "model"], maintain_order=True)
+                .first()
+                .to_dicts()
+            ):
+                best_map[(str(row["aggregation"]), str(row["model"]))] = float(
+                    row["validation_wmape"]
+                )
+
+            for row in clean_baseline.to_dicts():
+                aggregation = str(row["aggregation"])
+                model = str(row["model"])
+                best = best_map[(aggregation, model)]
+                value = float(row["validation_wmape"])
+                rows.append(
+                    {
+                        "sensitivity_axis": "hyperparameter",
+                        "scope": "baseline_hyperparameters",
+                        "aggregation": aggregation,
+                        "model": model,
+                        "setting": str(row.get("config", "")),
+                        "metric": "validation_wmape",
+                        "value": value,
+                        "reference_value": best,
+                        "delta_vs_reference": value - best,
+                    }
+                )
+
+    if cohort_df.height > 0:
+        for model in cohort_df.get_column("model").unique().to_list():
+            sparse_row = cohort_df.filter(
+                (pl.col("model") == model) & (pl.col("cohort") == "sparse")
+            )
+            dense_row = cohort_df.filter(
+                (pl.col("model") == model) & (pl.col("cohort") == "dense")
+            )
+            if sparse_row.height == 0 or dense_row.height == 0:
+                continue
+
+            sparse_wmape = sparse_row.select("test_wmape").item()
+            dense_wmape = dense_row.select("test_wmape").item()
+            if sparse_wmape is None or dense_wmape is None:
+                continue
+
+            rows.append(
+                {
+                    "sensitivity_axis": "threshold",
+                    "scope": "sparse_vs_dense",
+                    "aggregation": "station",
+                    "model": str(model),
+                    "setting": f"sparse_quantile={sparse_quantile}",
+                    "metric": "test_wmape",
+                    "value": float(sparse_wmape),
+                    "reference_value": float(dense_wmape),
+                    "delta_vs_reference": float(sparse_wmape) - float(dense_wmape),
+                }
+            )
+
+    if results_df.height > 0:
+        for model in results_df.get_column("model").unique().to_list():
+            station_rows = results_df.filter(
+                (pl.col("model") == model)
+                & (pl.col("aggregation") == "station")
+                & pl.col("test_wmape").is_not_null()
+            )
+            community_rows = results_df.filter(
+                (pl.col("model") == model)
+                & (pl.col("aggregation") == "community")
+                & pl.col("test_wmape").is_not_null()
+            )
+            if station_rows.height == 0 or community_rows.height == 0:
+                continue
+
+            station_best = float(station_rows.select(pl.col("test_wmape").min()).item())
+            community_best = float(
+                community_rows.select(pl.col("test_wmape").min()).item()
+            )
+            rows.append(
+                {
+                    "sensitivity_axis": "resolution",
+                    "scope": "station_vs_community",
+                    "aggregation": "station_community",
+                    "model": str(model),
+                    "setting": "aggregation_resolution",
+                    "metric": "test_wmape",
+                    "value": station_best,
+                    "reference_value": community_best,
+                    "delta_vs_reference": station_best - community_best,
+                }
+            )
+
+    return rows
+
+
 def evaluate_aggregation(
     aggregation: str,
+    graph_set: tuple[str, ...],
     train_series: np.ndarray,
     val_series: np.ndarray,
     test_series: np.ndarray,
@@ -171,11 +523,54 @@ def evaluate_aggregation(
     list[dict[str, Any]],
     list[dict[str, Any]],
     dict[str, tuple[np.ndarray, np.ndarray]],
+    dict[str, Any] | None,
 ]:
     results: list[dict[str, Any]] = []
     alpha_search: list[dict[str, Any]] = []
     baseline_search: list[dict[str, Any]] = []
     predictions: dict[str, tuple[np.ndarray, np.ndarray]] = {}
+    graph_set_text = ",".join(graph_set)
+
+    train_series_raw = train_series
+    val_series_raw = val_series
+    test_series_raw = test_series
+
+    preprocessing_metadata: dict[str, Any] | None = None
+    preprocessing_state = None
+    val_pre_residual = val_series_raw
+    test_pre_residual = test_series_raw
+
+    if args.preprocess_target:
+        preprocessing_config = TargetPreprocessingConfig(
+            winsor_lower_quantile=args.winsor_lower_quantile,
+            winsor_upper_quantile=args.winsor_upper_quantile,
+            enable_log1p=True,
+            scaler=args.preprocess_scaler,
+            enable_residualization=bool(args.residualize_target),
+            residual_lag_candidates=tuple(parse_int_grid(args.residual_lag_candidates)),
+            holiday_country=args.holiday_country,
+            holiday_subdivision=_resolve_holiday_subdivision(args),
+        )
+        preprocessing_state, lag_scores = fit_target_preprocessing(
+            train_series_raw,
+            validation_series=val_series_raw,
+            config=preprocessing_config,
+        )
+        train_applied = apply_target_preprocessing(
+            train_series_raw, preprocessing_state
+        )
+        val_applied = apply_target_preprocessing(val_series_raw, preprocessing_state)
+        test_applied = apply_target_preprocessing(test_series_raw, preprocessing_state)
+        train_series = train_applied.transformed
+        val_series = val_applied.transformed
+        test_series = test_applied.transformed
+        val_pre_residual = val_applied.pre_residual
+        test_pre_residual = test_applied.pre_residual
+        preprocessing_metadata = build_preprocessing_metadata(preprocessing_state)
+        preprocessing_metadata["aggregation"] = aggregation
+        preprocessing_metadata["residual_lag_scores"] = [
+            {"lag": int(row.lag), "score": float(row.score)} for row in lag_scores
+        ]
 
     best_alpha, graph_search = tune_graph_alpha(
         train_series=train_series,
@@ -184,7 +579,9 @@ def evaluate_aggregation(
         alpha_grid=alpha_grid,
     )
     for row in graph_search:
-        alpha_search.append({"aggregation": aggregation, **row})
+        alpha_search.append(
+            {"aggregation": aggregation, "graph_set": graph_set_text, **row}
+        )
 
     graph_val_pred = predict_graph_propagation(
         series=val_series,
@@ -196,20 +593,37 @@ def evaluate_aggregation(
         adjacency=adjacency,
         alpha=best_alpha,
     )
+    if args.preprocess_target:
+        graph_val_pred = inverse_target_predictions(
+            graph_val_pred,
+            state=preprocessing_state,
+            context_pre_residual=val_pre_residual,
+            history=1,
+            horizon=1,
+        )
+        graph_test_pred = inverse_target_predictions(
+            graph_test_pred,
+            state=preprocessing_state,
+            context_pre_residual=test_pre_residual,
+            history=1,
+            horizon=1,
+        )
+
     graph_val_metrics = compute_metrics(
-        actual=val_series[1:],
+        actual=val_series_raw[1:],
         pred=graph_val_pred,
-        train_series=train_series,
+        train_series=train_series_raw,
     )
     graph_test_metrics = compute_metrics(
-        actual=test_series[1:],
+        actual=test_series_raw[1:],
         pred=graph_test_pred,
-        train_series=train_series,
+        train_series=train_series_raw,
     )
     predictions["graph_propagation"] = (graph_val_pred, graph_test_pred)
     results.append(
         {
             "aggregation": aggregation,
+            "graph_set": graph_set_text,
             "model": "graph_propagation",
             "config": json.dumps({"alpha": best_alpha}),
             "n_nodes": int(train_series.shape[1]),
@@ -224,6 +638,12 @@ def evaluate_aggregation(
             "test_mae": graph_test_metrics["mae"],
             "test_rmse": graph_test_metrics["rmse"],
             "test_mase": graph_test_metrics["mase"],
+            "preprocessing_enabled": bool(args.preprocess_target),
+            "selected_residual_lag": (
+                preprocessing_metadata["selected_residual_lag"]
+                if preprocessing_metadata is not None
+                else None
+            ),
         }
     )
 
@@ -233,7 +653,9 @@ def evaluate_aggregation(
         args=args,
     )
     for row in baseline_search_rows:
-        baseline_search.append({"aggregation": aggregation, **row})
+        baseline_search.append(
+            {"aggregation": aggregation, "graph_set": graph_set_text, **row}
+        )
 
     for model_name in ("seasonal_naive", "lagged_linear", "tree_lagged"):
         if model_name not in fitted_baselines:
@@ -242,21 +664,39 @@ def evaluate_aggregation(
         model_spec = fitted_baselines[model_name]
         val_pred = predict_baseline(model_spec, val_series)
         test_pred = predict_baseline(model_spec, test_series)
+
+        if args.preprocess_target:
+            val_pred = inverse_target_predictions(
+                val_pred,
+                state=preprocessing_state,
+                context_pre_residual=val_pre_residual,
+                history=1,
+                horizon=1,
+            )
+            test_pred = inverse_target_predictions(
+                test_pred,
+                state=preprocessing_state,
+                context_pre_residual=test_pre_residual,
+                history=1,
+                horizon=1,
+            )
+
         predictions[model_name] = (val_pred, test_pred)
 
         val_metrics = compute_metrics(
-            actual=val_series[1:],
+            actual=val_series_raw[1:],
             pred=val_pred,
-            train_series=train_series,
+            train_series=train_series_raw,
         )
         test_metrics = compute_metrics(
-            actual=test_series[1:],
+            actual=test_series_raw[1:],
             pred=test_pred,
-            train_series=train_series,
+            train_series=train_series_raw,
         )
         results.append(
             {
                 "aggregation": aggregation,
+                "graph_set": graph_set_text,
                 "model": model_name,
                 "config": json.dumps(model_spec["config"]),
                 "n_nodes": int(train_series.shape[1]),
@@ -271,13 +711,32 @@ def evaluate_aggregation(
                 "test_mae": test_metrics["mae"],
                 "test_rmse": test_metrics["rmse"],
                 "test_mase": test_metrics["mase"],
+                "preprocessing_enabled": bool(args.preprocess_target),
+                "selected_residual_lag": (
+                    preprocessing_metadata["selected_residual_lag"]
+                    if preprocessing_metadata is not None
+                    else None
+                ),
             }
         )
 
-    return results, alpha_search, baseline_search, predictions
+    return results, alpha_search, baseline_search, predictions, preprocessing_metadata
 
 
 def run(args: argparse.Namespace) -> int:
+    np.random.seed(args.random_state)
+    rng = np.random.default_rng(args.random_state)
+
+    if not (0.0 < args.ci_level < 1.0):
+        raise ValueError("ci_level must be in (0, 1)")
+
+    if args.strict_graph_source:
+        assert_train_graph_source(
+            graph_dir=args.graph_dir,
+            train_path=args.train,
+            allow_leaky_graph_source=False,
+        )
+
     alpha_grid = parse_alpha_grid(args.alpha_grid)
     graph_set = parse_graph_set(args.graph_set)
 
@@ -302,21 +761,29 @@ def run(args: argparse.Namespace) -> int:
     results_rows: list[dict[str, Any]] = []
     alpha_rows: list[dict[str, Any]] = []
     baseline_rows: list[dict[str, Any]] = []
+    preprocessing_reports: list[dict[str, Any]] = []
 
-    station_results, station_alpha, station_baseline, station_predictions = (
-        evaluate_aggregation(
-            aggregation="station",
-            train_series=train_station,
-            val_series=val_station,
-            test_series=test_station,
-            adjacency=station_adj,
-            alpha_grid=alpha_grid,
-            args=args,
-        )
+    (
+        station_results,
+        station_alpha,
+        station_baseline,
+        station_predictions,
+        station_preprocessing,
+    ) = evaluate_aggregation(
+        aggregation="station",
+        graph_set=graph_set,
+        train_series=train_station,
+        val_series=val_station,
+        test_series=test_station,
+        adjacency=station_adj,
+        alpha_grid=alpha_grid,
+        args=args,
     )
     results_rows.extend(station_results)
     alpha_rows.extend(station_alpha)
     baseline_rows.extend(station_baseline)
+    if station_preprocessing is not None:
+        preprocessing_reports.append(station_preprocessing)
 
     cohort_rows: list[dict[str, Any]] = []
     city_lookup = load_station_city_lookup(args.stations_dir)
@@ -346,6 +813,7 @@ def run(args: argparse.Namespace) -> int:
             cohort_rows.append(
                 {
                     "aggregation": "station",
+                    "graph_set": ",".join(graph_set),
                     "model": model_name,
                     "cohort": cohort_name,
                     "n_nodes": int(idx.size),
@@ -377,18 +845,23 @@ def run(args: argparse.Namespace) -> int:
             groups=groups,
         )
 
-        comm_results, comm_alpha, comm_baseline, _ = evaluate_aggregation(
-            aggregation="community",
-            train_series=train_comm,
-            val_series=val_comm,
-            test_series=test_comm,
-            adjacency=comm_adj,
-            alpha_grid=alpha_grid,
-            args=args,
+        comm_results, comm_alpha, comm_baseline, _, comm_preprocessing = (
+            evaluate_aggregation(
+                aggregation="community",
+                graph_set=graph_set,
+                train_series=train_comm,
+                val_series=val_comm,
+                test_series=test_comm,
+                adjacency=comm_adj,
+                alpha_grid=alpha_grid,
+                args=args,
+            )
         )
         results_rows.extend(comm_results)
         alpha_rows.extend(comm_alpha)
         baseline_rows.extend(comm_baseline)
+        if comm_preprocessing is not None:
+            preprocessing_reports.append(comm_preprocessing)
 
     args.output_dir.mkdir(parents=True, exist_ok=True)
 
@@ -396,6 +869,8 @@ def run(args: argparse.Namespace) -> int:
     alpha_path = args.output_dir / "train_eval_alpha_search.csv"
     baseline_path = args.output_dir / "train_eval_baseline_search.csv"
     cohort_path = args.output_dir / "station_cohort_results.csv"
+    robustness_path = args.output_dir / "station_robustness_statistics.csv"
+    sensitivity_path = args.output_dir / "sensitivity_summary.csv"
     summary_path = args.output_dir / "summary.json"
 
     results_df = (
@@ -419,6 +894,39 @@ def run(args: argparse.Namespace) -> int:
         else pl.DataFrame()
     )
 
+    robustness_rows = build_station_robustness_rows(
+        actual=station_actual_test,
+        predictions={name: preds[1] for name, preds in station_predictions.items()},
+        cohorts=cohorts,
+        graph_set=graph_set,
+        reference_model=args.robustness_reference_model,
+        rng=rng,
+        n_bootstrap=args.bootstrap_resamples,
+        n_permutations=args.permutation_resamples,
+        ci_level=args.ci_level,
+        progress=bool(args.progress),
+        bootstrap_batch_size=args.bootstrap_batch_size,
+        permutation_batch_size=args.permutation_batch_size,
+    )
+    robustness_df = (
+        pl.DataFrame(robustness_rows).sort(["cohort", "model"])
+        if robustness_rows
+        else pl.DataFrame()
+    )
+
+    sensitivity_rows = build_sensitivity_summary_rows(
+        results_df=results_df,
+        alpha_df=alpha_df,
+        baseline_df=baseline_df,
+        cohort_df=cohort_df,
+        sparse_quantile=args.sparse_quantile,
+    )
+    sensitivity_df = (
+        pl.DataFrame(sensitivity_rows).sort(["sensitivity_axis", "model", "setting"])
+        if sensitivity_rows
+        else pl.DataFrame()
+    )
+
     if results_rows:
         results_df.write_csv(results_path)
     else:
@@ -439,6 +947,16 @@ def run(args: argparse.Namespace) -> int:
     else:
         cohort_path.write_text("", encoding="utf-8")
 
+    if robustness_rows:
+        robustness_df.write_csv(robustness_path)
+    else:
+        robustness_path.write_text("", encoding="utf-8")
+
+    if sensitivity_rows:
+        sensitivity_df.write_csv(sensitivity_path)
+    else:
+        sensitivity_path.write_text("", encoding="utf-8")
+
     summary = {
         "generated_at_utc": datetime.now(tz=timezone.utc).isoformat(),
         "graph_set": list(graph_set),
@@ -449,12 +967,16 @@ def run(args: argparse.Namespace) -> int:
             "alpha_search": len(alpha_rows),
             "baseline_search": len(baseline_rows),
             "cohort_rows": len(cohort_rows),
+            "robustness_rows": len(robustness_rows),
+            "sensitivity_rows": len(sensitivity_rows),
         },
         "paths": {
             "results": str(results_path),
             "alpha_search": str(alpha_path),
             "baseline_search": str(baseline_path),
             "cohort_results": str(cohort_path),
+            "robustness_statistics": str(robustness_path),
+            "sensitivity_summary": str(sensitivity_path),
         },
     }
 
@@ -467,12 +989,40 @@ def run(args: argparse.Namespace) -> int:
         )
         summary["best_by_aggregation"] = best_by_agg.to_dicts()
 
+    if preprocessing_reports:
+        summary["preprocessing"] = preprocessing_reports
+
+    metadata_preprocessing: dict[str, Any] | None = None
+    if preprocessing_reports:
+        metadata_preprocessing = {
+            **preprocessing_reports[0],
+            "aggregation_reports": preprocessing_reports,
+        }
+
+    metadata = build_run_metadata(
+        args=args,
+        stage="phase1_train_eval",
+        script="scripts/train_eval_pipeline.py",
+        extra={
+            "strict_graph_source": bool(args.strict_graph_source),
+            "preprocess_target": bool(args.preprocess_target),
+            "preprocessing": metadata_preprocessing,
+            "preprocessing_reports": preprocessing_reports,
+        },
+    )
+    metadata_path = args.output_dir / "metadata.json"
+    write_metadata_sidecar(metadata_path, metadata)
+    summary["paths"]["metadata"] = str(metadata_path)
+    summary["run_metadata"] = metadata
+
     summary_path.write_text(json.dumps(summary, indent=2), encoding="utf-8")
 
     print(f"Wrote train/eval results: {results_path}")
     print(f"Wrote graph alpha search: {alpha_path}")
     print(f"Wrote baseline search: {baseline_path}")
     print(f"Wrote station cohort metrics: {cohort_path}")
+    print(f"Wrote station robustness statistics: {robustness_path}")
+    print(f"Wrote sensitivity summary: {sensitivity_path}")
     print(f"Wrote summary: {summary_path}")
     return 0
 
@@ -502,7 +1052,49 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--tree-estimators", type=int, default=80)
     parser.add_argument("--linear-max-samples", type=int, default=250000)
     parser.add_argument("--tree-max-samples", type=int, default=120000)
+    parser.add_argument(
+        "--preprocess-target",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help="Apply train-fitted target preprocessing and inverse-transform metrics to original scale.",
+    )
+    parser.add_argument("--winsor-lower-quantile", type=float, default=0.005)
+    parser.add_argument("--winsor-upper-quantile", type=float, default=0.995)
+    parser.add_argument("--preprocess-scaler", choices=["robust"], default="robust")
+    parser.add_argument(
+        "--residualize-target",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help="Enable residualization with lag selected from --residual-lag-candidates.",
+    )
+    parser.add_argument("--residual-lag-candidates", default="24,168")
+    parser.add_argument("--holiday-country", default="FI")
+    parser.add_argument("--holiday-subdivision", default="18")
+    parser.add_argument(
+        "--holiday-national-only",
+        action=argparse.BooleanOptionalAction,
+        default=False,
+        help="Use national-only FI holidays (ignore subdivision) for sensitivity checks.",
+    )
+    parser.add_argument("--robustness-reference-model", default="graph_propagation")
+    parser.add_argument("--bootstrap-resamples", type=int, default=1000)
+    parser.add_argument("--permutation-resamples", type=int, default=2000)
+    parser.add_argument("--bootstrap-batch-size", type=int, default=2048)
+    parser.add_argument("--permutation-batch-size", type=int, default=4096)
+    parser.add_argument("--ci-level", type=float, default=0.95)
     parser.add_argument("--random-state", type=int, default=42)
+    parser.add_argument(
+        "--progress",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help="Show progress bars for long-running robustness calculations.",
+    )
+    parser.add_argument(
+        "--strict-graph-source",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help="Require graph metadata source to match the train split path.",
+    )
     return parser.parse_args()
 
 

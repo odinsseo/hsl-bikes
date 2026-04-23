@@ -9,6 +9,11 @@ from typing import Any
 import numpy as np
 import pandas as pd
 
+try:
+    from tqdm.auto import tqdm
+except Exception:  # pragma: no cover
+    tqdm = None
+
 from .config import (
     DEFAULT_COMMUNITIES,
     DEFAULT_GRAPH_DIR,
@@ -18,20 +23,65 @@ from .config import (
     DEFAULT_VALIDATION,
     build_experiment_specs,
     parse_alpha_grid,
+    parse_int_grid,
     parse_rqs,
 )
 from .data import (
     build_community_series,
     build_fused_adjacency,
+    build_hourly_index,
     build_station_series,
     load_communities,
     load_graph_bundle,
     load_split,
 )
-from .models import evaluate_baseline_models, evaluate_one_step_forecast
+from .models import (
+    compute_metrics,
+    fit_best_baseline_models,
+    predict_baseline,
+    predict_graph_propagation,
+    tune_graph_alpha,
+)
+from .preprocessing import (
+    TargetPreprocessingConfig,
+    apply_target_preprocessing,
+    build_preprocessing_metadata,
+    fit_target_preprocessing,
+    inverse_target_predictions,
+)
+from .provenance import build_run_metadata, write_metadata_sidecar
+from .safeguards import assert_train_graph_source
+
+
+def _iter_with_progress(
+    values: list[Any],
+    *,
+    enabled: bool,
+    desc: str,
+    unit: str,
+    leave: bool = True,
+) -> Any:
+    if enabled and tqdm is not None:
+        return tqdm(values, desc=desc, unit=unit, leave=leave)
+    return values
+
+
+def _resolve_holiday_subdivision(args: argparse.Namespace) -> str | None:
+    if getattr(args, "holiday_national_only", False):
+        return None
+    return args.holiday_subdivision
 
 
 def run(args: argparse.Namespace) -> int:
+    np.random.seed(args.random_state)
+
+    if args.strict_graph_source:
+        assert_train_graph_source(
+            graph_dir=args.graph_dir,
+            train_path=args.train,
+            allow_leaky_graph_source=False,
+        )
+
     selected_rqs = parse_rqs(args.rqs)
     specs = build_experiment_specs(selected_rqs)
 
@@ -66,10 +116,21 @@ def run(args: argparse.Namespace) -> int:
     train_df = load_split(args.train)
     val_df = load_split(args.validation)
     test_df = load_split(args.test)
+    train_hours = build_hourly_index(train_df)
+    train_time_bounds = (
+        (
+            train_hours[0].isoformat(),
+            train_hours[-1].isoformat(),
+        )
+        if train_hours
+        else None
+    )
 
     series_cache: dict[tuple[str, str], np.ndarray] = {}
     adj_cache: dict[tuple[tuple[str, ...], str], np.ndarray] = {}
-    baseline_cache: dict[str, list[dict[str, Any]]] = {}
+    baseline_cache: dict[str, dict[str, dict[str, Any]]] = {}
+    preprocessing_cache: dict[str, dict[str, Any]] = {}
+    preprocessing_reports: list[dict[str, Any]] = []
 
     alpha_grid = parse_alpha_grid(args.alpha_grid)
     alpha_search_rows: list[dict[str, Any]] = []
@@ -115,22 +176,92 @@ def run(args: argparse.Namespace) -> int:
         adj_cache[key] = adjacency
         return adjacency
 
-    for spec in specs:
-        train_series = get_series("train", spec.aggregation)
-        val_series = get_series("validation", spec.aggregation)
-        test_series = get_series("test", spec.aggregation)
+    def get_preprocessing_bundle(aggregation: str) -> dict[str, Any] | None:
+        if not args.preprocess_target:
+            return None
+        if aggregation in preprocessing_cache:
+            return preprocessing_cache[aggregation]
+
+        train_series_raw = get_series("train", aggregation)
+        val_series_raw = get_series("validation", aggregation)
+        test_series_raw = get_series("test", aggregation)
+
+        preprocessing_config = TargetPreprocessingConfig(
+            winsor_lower_quantile=args.winsor_lower_quantile,
+            winsor_upper_quantile=args.winsor_upper_quantile,
+            enable_log1p=True,
+            scaler=args.preprocess_scaler,
+            enable_residualization=bool(args.residualize_target),
+            residual_lag_candidates=tuple(parse_int_grid(args.residual_lag_candidates)),
+            holiday_country=args.holiday_country,
+            holiday_subdivision=_resolve_holiday_subdivision(args),
+        )
+        preprocessing_state, lag_scores = fit_target_preprocessing(
+            train_series_raw,
+            validation_series=val_series_raw,
+            config=preprocessing_config,
+        )
+        train_applied = apply_target_preprocessing(
+            train_series_raw, preprocessing_state
+        )
+        val_applied = apply_target_preprocessing(val_series_raw, preprocessing_state)
+        test_applied = apply_target_preprocessing(test_series_raw, preprocessing_state)
+
+        preprocessing_metadata = build_preprocessing_metadata(
+            preprocessing_state,
+            train_time_bounds=train_time_bounds,
+        )
+        preprocessing_metadata["aggregation"] = aggregation
+        preprocessing_metadata["residual_lag_scores"] = [
+            {"lag": int(row.lag), "score": float(row.score)} for row in lag_scores
+        ]
+
+        bundle = {
+            "train_series": train_applied.transformed,
+            "val_series": val_applied.transformed,
+            "test_series": test_applied.transformed,
+            "val_pre_residual": val_applied.pre_residual,
+            "test_pre_residual": test_applied.pre_residual,
+            "state": preprocessing_state,
+            "metadata": preprocessing_metadata,
+        }
+        preprocessing_cache[aggregation] = bundle
+        preprocessing_reports.append(preprocessing_metadata)
+        return bundle
+
+    spec_iter = _iter_with_progress(
+        list(specs),
+        enabled=bool(args.progress),
+        desc="RQ experiments",
+        unit="exp",
+    )
+    for spec in spec_iter:
+        train_series_raw = get_series("train", spec.aggregation)
+        val_series_raw = get_series("validation", spec.aggregation)
+        test_series_raw = get_series("test", spec.aggregation)
+
+        train_series = train_series_raw
+        val_series = val_series_raw
+        test_series = test_series_raw
+        selected_residual_lag: int | None = None
+        preprocess_bundle = get_preprocessing_bundle(spec.aggregation)
+        if preprocess_bundle is not None:
+            train_series = preprocess_bundle["train_series"]
+            val_series = preprocess_bundle["val_series"]
+            test_series = preprocess_bundle["test_series"]
+            selected_residual_lag = preprocess_bundle["metadata"][
+                "selected_residual_lag"
+            ]
+
         adjacency = get_adjacency(spec.graph_set, spec.aggregation)
 
-        best_alpha = alpha_grid[0]
-        best_val = np.inf
-
-        for alpha in alpha_grid:
-            val_metrics = evaluate_one_step_forecast(
-                series=val_series,
-                adjacency=adjacency,
-                alpha=alpha,
-                train_series=train_series,
-            )
+        best_alpha, alpha_search = tune_graph_alpha(
+            train_series=train_series,
+            val_series=val_series,
+            adjacency=adjacency,
+            alpha_grid=alpha_grid,
+        )
+        for val_metrics in alpha_search:
             alpha_search_rows.append(
                 {
                     "experiment_id": spec.experiment_id,
@@ -138,29 +269,50 @@ def run(args: argparse.Namespace) -> int:
                     "aggregation": spec.aggregation,
                     "graph_set": "+".join(spec.graph_set),
                     "model": "graph_propagation",
-                    "alpha": alpha,
-                    "validation_wmape": val_metrics["wmape"],
-                    "validation_mae": val_metrics["mae"],
-                    "validation_rmse": val_metrics["rmse"],
-                    "validation_mase": val_metrics["mase"],
+                    "alpha": val_metrics["alpha"],
+                    "validation_wmape": val_metrics["validation_wmape"],
+                    "validation_mae": val_metrics["validation_mae"],
+                    "validation_rmse": val_metrics["validation_rmse"],
+                    "validation_mase": val_metrics["validation_mase"],
                 }
             )
 
-            if np.isfinite(val_metrics["wmape"]) and val_metrics["wmape"] < best_val:
-                best_val = val_metrics["wmape"]
-                best_alpha = alpha
-
-        final_val_metrics = evaluate_one_step_forecast(
+        graph_val_pred = predict_graph_propagation(
             series=val_series,
             adjacency=adjacency,
             alpha=best_alpha,
-            train_series=train_series,
         )
-        final_test_metrics = evaluate_one_step_forecast(
+        graph_test_pred = predict_graph_propagation(
             series=test_series,
             adjacency=adjacency,
             alpha=best_alpha,
-            train_series=train_series,
+        )
+
+        if preprocess_bundle is not None:
+            graph_val_pred = inverse_target_predictions(
+                graph_val_pred,
+                state=preprocess_bundle["state"],
+                context_pre_residual=preprocess_bundle["val_pre_residual"],
+                history=1,
+                horizon=1,
+            )
+            graph_test_pred = inverse_target_predictions(
+                graph_test_pred,
+                state=preprocess_bundle["state"],
+                context_pre_residual=preprocess_bundle["test_pre_residual"],
+                history=1,
+                horizon=1,
+            )
+
+        final_val_metrics = compute_metrics(
+            actual=val_series_raw[1:],
+            pred=graph_val_pred,
+            train_series=train_series_raw,
+        )
+        final_test_metrics = compute_metrics(
+            actual=test_series_raw[1:],
+            pred=graph_test_pred,
+            train_series=train_series_raw,
         )
 
         result_rows.append(
@@ -184,14 +336,15 @@ def run(args: argparse.Namespace) -> int:
                 "test_mae": final_test_metrics["mae"],
                 "test_rmse": final_test_metrics["rmse"],
                 "test_mase": final_test_metrics["mase"],
+                "preprocessing_enabled": bool(args.preprocess_target),
+                "selected_residual_lag": selected_residual_lag,
             }
         )
 
         if spec.aggregation not in baseline_cache:
-            baseline_models, baseline_search = evaluate_baseline_models(
+            baseline_models, baseline_search = fit_best_baseline_models(
                 train_series=train_series,
                 val_series=val_series,
-                test_series=test_series,
                 args=args,
             )
             baseline_cache[spec.aggregation] = baseline_models
@@ -203,7 +356,40 @@ def run(args: argparse.Namespace) -> int:
                     }
                 )
 
-        for base in baseline_cache[spec.aggregation]:
+        for model_name in ("seasonal_naive", "lagged_linear", "tree_lagged"):
+            if model_name not in baseline_cache[spec.aggregation]:
+                continue
+            base = baseline_cache[spec.aggregation][model_name]
+            val_pred = predict_baseline(base, val_series)
+            test_pred = predict_baseline(base, test_series)
+
+            if preprocess_bundle is not None:
+                val_pred = inverse_target_predictions(
+                    val_pred,
+                    state=preprocess_bundle["state"],
+                    context_pre_residual=preprocess_bundle["val_pre_residual"],
+                    history=1,
+                    horizon=1,
+                )
+                test_pred = inverse_target_predictions(
+                    test_pred,
+                    state=preprocess_bundle["state"],
+                    context_pre_residual=preprocess_bundle["test_pre_residual"],
+                    history=1,
+                    horizon=1,
+                )
+
+            val_metrics = compute_metrics(
+                actual=val_series_raw[1:],
+                pred=val_pred,
+                train_series=train_series_raw,
+            )
+            test_metrics = compute_metrics(
+                actual=test_series_raw[1:],
+                pred=test_pred,
+                train_series=train_series_raw,
+            )
+
             result_rows.append(
                 {
                     "experiment_id": spec.experiment_id,
@@ -211,20 +397,22 @@ def run(args: argparse.Namespace) -> int:
                     "aggregation": spec.aggregation,
                     "graph_set": "+".join(spec.graph_set),
                     "description": spec.description,
-                    "model": base["model"],
-                    "config": base["config"],
+                    "model": model_name,
+                    "config": json.dumps(base["config"]),
                     "n_nodes": int(train_series.shape[1]),
                     "n_train_steps": int(train_series.shape[0]),
                     "n_validation_steps": int(val_series.shape[0]),
                     "n_test_steps": int(test_series.shape[0]),
-                    "validation_wmape": base["validation_wmape"],
-                    "validation_mae": base["validation_mae"],
-                    "validation_rmse": base["validation_rmse"],
-                    "validation_mase": base["validation_mase"],
-                    "test_wmape": base["test_wmape"],
-                    "test_mae": base["test_mae"],
-                    "test_rmse": base["test_rmse"],
-                    "test_mase": base["test_mase"],
+                    "validation_wmape": val_metrics["wmape"],
+                    "validation_mae": val_metrics["mae"],
+                    "validation_rmse": val_metrics["rmse"],
+                    "validation_mase": val_metrics["mase"],
+                    "test_wmape": test_metrics["wmape"],
+                    "test_mae": test_metrics["mae"],
+                    "test_rmse": test_metrics["rmse"],
+                    "test_mase": test_metrics["mase"],
+                    "preprocessing_enabled": bool(args.preprocess_target),
+                    "selected_residual_lag": selected_residual_lag,
                 }
             )
 
@@ -276,6 +464,32 @@ def run(args: argparse.Namespace) -> int:
         "best_by_rq": best_by_rq.to_dict(orient="records"),
         "best_graph_by_rq": best_graph_by_rq.to_dict(orient="records"),
     }
+    if preprocessing_reports:
+        summary["preprocessing"] = preprocessing_reports
+
+    metadata_preprocessing: dict[str, Any] | None = None
+    if preprocessing_reports:
+        metadata_preprocessing = {
+            **preprocessing_reports[0],
+            "aggregation_reports": preprocessing_reports,
+        }
+
+    metadata = build_run_metadata(
+        args=args,
+        stage="phase1_rq_runner",
+        script="scripts/experiment_runners.py",
+        extra={
+            "strict_graph_source": bool(args.strict_graph_source),
+            "preprocess_target": bool(args.preprocess_target),
+            "preprocessing": metadata_preprocessing,
+            "preprocessing_reports": preprocessing_reports,
+        },
+    )
+    metadata_path = args.output_dir / "metadata.json"
+    write_metadata_sidecar(metadata_path, metadata)
+    summary["paths"]["metadata"] = str(metadata_path)
+    summary["run_metadata"] = metadata
+
     summary_path.write_text(json.dumps(summary, indent=2), encoding="utf-8")
 
     print(f"Wrote experiment matrix: {matrix_path}")
@@ -306,7 +520,43 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--tree-estimators", type=int, default=80)
     parser.add_argument("--linear-max-samples", type=int, default=250000)
     parser.add_argument("--tree-max-samples", type=int, default=120000)
+    parser.add_argument(
+        "--preprocess-target",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help="Apply train-fitted target preprocessing and inverse-transform metrics to original scale.",
+    )
+    parser.add_argument("--winsor-lower-quantile", type=float, default=0.005)
+    parser.add_argument("--winsor-upper-quantile", type=float, default=0.995)
+    parser.add_argument("--preprocess-scaler", choices=["robust"], default="robust")
+    parser.add_argument(
+        "--residualize-target",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help="Enable residualization with lag selected from --residual-lag-candidates.",
+    )
+    parser.add_argument("--residual-lag-candidates", default="24,168")
+    parser.add_argument("--holiday-country", default="FI")
+    parser.add_argument("--holiday-subdivision", default="18")
+    parser.add_argument(
+        "--holiday-national-only",
+        action=argparse.BooleanOptionalAction,
+        default=False,
+        help="Use national-only FI holidays (ignore subdivision) for sensitivity checks.",
+    )
     parser.add_argument("--random-state", type=int, default=42)
+    parser.add_argument(
+        "--progress",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help="Show progress bars for experiment and alpha sweeps.",
+    )
+    parser.add_argument(
+        "--strict-graph-source",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help="Require graph metadata source to match the train split path.",
+    )
     parser.add_argument("--generate-only", action="store_true")
     return parser.parse_args()
 

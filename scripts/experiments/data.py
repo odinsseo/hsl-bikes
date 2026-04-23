@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from datetime import datetime
 from pathlib import Path
 
 import numpy as np
@@ -81,7 +82,7 @@ def _dense_hourly_pivot(
     df: pl.DataFrame, group_col: str, group_values: list[str]
 ) -> np.ndarray:
     hourly = (
-        df.with_columns(pl.col("departure_ts").dt.truncate("1h").alias("hour"))
+        df.with_columns(pl.col("departure_ts").dt.truncate("3h").alias("hour"))
         .group_by(["hour", group_col])
         .len()
         .rename({"len": "demand"})
@@ -101,9 +102,9 @@ def _dense_hourly_pivot(
         .fill_null(0)
     )
 
-    for value in group_values:
-        if value not in pivot.columns:
-            pivot = pivot.with_columns(pl.lit(0).alias(value))
+    missing_groups = [value for value in group_values if value not in pivot.columns]
+    if missing_groups:
+        pivot = pivot.with_columns([pl.lit(0).alias(value) for value in missing_groups])
 
     start = pivot.get_column("hour").min()
     end = pivot.get_column("hour").max()
@@ -128,15 +129,30 @@ def build_community_series(
     station_to_group: dict[str, str],
     groups: list[str],
 ) -> np.ndarray:
-    with_group = df.with_columns(
-        pl.col("departure_name")
-        .map_elements(
-            lambda x: station_to_group.get(str(x)) if x is not None else None,
-            return_dtype=pl.String,
-        )
-        .alias("community")
-    ).drop_nulls(["community"])
+    mapping_df = pl.DataFrame(
+        {
+            "departure_name": list(station_to_group.keys()),
+            "community": list(station_to_group.values()),
+        }
+    )
+    with_group = (
+        df.join(mapping_df, on="departure_name", how="left")
+        .drop_nulls(["community"])
+        .with_columns(pl.col("community").cast(pl.String, strict=False))
+    )
     return _dense_hourly_pivot(with_group, group_col="community", group_values=groups)
+
+
+def build_hourly_index(df: pl.DataFrame) -> list[datetime]:
+    hourly = df.with_columns(pl.col("departure_ts").dt.truncate("3h").alias("hour"))
+    hours = hourly.get_column("hour") if "hour" in hourly.columns else None
+    if hours is None or len(hours) == 0:
+        return []
+
+    start = hours.min()
+    end = hours.max()
+    full_hours = pl.datetime_range(start, end, interval="1h", eager=True)
+    return full_hours.to_list()
 
 
 def aggregate_adjacency_to_groups(

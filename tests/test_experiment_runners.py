@@ -1,6 +1,11 @@
 from __future__ import annotations
 
+import json
+from argparse import Namespace
+from pathlib import Path
+
 import numpy as np
+import pandas as pd
 
 from scripts.experiment_runners import (
     aggregate_adjacency_to_groups,
@@ -11,6 +16,8 @@ from scripts.experiment_runners import (
     parse_lag_candidates,
     row_normalize,
 )
+from scripts.experiments.contracts import REQUIRED_PREPROCESSING_LINEAGE_FIELDS
+from scripts.experiments.pipeline import run as run_rq_pipeline
 
 
 def test_parse_alpha_grid_is_sorted_and_unique() -> None:
@@ -112,3 +119,95 @@ def test_build_one_step_lag_features_shape() -> None:
 
     # (T - 1) * N rows and len(lags) columns
     assert features.shape == (6, 2)
+
+
+def _write_split_csv(
+    path: Path, *, start: str, periods: int, stations: list[str]
+) -> None:
+    timestamps = pd.date_range(start=start, periods=periods, freq="h")
+    rows = []
+    for ts in timestamps:
+        for station_idx, station in enumerate(stations):
+            repeats = 1 + ((ts.hour + station_idx) % 3)
+            for _ in range(repeats):
+                rows.append(
+                    {
+                        "departure": ts.isoformat(),
+                        "departure_name": station,
+                    }
+                )
+    pd.DataFrame(rows).to_csv(path, index=False)
+
+
+def test_rq_runner_emits_preprocessing_lineage_and_original_scale_metrics(
+    tmp_path: Path,
+) -> None:
+    stations = ["A", "B"]
+    train_path = tmp_path / "train.csv"
+    val_path = tmp_path / "validation.csv"
+    test_path = tmp_path / "test.csv"
+    graph_dir = tmp_path / "graphs"
+    output_dir = tmp_path / "out"
+
+    _write_split_csv(
+        train_path, start="2025-01-01 00:00:00", periods=72, stations=stations
+    )
+    _write_split_csv(
+        val_path, start="2025-01-04 00:00:00", periods=48, stations=stations
+    )
+    _write_split_csv(
+        test_path, start="2025-01-06 00:00:00", periods=48, stations=stations
+    )
+
+    graph_dir.mkdir(parents=True, exist_ok=True)
+    (graph_dir / "station_index.txt").write_text("A\nB\n", encoding="utf-8")
+    for name in ("SD", "DE", "DC", "ATD"):
+        np.save(
+            graph_dir / f"{name}.npy", np.array([[0.0, 1.0], [1.0, 0.0]], dtype=float)
+        )
+
+    args = Namespace(
+        train=train_path,
+        validation=val_path,
+        test=test_path,
+        graph_dir=graph_dir,
+        communities=tmp_path / "communities.csv",
+        output_dir=output_dir,
+        rqs="RQ1",
+        alpha_grid="0.0,0.5,1.0",
+        seasonal_lags="1,24",
+        linear_lag_candidates="1|1,24",
+        tree_lag_candidates="1,24",
+        tree_max_depths="4",
+        tree_estimators=10,
+        linear_max_samples=5000,
+        tree_max_samples=5000,
+        preprocess_target=True,
+        winsor_lower_quantile=0.005,
+        winsor_upper_quantile=0.995,
+        preprocess_scaler="robust",
+        residualize_target=True,
+        residual_lag_candidates="24,168",
+        holiday_country="FI",
+        holiday_subdivision="18",
+        holiday_national_only=False,
+        random_state=42,
+        progress=False,
+        strict_graph_source=False,
+        generate_only=False,
+    )
+
+    exit_code = run_rq_pipeline(args)
+    assert exit_code == 0
+
+    metadata = json.loads((output_dir / "metadata.json").read_text(encoding="utf-8"))
+    assert "preprocessing" in metadata
+    for field in REQUIRED_PREPROCESSING_LINEAGE_FIELDS:
+        assert field in metadata["preprocessing"]
+
+    results = pd.read_csv(output_dir / "results.csv")
+    assert "preprocessing_enabled" in results.columns
+    assert bool(results["preprocessing_enabled"].all())
+    assert "selected_residual_lag" in results.columns
+    assert results["selected_residual_lag"].notna().all()
+    assert results["test_wmape"].notna().all()

@@ -46,10 +46,14 @@ CSV_SCHEMA_OVERRIDES = {
     "Return station id": pl.String,
     "Departure station name": pl.String,
     "Return station name": pl.String,
+    "Covered distance (m)": pl.Float64,
+    "Duration (sec.)": pl.Float64,
     "departure_id": pl.String,
     "return_id": pl.String,
     "departure_name": pl.String,
     "return_name": pl.String,
+    "distance_m": pl.Float64,
+    "duration_sec": pl.Float64,
 }
 
 
@@ -125,7 +129,7 @@ def load_and_rename_one(path: Path) -> pl.DataFrame:
 
     rename = {k: v for k, v in COL_RENAME.items() if k in df.columns}
     if rename:
-        df = df.rename(columns=rename)
+        df = df.rename(rename)
 
     cast_expr = []
     for col in ("departure_id", "return_id", "departure_name", "return_name"):

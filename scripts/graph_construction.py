@@ -244,7 +244,7 @@ def build_dc_adjacency(
             .alias(timestamp_col)
         )
         .drop_nulls([departure_col, timestamp_col])
-        .with_columns(pl.col(timestamp_col).dt.truncate("1h").alias("hour_start"))
+        .with_columns(pl.col(timestamp_col).dt.truncate("3h").alias("hour_start"))
     )
 
     hourly = tmp.group_by(["hour_start", departure_col]).len().rename({"len": "count"})
