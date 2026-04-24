@@ -9,6 +9,9 @@ import polars as pl
 
 from .config import CSV_SCHEMA_OVERRIDES, row_normalize
 
+# Canonical resolution for station/community demand tensors and time indices.
+DEMAND_TIME_BUCKET = "3h"
+
 
 def load_split(path: Path) -> pl.DataFrame:
     df = pl.read_csv(path, try_parse_dates=True, schema_overrides=CSV_SCHEMA_OVERRIDES)
@@ -78,27 +81,30 @@ def load_communities(path: Path, station_index: list[str]) -> dict[str, str]:
     return mapping
 
 
-def _dense_hourly_pivot(
+def _dense_demand_bucket_pivot(
     df: pl.DataFrame, group_col: str, group_values: list[str]
 ) -> np.ndarray:
-    hourly = (
-        df.with_columns(pl.col("departure_ts").dt.truncate("3h").alias("hour"))
-        .group_by(["hour", group_col])
+    """Aggregate trips into ``DEMAND_TIME_BUCKET`` bins and return a dense [time, group] matrix."""
+    bucketed = (
+        df.with_columns(
+            pl.col("departure_ts").dt.truncate(DEMAND_TIME_BUCKET).alias("bucket_start")
+        )
+        .group_by(["bucket_start", group_col])
         .len()
         .rename({"len": "demand"})
     )
 
-    if hourly.height == 0:
+    if bucketed.height == 0:
         return np.zeros((0, len(group_values)), dtype=float)
 
     pivot = (
-        hourly.pivot(
+        bucketed.pivot(
             values="demand",
-            index="hour",
+            index="bucket_start",
             on=group_col,
             aggregate_function="sum",
         )
-        .sort("hour")
+        .sort("bucket_start")
         .fill_null(0)
     )
 
@@ -106,18 +112,22 @@ def _dense_hourly_pivot(
     if missing_groups:
         pivot = pivot.with_columns([pl.lit(0).alias(value) for value in missing_groups])
 
-    start = pivot.get_column("hour").min()
-    end = pivot.get_column("hour").max()
-    full_hours = pl.DataFrame(
-        {"hour": pl.datetime_range(start, end, interval="1h", eager=True)}
+    start = pivot.get_column("bucket_start").min()
+    end = pivot.get_column("bucket_start").max()
+    full_index = pl.DataFrame(
+        {
+            "bucket_start": pl.datetime_range(
+                start, end, interval=DEMAND_TIME_BUCKET, eager=True
+            )
+        }
     )
-    dense = full_hours.join(pivot, on="hour", how="left").fill_null(0)
+    dense = full_index.join(pivot, on="bucket_start", how="left").fill_null(0)
 
     return dense.select(group_values).to_numpy().astype(float)
 
 
 def build_station_series(df: pl.DataFrame, station_index: list[str]) -> np.ndarray:
-    return _dense_hourly_pivot(
+    return _dense_demand_bucket_pivot(
         df,
         group_col="departure_name",
         group_values=station_index,
@@ -140,19 +150,24 @@ def build_community_series(
         .drop_nulls(["community"])
         .with_columns(pl.col("community").cast(pl.String, strict=False))
     )
-    return _dense_hourly_pivot(with_group, group_col="community", group_values=groups)
+    return _dense_demand_bucket_pivot(with_group, group_col="community", group_values=groups)
 
 
 def build_hourly_index(df: pl.DataFrame) -> list[datetime]:
-    hourly = df.with_columns(pl.col("departure_ts").dt.truncate("3h").alias("hour"))
-    hours = hourly.get_column("hour") if "hour" in hourly.columns else None
-    if hours is None or len(hours) == 0:
+    """Return dense timestamps for each demand row (one per ``DEMAND_TIME_BUCKET`` step)."""
+    bucketed = df.with_columns(
+        pl.col("departure_ts").dt.truncate(DEMAND_TIME_BUCKET).alias("bucket_start")
+    )
+    buckets = bucketed.get_column("bucket_start")
+    if buckets is None or len(buckets) == 0:
         return []
 
-    start = hours.min()
-    end = hours.max()
-    full_hours = pl.datetime_range(start, end, interval="1h", eager=True)
-    return full_hours.to_list()
+    start = buckets.min()
+    end = buckets.max()
+    return (
+        pl.datetime_range(start, end, interval=DEMAND_TIME_BUCKET, eager=True)
+        .to_list()
+    )
 
 
 def aggregate_adjacency_to_groups(

@@ -163,13 +163,13 @@ python scripts/train_eval_pipeline.py --graph-set SD,DE,DC,ATD
 
 Output artifacts:
 
-1. `data/artifacts/experiments/train_eval_1h/train_eval_results.csv`
-2. `data/artifacts/experiments/train_eval_1h/train_eval_alpha_search.csv`
-3. `data/artifacts/experiments/train_eval_1h/train_eval_baseline_search.csv`
-4. `data/artifacts/experiments/train_eval_1h/station_cohort_results.csv`
-5. `data/artifacts/experiments/train_eval_1h/station_robustness_statistics.csv`
-6. `data/artifacts/experiments/train_eval_1h/sensitivity_summary.csv`
-7. `data/artifacts/experiments/train_eval_1h/summary.json`
+1. `data/artifacts/experiments/train_eval_3h/train_eval_results.csv`
+2. `data/artifacts/experiments/train_eval_3h/train_eval_alpha_search.csv`
+3. `data/artifacts/experiments/train_eval_3h/train_eval_baseline_search.csv`
+4. `data/artifacts/experiments/train_eval_3h/station_cohort_results.csv`
+5. `data/artifacts/experiments/train_eval_3h/station_robustness_statistics.csv`
+6. `data/artifacts/experiments/train_eval_3h/sensitivity_summary.csv`
+7. `data/artifacts/experiments/train_eval_3h/summary.json`
 
 What it does:
 
@@ -184,7 +184,7 @@ What it does:
 Run:
 
 ```bash
-python scripts/train_stgnn_pipeline.py --aggregation station --graph DE --history 24
+python scripts/train_stgnn_pipeline.py --aggregation station --graph DE --history 8
 ```
 
 Output artifacts:
@@ -204,7 +204,7 @@ What it does:
 Run:
 
 ```bash
-python scripts/train_stgnn_pipeline.py --aggregation station --graph-set SD,DE,DC,ATD --fusion-mode learned --history 24
+python scripts/train_stgnn_pipeline.py --aggregation station --graph-set SD,DE,DC,ATD --fusion-mode learned --history 8
 ```
 
 Output artifacts:

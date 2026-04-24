@@ -17,7 +17,7 @@ All ST-GNN and baseline training/evaluation pipelines use a single train-fitted 
 1. per-node winsorization (`q0.5`/`q99.5` defaults)
 2. `log1p`
 3. robust scaling (median/IQR)
-4. optional residualization with lag tuned on validation from `{24, 168}`
+4. optional residualization with lag tuned on validation from `{8, 56}` (3-hour demand steps)
 
 Primary metrics (WMAPE/MAE/RMSE/MASE) are always reported on the original bike-count scale after inverse-transform.
 
@@ -38,7 +38,7 @@ Full methodology and reviewer checklist: `docs/target_preprocessing_methodology.
 │   ├── data_audit.py          # Validate schema, split integrity, and leakage guards
 │   ├── graph_construction.py  # Build SD/DE/DC/ATD adjacency matrices
 │   ├── experiment_runners.py  # Run RQ1/RQ2/RQ3 ablation experiments
-│   ├── train_eval_pipeline.py # 1-hour train/eval for station and community levels
+│   ├── train_eval_pipeline.py # 3-hour-bucket train/eval for station and community levels
 │   ├── train_stgnn_pipeline.py # Single-graph ST-GNN (A3T-GCN style) train/eval
 │   ├── run_stgnn_milestones.py # M3.1/M3.2 sweep + leakage sensitivity orchestration
 │   ├── pre_notebook_quality_gate.py # Canonical artifact gate before notebook reporting
@@ -98,9 +98,12 @@ python scripts/prepare_data.py
 This will:
 
 - Load and clean all trip CSVs
+- Drop trips in **HSL inactive months** (November–March; see `HSL_CITY_BIKE_INACTIVE_MONTHS` in `config/constants.py`)
 - Merge with station coordinates
 - Write `data/prepared/merged/trips_merged.csv`
 - Split by time into `data/prepared/splits/{train,validation,test}`
+
+Demand series for experiments use **3-hour** time buckets (aligned in `scripts/experiments/data.py`).
 
 ## Usage
 
@@ -174,7 +177,7 @@ The same holiday sensitivity toggle is supported:
 --holiday-national-only
 ```
 
-This writes outputs to `data/artifacts/experiments/train_eval_1h/`:
+This writes outputs to `data/artifacts/experiments/train_eval_3h/`:
 
 - `train_eval_results.csv` (overall station/community model metrics)
 - `train_eval_alpha_search.csv` (graph alpha tuning by aggregation)
@@ -187,7 +190,7 @@ This writes outputs to `data/artifacts/experiments/train_eval_1h/`:
 **Run ST-GNN baseline (single graph, M3.1):**
 
 ```bash
-python scripts/train_stgnn_pipeline.py --aggregation station --graph DE --history 24
+python scripts/train_stgnn_pipeline.py --aggregation station --graph DE --history 8
 ```
 
 National-only holiday sensitivity is available with:
@@ -199,7 +202,7 @@ National-only holiday sensitivity is available with:
 **Run ST-GNN multi-graph fusion (M3.2):**
 
 ```bash
-python scripts/train_stgnn_pipeline.py --aggregation station --graph-set SD,DE,DC,ATD --fusion-mode learned --history 24
+python scripts/train_stgnn_pipeline.py --aggregation station --graph-set SD,DE,DC,ATD --fusion-mode learned --history 8
 ```
 
 This writes outputs to `data/artifacts/experiments/stgnn_single_graph/`:

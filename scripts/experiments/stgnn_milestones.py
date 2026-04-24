@@ -519,7 +519,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--sd-sigma-km", type=float, default=2.5)
     parser.add_argument("--de-min-flow", type=int, default=1)
 
-    parser.add_argument("--history", type=int, default=24)
+    parser.add_argument("--history", type=int, default=8)
     parser.add_argument("--horizon", type=int, default=1)
     parser.add_argument("--hidden-dim", type=int, default=32)
     parser.add_argument("--dropout", type=float, default=0.1)
@@ -604,7 +604,7 @@ def parse_args() -> argparse.Namespace:
         default=True,
         help="Enable residualization with lag selected from --residual-lag-candidates.",
     )
-    parser.add_argument("--residual-lag-candidates", default="24,168")
+    parser.add_argument("--residual-lag-candidates", default="8,56")
     parser.add_argument("--holiday-country", default="FI")
     parser.add_argument("--holiday-subdivision", default="18")
     parser.add_argument(
@@ -631,7 +631,7 @@ def parse_args() -> argparse.Namespace:
         default=False,
         help="Include sparse long zero-run indicator as dynamic covariate.",
     )
-    parser.add_argument("--zero-run-length", type=int, default=6)
+    parser.add_argument("--zero-run-length", type=int, default=2)
     parser.add_argument(
         "--include-static-features",
         action=argparse.BooleanOptionalAction,

@@ -17,7 +17,7 @@ class TargetPreprocessingConfig:
     enable_log1p: bool = True
     scaler: str = "robust"
     enable_residualization: bool = True
-    residual_lag_candidates: tuple[int, ...] = (24, 168)
+    residual_lag_candidates: tuple[int, ...] = (8, 56)
     holiday_country: str = "FI"
     holiday_subdivision: str | None = "18"
 

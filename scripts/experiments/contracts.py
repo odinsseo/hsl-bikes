@@ -68,8 +68,8 @@ CANONICAL_ARTIFACT_SPECS: tuple[ArtifactSpec, ...] = (
         ),
     ),
     ArtifactSpec(
-        name="train_eval_1h",
-        output_dir="experiments/train_eval_1h",
+        name="train_eval_3h",
+        output_dir="experiments/train_eval_3h",
         results_file="train_eval_results.csv",
         required_columns=(
             "aggregation",

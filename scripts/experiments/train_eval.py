@@ -49,7 +49,7 @@ from .preprocessing import (
 from .provenance import build_run_metadata, write_metadata_sidecar
 from .safeguards import assert_train_graph_source
 
-DEFAULT_OUTPUT_DIR = DATA_DIR / "artifacts" / "experiments" / "train_eval_1h"
+DEFAULT_OUTPUT_DIR = DATA_DIR / "artifacts" / "experiments" / "train_eval_3h"
 DEFAULT_STATIONS_DIR = DATA_DIR / "primary" / "stations"
 ALLOWED_GRAPH_NAMES = {"SD", "DE", "DC", "ATD"}
 
@@ -1045,9 +1045,9 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--sparse-quantile", type=float, default=0.25)
     parser.add_argument("--disable-community", action="store_true")
 
-    parser.add_argument("--seasonal-lags", default="1,24,168")
-    parser.add_argument("--linear-lag-candidates", default="1|1,24|1,2,24")
-    parser.add_argument("--tree-lag-candidates", default="1,24|1,2,24")
+    parser.add_argument("--seasonal-lags", default="1,8,56")
+    parser.add_argument("--linear-lag-candidates", default="1|1,8|1,2,8")
+    parser.add_argument("--tree-lag-candidates", default="1,8|1,2,8")
     parser.add_argument("--tree-max-depths", default="8,12")
     parser.add_argument("--tree-estimators", type=int, default=80)
     parser.add_argument("--linear-max-samples", type=int, default=250000)
@@ -1067,7 +1067,7 @@ def parse_args() -> argparse.Namespace:
         default=True,
         help="Enable residualization with lag selected from --residual-lag-candidates.",
     )
-    parser.add_argument("--residual-lag-candidates", default="24,168")
+    parser.add_argument("--residual-lag-candidates", default="8,56")
     parser.add_argument("--holiday-country", default="FI")
     parser.add_argument("--holiday-subdivision", default="18")
     parser.add_argument(

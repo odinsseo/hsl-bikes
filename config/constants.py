@@ -1,3 +1,6 @@
+# HSL city bikes: service is typically suspended November–March; exclude from modeling.
+HSL_CITY_BIKE_INACTIVE_MONTHS: frozenset[int] = frozenset({1, 2, 3, 11, 12})
+
 # Renamed station names (old -> new) for matching with stations coordinates.
 # Based on reference/constants.py for Helsinki City Bikes.
 RENAMED_STATIONS = {

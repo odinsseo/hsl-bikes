@@ -1039,7 +1039,7 @@ def run(args: argparse.Namespace) -> int:
         ):
             if len(hours_split) != int(series_split.shape[0]):
                 raise ValueError(
-                    f"{split_name} hourly index length ({len(hours_split)}) does not match series rows ({series_split.shape[0]})"
+                    f"{split_name} demand time index length ({len(hours_split)}) does not match series rows ({series_split.shape[0]})"
                 )
 
         train_dynamic_covariates, dynamic_feature_names, sparse_feature_names = (
@@ -1770,7 +1770,12 @@ def parse_args() -> argparse.Namespace:
         help="single: one graph only, equal: fixed mean over graph-set, learned: trainable fusion weights",
     )
 
-    parser.add_argument("--history", type=int, default=24)
+    parser.add_argument(
+        "--history",
+        type=int,
+        default=8,
+        help="Input window length in demand steps (3h buckets; default 8 ~= one day).",
+    )
     parser.add_argument("--horizon", type=int, default=1)
     parser.add_argument("--hidden-dim", type=int, default=32)
     parser.add_argument("--dropout", type=float, default=0.1)
@@ -1857,7 +1862,11 @@ def parse_args() -> argparse.Namespace:
         default=True,
         help="Enable residualization with lag selected from --residual-lag-candidates.",
     )
-    parser.add_argument("--residual-lag-candidates", default="24,168")
+    parser.add_argument(
+        "--residual-lag-candidates",
+        default="8,56",
+        help="Seasonal residual lags in steps (8~=same 3h slot previous day, 56~=same slot previous week).",
+    )
     parser.add_argument("--holiday-country", default="FI")
     parser.add_argument("--holiday-subdivision", default="18")
     parser.add_argument(
@@ -1884,7 +1893,12 @@ def parse_args() -> argparse.Namespace:
         default=False,
         help="Include sparse long zero-run indicator as dynamic covariate.",
     )
-    parser.add_argument("--zero-run-length", type=int, default=6)
+    parser.add_argument(
+        "--zero-run-length",
+        type=int,
+        default=2,
+        help="Long zero-run indicator window in demand steps (~6h at 3h resolution).",
+    )
     parser.add_argument(
         "--include-static-features",
         action=argparse.BooleanOptionalAction,

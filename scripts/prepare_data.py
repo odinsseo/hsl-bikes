@@ -2,6 +2,10 @@
 Load and prepare Helsinki/Espoo city bike OD trip data from data/primary/trips (by year/month),
 merge with station coordinates from data/primary/stations, and optionally split into
 train/validation/test by time (time-series best practice).
+
+Drops trips whose departure falls in HSL inactive months (November–March); see
+`HSL_CITY_BIKE_INACTIVE_MONTHS` in config/constants.py.
+
 Output: data/prepared/merged/trips_merged.csv and data/prepared/splits/*.
 """
 
@@ -16,7 +20,11 @@ from tqdm import tqdm
 # Ensure project root is on path for config import
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
-from config.constants import RENAMED_STATIONS, STATIONS_TO_DROP_PREFIXES
+from config.constants import (
+    HSL_CITY_BIKE_INACTIVE_MONTHS,
+    RENAMED_STATIONS,
+    STATIONS_TO_DROP_PREFIXES,
+)
 
 DATA_DIR = PROJECT_ROOT / "data"
 PRIMARY_DIR = DATA_DIR / "primary"
@@ -291,6 +299,21 @@ def run(
 
     print(f"Concatenating {len(frames)} DataFrames...", flush=True)
     df = pl.concat(frames, how="vertical_relaxed")
+    df = df.with_columns(
+        pl.col("departure")
+        .cast(pl.String, strict=False)
+        .str.strptime(pl.Datetime, strict=False)
+        .alias("departure")
+    ).drop_nulls(["departure"])
+    n_before_season = df.height
+    inactive = sorted(HSL_CITY_BIKE_INACTIVE_MONTHS)
+    df = df.filter(~pl.col("departure").dt.month().is_in(inactive))
+    dropped_season = n_before_season - df.height
+    if dropped_season:
+        print(
+            f"Excluded {dropped_season:,} trips in HSL inactive months "
+            f"(months {inactive})..."
+        )
     print(f"Adding station coordinates ({df.height:,} rows)...", flush=True)
     df = add_station_coordinates(df, station_coords)
 

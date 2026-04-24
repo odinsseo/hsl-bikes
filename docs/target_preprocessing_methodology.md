@@ -9,7 +9,7 @@ The fitted transform is applied per node (station or community) in this fixed or
 1. Winsorization with train-fitted quantiles (default `q0.5` and `q99.5`).
 2. `log1p` to reduce heavy-tail skew while preserving zero counts.
 3. Robust scaling with train-fitted median and IQR.
-4. Optional seasonal residualization (`y - seasonal_baseline(y, lag)`) with lag selected from `{24, 168}` by validation MAE in transformed space.
+4. Optional seasonal residualization (`y - seasonal_baseline(y, lag)`) with lag selected from `{8, 56}` (in **3-hour demand steps**: ~same slot previous day / previous week) by validation MAE in transformed space.
 
 All transform parameters are fit on the train split only and reused for validation/test/inference.
 

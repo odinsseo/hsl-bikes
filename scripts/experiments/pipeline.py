@@ -513,9 +513,9 @@ def parse_args() -> argparse.Namespace:
         "--alpha-grid",
         default="0.0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0",
     )
-    parser.add_argument("--seasonal-lags", default="1,24,168")
-    parser.add_argument("--linear-lag-candidates", default="1|1,24|1,2,24")
-    parser.add_argument("--tree-lag-candidates", default="1,24|1,2,24")
+    parser.add_argument("--seasonal-lags", default="1,8,56")
+    parser.add_argument("--linear-lag-candidates", default="1|1,8|1,2,8")
+    parser.add_argument("--tree-lag-candidates", default="1,8|1,2,8")
     parser.add_argument("--tree-max-depths", default="8,12")
     parser.add_argument("--tree-estimators", type=int, default=80)
     parser.add_argument("--linear-max-samples", type=int, default=250000)
@@ -535,7 +535,7 @@ def parse_args() -> argparse.Namespace:
         default=True,
         help="Enable residualization with lag selected from --residual-lag-candidates.",
     )
-    parser.add_argument("--residual-lag-candidates", default="24,168")
+    parser.add_argument("--residual-lag-candidates", default="8,56")
     parser.add_argument("--holiday-country", default="FI")
     parser.add_argument("--holiday-subdivision", default="18")
     parser.add_argument(

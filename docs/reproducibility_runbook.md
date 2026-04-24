@@ -79,9 +79,9 @@ This writes:
 
 ## Claim-to-Artifact Mapping
 
-- RQ1 notebook: functional vs geometric evidence from data/artifacts/experiments/rq_runner/results.csv, uncertainty support from data/artifacts/experiments/train_eval_1h/station_robustness_statistics.csv.
+- RQ1 notebook: functional vs geometric evidence from data/artifacts/experiments/rq_runner/results.csv, uncertainty support from data/artifacts/experiments/train_eval_3h/station_robustness_statistics.csv.
 - RQ2 notebook: fusion ablations from data/artifacts/experiments/rq_runner/results.csv, learned fusion interpretation from data/artifacts/experiments/stgnn_milestones/milestone_results.csv.
-- RQ3 notebook: station vs community trade-offs from data/artifacts/experiments/rq_runner/results.csv, sparse/suburban failure slices from data/artifacts/experiments/train_eval_1h/station_cohort_results.csv.
+- RQ3 notebook: station vs community trade-offs from data/artifacts/experiments/rq_runner/results.csv, sparse/suburban failure slices from data/artifacts/experiments/train_eval_3h/station_cohort_results.csv.
 - Synthesis notebook: conclusion matrix aggregated from the three RQ evidence streams above, plus milestone and robustness optional context layers.
 
 ## Final Lock Criteria

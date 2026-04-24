@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import sys
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -16,6 +17,9 @@ import numpy as np
 import polars as pl
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(PROJECT_ROOT))
+
+from scripts.experiments.data import DEMAND_TIME_BUCKET  # noqa: E402
 DATA_DIR = PROJECT_ROOT / "data"
 DEFAULT_INPUT = DATA_DIR / "prepared" / "splits" / "train" / "train.csv"
 DEFAULT_OUTPUT_DIR = DATA_DIR / "artifacts" / "graphs" / "train"
@@ -231,7 +235,7 @@ def build_dc_adjacency(
     timestamp_col: str = "departure",
     row_normalized: bool = False,
 ) -> np.ndarray:
-    """Build Demand Correlation (DC) graph from hourly outflow correlations."""
+    """Build Demand Correlation (DC) graph from outflow correlations in demand buckets."""
     if timestamp_col not in df.columns:
         raise ValueError(f"Timestamp column '{timestamp_col}' missing from dataframe")
 
@@ -244,7 +248,9 @@ def build_dc_adjacency(
             .alias(timestamp_col)
         )
         .drop_nulls([departure_col, timestamp_col])
-        .with_columns(pl.col(timestamp_col).dt.truncate("3h").alias("hour_start"))
+        .with_columns(
+            pl.col(timestamp_col).dt.truncate(DEMAND_TIME_BUCKET).alias("hour_start")
+        )
     )
 
     hourly = tmp.group_by(["hour_start", departure_col]).len().rename({"len": "count"})

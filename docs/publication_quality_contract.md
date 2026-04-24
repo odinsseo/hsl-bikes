@@ -61,7 +61,7 @@ Required for publication-quality transform lineage:
 The following outputs are considered canonical for notebook consumption:
 
 1. `data/artifacts/experiments/rq_runner/results.csv`
-2. `data/artifacts/experiments/train_eval_1h/train_eval_results.csv`
+2. `data/artifacts/experiments/train_eval_3h/train_eval_results.csv`
 3. `data/artifacts/experiments/stgnn_single_graph/results.csv`
 4. `data/artifacts/experiments/stgnn_milestones/milestone_results.csv`
 

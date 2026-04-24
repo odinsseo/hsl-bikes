@@ -37,8 +37,8 @@ def _required_preprocessing_lineage() -> dict[str, object]:
         },
         "quantile_bounds": {"lower": 0.005, "upper": 0.995},
         "scaler_type": "robust",
-        "residual_lag_policy": [24, 168],
-        "selected_residual_lag": 24,
+        "residual_lag_policy": [8, 56],
+        "selected_residual_lag": 8,
         "calendar_source": {
             "library": "holidays",
             "country": "FI",
