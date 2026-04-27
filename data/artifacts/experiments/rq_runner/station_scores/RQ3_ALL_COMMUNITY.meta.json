@@ -1,0 +1,9 @@
+{
+  "experiment_id": "RQ3_ALL_COMMUNITY",
+  "rq": "RQ3",
+  "aggregation": "community",
+  "graph_set": "SD+DE+DC+ATD",
+  "sparse_quantile": 0.25,
+  "n_nodes_used": 446,
+  "n_stations": 449
+}

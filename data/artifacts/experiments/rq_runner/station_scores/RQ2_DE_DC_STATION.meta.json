@@ -1,0 +1,9 @@
+{
+  "experiment_id": "RQ2_DE_DC_STATION",
+  "rq": "RQ2",
+  "aggregation": "station",
+  "graph_set": "DE+DC",
+  "sparse_quantile": 0.25,
+  "n_nodes_used": 446,
+  "n_stations": 449
+}

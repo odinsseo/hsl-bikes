@@ -1,0 +1,9 @@
+{
+  "experiment_id": "RQ1_SD_STATION",
+  "rq": "RQ1",
+  "aggregation": "station",
+  "graph_set": "SD",
+  "sparse_quantile": 0.25,
+  "n_nodes_used": 446,
+  "n_stations": 449
+}
