@@ -55,6 +55,15 @@ This document is the canonical reference for **what the hypothesis tests assume*
 - One length-\(S\) vector per experiment is small compared to full prediction tensors.
 - Permutation is batched in `train_eval`; cost is \(O(B \cdot S)\) for \(B\) randomizations—negligible vs model fitting.
 
+## Primary analysis cohort (notebooks)
+
+For reporting tables and synthesis, the **primary** cohort is pre-specified in `scripts/notebook_reporting.py` as `PRIMARY_COHORT_BY_RQ`: **all** stations for RQ1 and RQ2, **sparse_espoo** for RQ3 (sparse-by-train-demand ∩ Espoo). Other cohort rows remain exploratory unless you promote them explicitly in text.
+
+## Evidence map: `train_eval` vs `rq_hypothesis_tests`
+
+- **`train_eval_3h/station_robustness_statistics.csv`**: paired station WMAPE for a **fixed model vs reference** on a **single** graph configuration (not the same estimand as cross-graph-set contrasts).
+- **`rq_runner/rq_hypothesis_tests.csv`**: pre-registered **contrasts** (different graph sets, or station vs broadcast community on station actuals) on the **same** station index, with **Holm** adjustment within each (RQ, cohort) family.
+
 ## Revision log
 
-- Update this file when you change α, the Holm family definition, cohort policy (`sparse_quantile`), or the broadcast rule for RQ3 so thesis text stays aligned with artifacts.
+- Update this file when you change α, the Holm family definition, cohort policy (`sparse_quantile`), primary cohort mapping, or the broadcast rule for RQ3 so thesis text stays aligned with artifacts.
