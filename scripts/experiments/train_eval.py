@@ -572,11 +572,25 @@ def evaluate_aggregation(
             {"lag": int(row.lag), "score": float(row.score)} for row in lag_scores
         ]
 
+    tune_kwargs: dict[str, Any] = {}
+    if args.preprocess_target:
+        if preprocessing_state is None or val_pre_residual is None:
+            raise RuntimeError("preprocess_target requires fitted preprocessing state")
+        tune_kwargs = {
+            "val_series_raw": val_series_raw,
+            "train_series_raw": train_series_raw,
+            "inverse_state": preprocessing_state,
+            "val_pre_residual": val_pre_residual,
+            "history": 1,
+            "horizon": 1,
+        }
+
     best_alpha, graph_search = tune_graph_alpha(
         train_series=train_series,
         val_series=val_series,
         adjacency=adjacency,
         alpha_grid=alpha_grid,
+        **tune_kwargs,
     )
     for row in graph_search:
         alpha_search.append(

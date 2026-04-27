@@ -255,11 +255,23 @@ def run(args: argparse.Namespace) -> int:
 
         adjacency = get_adjacency(spec.graph_set, spec.aggregation)
 
+        tune_kwargs: dict[str, Any] = {}
+        if preprocess_bundle is not None:
+            tune_kwargs = {
+                "val_series_raw": val_series_raw,
+                "train_series_raw": train_series_raw,
+                "inverse_state": preprocess_bundle["state"],
+                "val_pre_residual": preprocess_bundle["val_pre_residual"],
+                "history": 1,
+                "horizon": 1,
+            }
+
         best_alpha, alpha_search = tune_graph_alpha(
             train_series=train_series,
             val_series=val_series,
             adjacency=adjacency,
             alpha_grid=alpha_grid,
+            **tune_kwargs,
         )
         for val_metrics in alpha_search:
             alpha_search_rows.append(

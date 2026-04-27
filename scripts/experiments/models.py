@@ -8,6 +8,7 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.linear_model import Ridge
 
 from .config import parse_int_grid, parse_lag_candidates
+from .preprocessing import TargetPreprocessingState, inverse_target_predictions
 
 
 def compute_metrics(
@@ -67,9 +68,24 @@ def tune_graph_alpha(
     val_series: np.ndarray,
     adjacency: np.ndarray,
     alpha_grid: list[float],
+    *,
+    val_series_raw: np.ndarray | None = None,
+    train_series_raw: np.ndarray | None = None,
+    inverse_state: TargetPreprocessingState | None = None,
+    val_pre_residual: np.ndarray | None = None,
+    history: int = 1,
+    horizon: int = 1,
 ) -> tuple[float, list[dict[str, float]]]:
     if not alpha_grid:
         raise ValueError("alpha_grid cannot be empty")
+
+    use_original_scale = inverse_state is not None
+    if use_original_scale:
+        if val_series_raw is None or train_series_raw is None or val_pre_residual is None:
+            raise ValueError(
+                "val_series_raw, train_series_raw, and val_pre_residual are required when "
+                "inverse_state is set (original-scale α tuning)"
+            )
 
     best_alpha = alpha_grid[0]
     best_wmape = np.inf
@@ -81,11 +97,25 @@ def tune_graph_alpha(
             adjacency=adjacency,
             alpha=alpha,
         )
-        metrics = compute_metrics(
-            actual=val_series[1:],
-            pred=pred_val,
-            train_series=train_series,
-        )
+        if use_original_scale:
+            pred_val = inverse_target_predictions(
+                pred_val,
+                state=inverse_state,
+                context_pre_residual=val_pre_residual,
+                history=history,
+                horizon=horizon,
+            )
+            metrics = compute_metrics(
+                actual=val_series_raw[1:],
+                pred=pred_val,
+                train_series=train_series_raw,
+            )
+        else:
+            metrics = compute_metrics(
+                actual=val_series[1:],
+                pred=pred_val,
+                train_series=train_series,
+            )
         search_rows.append(
             {
                 "alpha": alpha,
