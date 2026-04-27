@@ -2,6 +2,12 @@
 
 This module is the stable CLI/public API facade for the experiment runner. The
 implementation is split into smaller modules under ``scripts.experiments``.
+
+After a successful run, post-hoc paired tests (Holm-adjusted) can be generated with::
+
+    python -m scripts.experiments.rq_hypothesis_tests --output-dir data/artifacts/experiments/rq_runner
+
+See ``docs/statistical_inference_rq.md`` and the repository README for details.
 """
 
 from __future__ import annotations

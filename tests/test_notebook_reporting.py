@@ -4,9 +4,15 @@ from pathlib import Path
 
 import polars as pl
 
+import numpy as np
+
 from scripts.notebook_reporting import (
+    HEADLINE_CONTRAST_BY_RQ,
+    PRIMARY_COHORT_BY_RQ,
     canon_graph_set,
+    load_station_wmape_vector,
     optional_csv,
+    paired_station_wmape_diff,
     parse_fusion_weights,
     relative_change,
     require_csv,
@@ -37,3 +43,21 @@ def test_require_csv_and_optional_csv(tmp_path: Path) -> None:
 
     maybe_missing = optional_csv("missing.csv", root=tmp_path)
     assert maybe_missing is None
+
+
+def test_primary_cohort_and_headline_constants() -> None:
+    assert PRIMARY_COHORT_BY_RQ["RQ3"] == "sparse_espoo"
+    assert HEADLINE_CONTRAST_BY_RQ["RQ1"] == "SD_vs_DC"
+
+
+def test_load_station_wmape_vector_and_paired_diff(tmp_path: Path) -> None:
+    scores = tmp_path / "station_scores"
+    scores.mkdir(parents=True)
+    a = np.array([1.0, 2.0, 3.0], dtype=np.float64)
+    b = np.array([1.5, 2.5, 2.0], dtype=np.float64)
+    np.savez_compressed(scores / "exp_a.npz", wmape_by_station=a)
+    np.savez_compressed(scores / "exp_b.npz", wmape_by_station=b)
+    assert np.allclose(load_station_wmape_vector(scores, "exp_a"), a)
+    idx = np.array([0, 1, 2], dtype=int)
+    diff = paired_station_wmape_diff(scores, "exp_a", "exp_b", idx)
+    assert np.allclose(diff, a - b)

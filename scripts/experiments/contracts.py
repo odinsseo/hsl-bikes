@@ -50,6 +50,7 @@ class AuxiliaryResultSpec:
     file: str
     required_columns: tuple[str, ...]
     min_rows: int = 1
+    optional: bool = False
 
 
 CANONICAL_ARTIFACT_SPECS: tuple[ArtifactSpec, ...] = (
@@ -65,6 +66,27 @@ CANONICAL_ARTIFACT_SPECS: tuple[ArtifactSpec, ...] = (
             "model",
             "validation_wmape",
             "test_wmape",
+        ),
+        auxiliary_results=(
+            AuxiliaryResultSpec(
+                file="rq_hypothesis_tests.csv",
+                required_columns=(
+                    "rq",
+                    "contrast",
+                    "cohort",
+                    "H0",
+                    "mean_delta",
+                    "ci_lower",
+                    "ci_upper",
+                    "p_value",
+                    "p_holm",
+                    "alpha",
+                    "reject_H0",
+                    "n_stations_used",
+                ),
+                min_rows=0,
+                optional=True,
+            ),
         ),
     ),
     ArtifactSpec(
@@ -264,6 +286,17 @@ def validate_artifact_output_dir(
     auxiliary_reports: list[dict[str, Any]] = []
     for auxiliary in spec.auxiliary_results:
         auxiliary_path = output_dir / auxiliary.file
+        if not auxiliary_path.is_file():
+            if auxiliary.optional:
+                auxiliary_reports.append(
+                    {
+                        "file": auxiliary.file,
+                        "skipped": True,
+                        "reason": "missing_optional_file",
+                    }
+                )
+                continue
+            _require_file(auxiliary_path)
         auxiliary_frame = validate_results_schema(
             auxiliary_path,
             required_columns=auxiliary.required_columns,
