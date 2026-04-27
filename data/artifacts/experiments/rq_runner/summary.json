@@ -1,0 +1,495 @@
+{
+  "generated_at_utc": "2026-04-26T08:40:52.999599+00:00",
+  "selected_rqs": [
+    "RQ1",
+    "RQ2",
+    "RQ3"
+  ],
+  "experiment_count": 12,
+  "result_rows": 48,
+  "alpha_grid": [
+    0.0,
+    0.05,
+    0.1,
+    0.15,
+    0.2,
+    0.25,
+    0.3,
+    0.35,
+    0.4,
+    0.45,
+    0.5,
+    0.55,
+    0.6,
+    0.65,
+    0.7,
+    0.75,
+    0.8,
+    0.85,
+    0.9,
+    0.95,
+    1.0
+  ],
+  "paths": {
+    "experiment_matrix": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\experiments\\rq_runner\\experiment_matrix.csv",
+    "alpha_search": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\experiments\\rq_runner\\alpha_search.csv",
+    "baseline_search": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\experiments\\rq_runner\\baseline_search.csv",
+    "results": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\experiments\\rq_runner\\results.csv",
+    "metadata": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\experiments\\rq_runner\\metadata.json"
+  },
+  "best_by_rq": [
+    {
+      "rq": "RQ1",
+      "experiment_id": "RQ1_SD_STATION",
+      "aggregation": "station",
+      "graph_set": "SD",
+      "description": "Geometric baseline: SD only",
+      "model": "tree_lagged",
+      "config": "{\"lags\": [1, 2, 24, 168], \"max_depth\": 8, \"n_estimators\": 300, \"max_samples\": 300000}",
+      "n_nodes": 449,
+      "n_train_steps": 15821,
+      "n_validation_steps": 1712,
+      "n_test_steps": 4639,
+      "validation_wmape": 0.6194837433852388,
+      "validation_mae": 1.9149808886946331,
+      "validation_rmse": 3.697823181462152,
+      "validation_mase": 1.2634574768102584,
+      "test_wmape": 0.6284663947563739,
+      "test_mae": 1.4724875685772967,
+      "test_rmse": 3.328144427710944,
+      "test_mase": 0.9715112244787583,
+      "preprocessing_enabled": true,
+      "selected_residual_lag": 56
+    },
+    {
+      "rq": "RQ2",
+      "experiment_id": "RQ2_SD_DE_STATION",
+      "aggregation": "station",
+      "graph_set": "SD+DE",
+      "description": "Two-view fusion: SD + DE",
+      "model": "tree_lagged",
+      "config": "{\"lags\": [1, 2, 24, 168], \"max_depth\": 8, \"n_estimators\": 300, \"max_samples\": 300000}",
+      "n_nodes": 449,
+      "n_train_steps": 15821,
+      "n_validation_steps": 1712,
+      "n_test_steps": 4639,
+      "validation_wmape": 0.6194837433852388,
+      "validation_mae": 1.9149808886946331,
+      "validation_rmse": 3.697823181462152,
+      "validation_mase": 1.2634574768102584,
+      "test_wmape": 0.6284663947563739,
+      "test_mae": 1.4724875685772967,
+      "test_rmse": 3.328144427710944,
+      "test_mase": 0.9715112244787583,
+      "preprocessing_enabled": true,
+      "selected_residual_lag": 56
+    },
+    {
+      "rq": "RQ3",
+      "experiment_id": "RQ3_ALL_COMMUNITY",
+      "aggregation": "community",
+      "graph_set": "SD+DE+DC+ATD",
+      "description": "All-view community-level baseline",
+      "model": "tree_lagged",
+      "config": "{\"lags\": [1, 2, 24, 168], \"max_depth\": 12, \"n_estimators\": 300, \"max_samples\": 300000}",
+      "n_nodes": 5,
+      "n_train_steps": 15821,
+      "n_validation_steps": 1712,
+      "n_test_steps": 4639,
+      "validation_wmape": 0.2280754414634483,
+      "validation_mae": 63.312489534969934,
+      "validation_rmse": 118.13679223214298,
+      "validation_mase": 0.622725613778715,
+      "test_wmape": 0.2632412713190234,
+      "test_mae": 55.38598618852135,
+      "test_rmse": 190.9777888988498,
+      "test_mase": 0.5447625341748105,
+      "preprocessing_enabled": true,
+      "selected_residual_lag": 56
+    }
+  ],
+  "best_graph_by_rq": [
+    {
+      "rq": "RQ1",
+      "experiment_id": "RQ1_DC_STATION",
+      "aggregation": "station",
+      "graph_set": "DC",
+      "description": "Functional baseline: DC only",
+      "model": "graph_propagation",
+      "config": "{\"alpha\": 0.05}",
+      "n_nodes": 449,
+      "n_train_steps": 15821,
+      "n_validation_steps": 1712,
+      "n_test_steps": 4639,
+      "validation_wmape": 0.6527068960595721,
+      "validation_mae": 2.0176820541616465,
+      "validation_rmse": 4.518717654940444,
+      "validation_mase": 1.331217189793544,
+      "test_wmape": 0.6741598199470227,
+      "test_mae": 1.5795465953133714,
+      "test_rmse": 4.732210164023446,
+      "test_mase": 1.0421461475676916,
+      "preprocessing_enabled": true,
+      "selected_residual_lag": 56
+    },
+    {
+      "rq": "RQ2",
+      "experiment_id": "RQ2_SD_DC_STATION",
+      "aggregation": "station",
+      "graph_set": "SD+DC",
+      "description": "Two-view fusion: SD + DC",
+      "model": "graph_propagation",
+      "config": "{\"alpha\": 0.05}",
+      "n_nodes": 449,
+      "n_train_steps": 15821,
+      "n_validation_steps": 1712,
+      "n_test_steps": 4639,
+      "validation_wmape": 0.6544056675934194,
+      "validation_mae": 2.0229333865110624,
+      "validation_rmse": 4.42655499188509,
+      "validation_mase": 1.3346818902295927,
+      "test_wmape": 0.6746160701280048,
+      "test_mae": 1.5806155828125643,
+      "test_rmse": 4.689292926051488,
+      "test_mase": 1.0428514393314088,
+      "preprocessing_enabled": true,
+      "selected_residual_lag": 56
+    },
+    {
+      "rq": "RQ3",
+      "experiment_id": "RQ3_ALL_COMMUNITY",
+      "aggregation": "community",
+      "graph_set": "SD+DE+DC+ATD",
+      "description": "All-view community-level baseline",
+      "model": "graph_propagation",
+      "config": "{\"alpha\": 0.8}",
+      "n_nodes": 5,
+      "n_train_steps": 15821,
+      "n_validation_steps": 1712,
+      "n_test_steps": 4639,
+      "validation_wmape": 0.28031559856850785,
+      "validation_mae": 77.8140701470558,
+      "validation_rmse": 204.8521516661993,
+      "validation_mase": 0.7653594882914964,
+      "test_wmape": 0.3197631080776469,
+      "test_mae": 67.27818551720902,
+      "test_rmse": 238.80325898295112,
+      "test_mase": 0.6617311951851388,
+      "preprocessing_enabled": true,
+      "selected_residual_lag": 56
+    }
+  ],
+  "preprocessing": [
+    {
+      "preprocessing_version": "v1",
+      "fitted_split": "train",
+      "train_time_bounds": {
+        "start": "2016-05-02T09:00:00",
+        "end": "2021-09-30T21:00:00"
+      },
+      "quantile_bounds": {
+        "lower": 0.005,
+        "upper": 0.995
+      },
+      "scaler_type": "robust",
+      "residual_lag_policy": [
+        8,
+        56
+      ],
+      "selected_residual_lag": 56,
+      "calendar_source": {
+        "library": "holidays",
+        "country": "FI",
+        "subdivision": "18"
+      },
+      "dynamic_feature_definitions": [],
+      "static_feature_definitions": [],
+      "sparse_feature_definitions": [],
+      "train_only_fit": true,
+      "aggregation": "station",
+      "residual_lag_scores": [
+        {
+          "lag": 8,
+          "score": 0.3832706906117299
+        },
+        {
+          "lag": 56,
+          "score": 0.37777592807462623
+        }
+      ]
+    },
+    {
+      "preprocessing_version": "v1",
+      "fitted_split": "train",
+      "train_time_bounds": {
+        "start": "2016-05-02T09:00:00",
+        "end": "2021-09-30T21:00:00"
+      },
+      "quantile_bounds": {
+        "lower": 0.005,
+        "upper": 0.995
+      },
+      "scaler_type": "robust",
+      "residual_lag_policy": [
+        8,
+        56
+      ],
+      "selected_residual_lag": 56,
+      "calendar_source": {
+        "library": "holidays",
+        "country": "FI",
+        "subdivision": "18"
+      },
+      "dynamic_feature_definitions": [],
+      "static_feature_definitions": [],
+      "sparse_feature_definitions": [],
+      "train_only_fit": true,
+      "aggregation": "community",
+      "residual_lag_scores": [
+        {
+          "lag": 8,
+          "score": 0.07974084027914645
+        },
+        {
+          "lag": 56,
+          "score": 0.07252685691293029
+        }
+      ]
+    }
+  ],
+  "run_metadata": {
+    "generated_at_utc": "2026-04-26T08:40:53.035411+00:00",
+    "git_commit": "2ab355d197b1c80ecd3af2dfd250af2fb26cec02",
+    "command": ".\\scripts\\experiment_runners.py --rqs RQ1,RQ2,RQ3 --alpha-grid 0.0,0.05,0.1,0.15,0.2,0.25,0.3,0.35,0.4,0.45,0.5,0.55,0.6,0.65,0.7,0.75,0.8,0.85,0.9,0.95,1.0 --seasonal-lags 1,24,168,336 --linear-lag-candidates 1|1,24|1,2,24|1,24,168|1,2,24,168 --tree-lag-candidates 1,24|1,2,24|1,24,168|1,2,24,168 --tree-max-depths 8,12,16 --tree-estimators 300 --linear-max-samples 300000 --tree-max-samples 300000 --progress",
+    "script": "scripts/experiment_runners.py",
+    "stage": "phase1_rq_runner",
+    "python_version": "3.14.0",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "args": {
+      "train": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\prepared\\splits\\train\\train.csv",
+      "validation": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\prepared\\splits\\validation\\validation.csv",
+      "test": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\prepared\\splits\\test\\test.csv",
+      "graph_dir": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\graphs\\train",
+      "communities": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\network\\notebook\\communities.csv",
+      "output_dir": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\experiments\\rq_runner",
+      "rqs": "RQ1,RQ2,RQ3",
+      "alpha_grid": "0.0,0.05,0.1,0.15,0.2,0.25,0.3,0.35,0.4,0.45,0.5,0.55,0.6,0.65,0.7,0.75,0.8,0.85,0.9,0.95,1.0",
+      "seasonal_lags": "1,24,168,336",
+      "linear_lag_candidates": "1|1,24|1,2,24|1,24,168|1,2,24,168",
+      "tree_lag_candidates": "1,24|1,2,24|1,24,168|1,2,24,168",
+      "tree_max_depths": "8,12,16",
+      "tree_estimators": 300,
+      "linear_max_samples": 300000,
+      "tree_max_samples": 300000,
+      "preprocess_target": true,
+      "winsor_lower_quantile": 0.005,
+      "winsor_upper_quantile": 0.995,
+      "preprocess_scaler": "robust",
+      "residualize_target": true,
+      "residual_lag_candidates": "8,56",
+      "holiday_country": "FI",
+      "holiday_subdivision": "18",
+      "holiday_national_only": false,
+      "random_state": 42,
+      "progress": true,
+      "strict_graph_source": true,
+      "generate_only": false
+    },
+    "strict_graph_source": true,
+    "preprocess_target": true,
+    "preprocessing": {
+      "preprocessing_version": "v1",
+      "fitted_split": "train",
+      "train_time_bounds": {
+        "start": "2016-05-02T09:00:00",
+        "end": "2021-09-30T21:00:00"
+      },
+      "quantile_bounds": {
+        "lower": 0.005,
+        "upper": 0.995
+      },
+      "scaler_type": "robust",
+      "residual_lag_policy": [
+        8,
+        56
+      ],
+      "selected_residual_lag": 56,
+      "calendar_source": {
+        "library": "holidays",
+        "country": "FI",
+        "subdivision": "18"
+      },
+      "dynamic_feature_definitions": [],
+      "static_feature_definitions": [],
+      "sparse_feature_definitions": [],
+      "train_only_fit": true,
+      "aggregation": "station",
+      "residual_lag_scores": [
+        {
+          "lag": 8,
+          "score": 0.3832706906117299
+        },
+        {
+          "lag": 56,
+          "score": 0.37777592807462623
+        }
+      ],
+      "aggregation_reports": [
+        {
+          "preprocessing_version": "v1",
+          "fitted_split": "train",
+          "train_time_bounds": {
+            "start": "2016-05-02T09:00:00",
+            "end": "2021-09-30T21:00:00"
+          },
+          "quantile_bounds": {
+            "lower": 0.005,
+            "upper": 0.995
+          },
+          "scaler_type": "robust",
+          "residual_lag_policy": [
+            8,
+            56
+          ],
+          "selected_residual_lag": 56,
+          "calendar_source": {
+            "library": "holidays",
+            "country": "FI",
+            "subdivision": "18"
+          },
+          "dynamic_feature_definitions": [],
+          "static_feature_definitions": [],
+          "sparse_feature_definitions": [],
+          "train_only_fit": true,
+          "aggregation": "station",
+          "residual_lag_scores": [
+            {
+              "lag": 8,
+              "score": 0.3832706906117299
+            },
+            {
+              "lag": 56,
+              "score": 0.37777592807462623
+            }
+          ]
+        },
+        {
+          "preprocessing_version": "v1",
+          "fitted_split": "train",
+          "train_time_bounds": {
+            "start": "2016-05-02T09:00:00",
+            "end": "2021-09-30T21:00:00"
+          },
+          "quantile_bounds": {
+            "lower": 0.005,
+            "upper": 0.995
+          },
+          "scaler_type": "robust",
+          "residual_lag_policy": [
+            8,
+            56
+          ],
+          "selected_residual_lag": 56,
+          "calendar_source": {
+            "library": "holidays",
+            "country": "FI",
+            "subdivision": "18"
+          },
+          "dynamic_feature_definitions": [],
+          "static_feature_definitions": [],
+          "sparse_feature_definitions": [],
+          "train_only_fit": true,
+          "aggregation": "community",
+          "residual_lag_scores": [
+            {
+              "lag": 8,
+              "score": 0.07974084027914645
+            },
+            {
+              "lag": 56,
+              "score": 0.07252685691293029
+            }
+          ]
+        }
+      ]
+    },
+    "preprocessing_reports": [
+      {
+        "preprocessing_version": "v1",
+        "fitted_split": "train",
+        "train_time_bounds": {
+          "start": "2016-05-02T09:00:00",
+          "end": "2021-09-30T21:00:00"
+        },
+        "quantile_bounds": {
+          "lower": 0.005,
+          "upper": 0.995
+        },
+        "scaler_type": "robust",
+        "residual_lag_policy": [
+          8,
+          56
+        ],
+        "selected_residual_lag": 56,
+        "calendar_source": {
+          "library": "holidays",
+          "country": "FI",
+          "subdivision": "18"
+        },
+        "dynamic_feature_definitions": [],
+        "static_feature_definitions": [],
+        "sparse_feature_definitions": [],
+        "train_only_fit": true,
+        "aggregation": "station",
+        "residual_lag_scores": [
+          {
+            "lag": 8,
+            "score": 0.3832706906117299
+          },
+          {
+            "lag": 56,
+            "score": 0.37777592807462623
+          }
+        ]
+      },
+      {
+        "preprocessing_version": "v1",
+        "fitted_split": "train",
+        "train_time_bounds": {
+          "start": "2016-05-02T09:00:00",
+          "end": "2021-09-30T21:00:00"
+        },
+        "quantile_bounds": {
+          "lower": 0.005,
+          "upper": 0.995
+        },
+        "scaler_type": "robust",
+        "residual_lag_policy": [
+          8,
+          56
+        ],
+        "selected_residual_lag": 56,
+        "calendar_source": {
+          "library": "holidays",
+          "country": "FI",
+          "subdivision": "18"
+        },
+        "dynamic_feature_definitions": [],
+        "static_feature_definitions": [],
+        "sparse_feature_definitions": [],
+        "train_only_fit": true,
+        "aggregation": "community",
+        "residual_lag_scores": [
+          {
+            "lag": 8,
+            "score": 0.07974084027914645
+          },
+          {
+            "lag": 56,
+            "score": 0.07252685691293029
+          }
+        ]
+      }
+    ]
+  }
+}

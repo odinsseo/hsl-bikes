@@ -1,0 +1,150 @@
+{
+  "generated_at_utc": "2026-04-25T12:35:36.591424+00:00",
+  "git_commit": "2ab355d197b1c80ecd3af2dfd250af2fb26cec02",
+  "command": ".\\scripts\\run_stgnn_milestones.py --single-graphs SD,DE,DC,ATD --fusion-graph-set SD,DE,DC,ATD --include-community --include-leakage-sensitivity --build-leaky-graphs --epochs 120 --patience 10 --hidden-dim 64 --dropout 0.1 --batch-size 128 --learning-rate 0.001 --weight-decay 1e-5 --optimizer adamw --lr-scheduler plateau --lr-decay-factor 0.5 --lr-decay-patience 5 --min-learning-rate 1e-5 --max-grad-norm 1.0 --max-train-windows 0 --device cuda --random-state 52 --output-dir data/artifacts/experiments/stgnn_milestones_seed52 --progress --epoch-progress --early-stop-min-delta 0.001 --early-stop-start-epoch 5 --lr-plateau-threshold 0.001",
+  "script": "scripts/train_stgnn_pipeline.py",
+  "stage": "phase3_stgnn",
+  "python_version": "3.14.0",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "args": {
+    "train": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\prepared\\splits\\train\\train.csv",
+    "validation": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\prepared\\splits\\validation\\validation.csv",
+    "test": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\prepared\\splits\\test\\test.csv",
+    "graph_dir": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\graphs\\train",
+    "communities": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\network\\notebook\\communities.csv",
+    "output_dir": "data\\artifacts\\experiments\\stgnn_milestones_seed52\\runs\\m31_single_station_atd",
+    "aggregation": "station",
+    "graph": "DE",
+    "graph_set": "ATD",
+    "fusion_mode": "single",
+    "history": 8,
+    "horizon": 1,
+    "hidden_dim": 64,
+    "dropout": 0.1,
+    "epochs": 120,
+    "batch_size": 128,
+    "learning_rate": 0.001,
+    "weight_decay": 1e-05,
+    "patience": 10,
+    "early_stop_min_delta": 0.001,
+    "early_stop_start_epoch": 5,
+    "optimizer": "adamw",
+    "lr_scheduler": "plateau",
+    "lr_decay_factor": 0.5,
+    "lr_decay_patience": 5,
+    "lr_plateau_threshold": 0.001,
+    "min_learning_rate": 1e-05,
+    "max_grad_norm": 1.0,
+    "epoch_progress": true,
+    "max_train_windows": 0,
+    "preprocess_target": true,
+    "winsor_lower_quantile": 0.005,
+    "winsor_upper_quantile": 0.995,
+    "preprocess_scaler": "robust",
+    "residualize_target": true,
+    "residual_lag_candidates": "8,56",
+    "holiday_country": "FI",
+    "holiday_subdivision": "18",
+    "holiday_national_only": false,
+    "include_calendar_covariates": true,
+    "include_activity_mask": true,
+    "include_zero_run_indicator": false,
+    "zero_run_length": 2,
+    "include_static_features": true,
+    "num_workers": 2,
+    "prefetch_factor": 2,
+    "pin_memory": true,
+    "persistent_workers": true,
+    "lazy_windows": true,
+    "cache_preprocessed": true,
+    "refresh_preprocessed_cache": false,
+    "preprocessed_cache_dir": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\cache\\stgnn_preprocessed",
+    "device": "cuda",
+    "random_state": 52,
+    "strict_graph_source": true,
+    "allow_leaky_graph_source": false
+  },
+  "strict_graph_source": true,
+  "allow_leaky_graph_source": false,
+  "preprocessing_cache": {
+    "enabled": true,
+    "hit": true,
+    "key": "061c35c63613b5b32238",
+    "path": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\cache\\stgnn_preprocessed\\061c35c63613b5b32238"
+  },
+  "preprocessing": {
+    "preprocessing_version": "v1",
+    "fitted_split": "train",
+    "train_time_bounds": {
+      "start": "2016-05-02T09:00:00",
+      "end": "2021-09-30T21:00:00"
+    },
+    "quantile_bounds": {
+      "lower": 0.005,
+      "upper": 0.995
+    },
+    "scaler_type": "robust",
+    "residual_lag_policy": [
+      8,
+      56
+    ],
+    "selected_residual_lag": 56,
+    "calendar_source": {
+      "library": "holidays",
+      "country": "FI",
+      "subdivision": "18"
+    },
+    "dynamic_feature_definitions": [
+      "hour_sin",
+      "hour_cos",
+      "dow_sin",
+      "dow_cos",
+      "is_weekend",
+      "is_holiday",
+      "recent_activity_mask"
+    ],
+    "static_feature_definitions": [
+      "train_mean",
+      "train_variance",
+      "train_zero_rate"
+    ],
+    "sparse_feature_definitions": [
+      "recent_activity_mask"
+    ],
+    "train_only_fit": true
+  },
+  "residual_lag_scores": [
+    {
+      "lag": 8,
+      "score": 0.3832706906117299
+    },
+    {
+      "lag": 56,
+      "score": 0.37777592807462623
+    }
+  ],
+  "covariates": {
+    "enabled": true,
+    "dynamic_feature_definitions": [
+      "hour_sin",
+      "hour_cos",
+      "dow_sin",
+      "dow_cos",
+      "is_weekend",
+      "is_holiday",
+      "recent_activity_mask"
+    ],
+    "static_feature_definitions": [
+      "train_mean",
+      "train_variance",
+      "train_zero_rate"
+    ],
+    "sparse_feature_definitions": [
+      "recent_activity_mask"
+    ],
+    "train_time_bounds": {
+      "start": "2016-05-02T09:00:00",
+      "end": "2021-09-30T21:00:00"
+    }
+  }
+}

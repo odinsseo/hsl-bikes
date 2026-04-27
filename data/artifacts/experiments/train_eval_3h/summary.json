@@ -1,0 +1,392 @@
+{
+  "generated_at_utc": "2026-04-25T12:14:09.052115+00:00",
+  "graph_set": [
+    "SD",
+    "DE",
+    "DC",
+    "ATD"
+  ],
+  "alpha_grid": [
+    0.0,
+    0.05,
+    0.1,
+    0.15,
+    0.2,
+    0.25,
+    0.3,
+    0.35,
+    0.4,
+    0.45,
+    0.5,
+    0.55,
+    0.6,
+    0.65,
+    0.7,
+    0.75,
+    0.8,
+    0.85,
+    0.9,
+    0.95,
+    1.0
+  ],
+  "disable_community": false,
+  "counts": {
+    "results": 8,
+    "alpha_search": 42,
+    "baseline_search": 42,
+    "cohort_rows": 28,
+    "robustness_rows": 28,
+    "sensitivity_rows": 92
+  },
+  "paths": {
+    "results": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\experiments\\train_eval_3h\\train_eval_results.csv",
+    "alpha_search": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\experiments\\train_eval_3h\\train_eval_alpha_search.csv",
+    "baseline_search": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\experiments\\train_eval_3h\\train_eval_baseline_search.csv",
+    "cohort_results": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\experiments\\train_eval_3h\\station_cohort_results.csv",
+    "robustness_statistics": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\experiments\\train_eval_3h\\station_robustness_statistics.csv",
+    "sensitivity_summary": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\experiments\\train_eval_3h\\sensitivity_summary.csv",
+    "metadata": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\experiments\\train_eval_3h\\metadata.json"
+  },
+  "best_by_aggregation": [
+    {
+      "aggregation": "community",
+      "graph_set": "SD,DE,DC,ATD",
+      "model": "tree_lagged",
+      "config": "{\"lags\": [1, 2, 24, 168], \"max_depth\": 12, \"n_estimators\": 300, \"max_samples\": 300000}",
+      "n_nodes": 5,
+      "n_train_steps": 15821,
+      "n_validation_steps": 1712,
+      "n_test_steps": 4639,
+      "validation_wmape": 0.2280754414634483,
+      "validation_mae": 63.312489534969934,
+      "validation_rmse": 118.13679223214298,
+      "validation_mase": 0.622725613778715,
+      "test_wmape": 0.2632412713190234,
+      "test_mae": 55.38598618852135,
+      "test_rmse": 190.9777888988498,
+      "test_mase": 0.5447625341748105,
+      "preprocessing_enabled": true,
+      "selected_residual_lag": 56
+    },
+    {
+      "aggregation": "station",
+      "graph_set": "SD,DE,DC,ATD",
+      "model": "tree_lagged",
+      "config": "{\"lags\": [1, 2, 24, 168], \"max_depth\": 8, \"n_estimators\": 300, \"max_samples\": 300000}",
+      "n_nodes": 449,
+      "n_train_steps": 15821,
+      "n_validation_steps": 1712,
+      "n_test_steps": 4639,
+      "validation_wmape": 0.6194837433852388,
+      "validation_mae": 1.9149808886946331,
+      "validation_rmse": 3.697823181462152,
+      "validation_mase": 1.2634574768102584,
+      "test_wmape": 0.6284663947563739,
+      "test_mae": 1.4724875685772967,
+      "test_rmse": 3.328144427710944,
+      "test_mase": 0.9715112244787583,
+      "preprocessing_enabled": true,
+      "selected_residual_lag": 56
+    }
+  ],
+  "preprocessing": [
+    {
+      "preprocessing_version": "v1",
+      "fitted_split": "train",
+      "train_time_bounds": null,
+      "quantile_bounds": {
+        "lower": 0.005,
+        "upper": 0.995
+      },
+      "scaler_type": "robust",
+      "residual_lag_policy": [
+        8,
+        56
+      ],
+      "selected_residual_lag": 56,
+      "calendar_source": {
+        "library": "holidays",
+        "country": "FI",
+        "subdivision": "18"
+      },
+      "dynamic_feature_definitions": [],
+      "static_feature_definitions": [],
+      "sparse_feature_definitions": [],
+      "train_only_fit": true,
+      "aggregation": "station",
+      "residual_lag_scores": [
+        {
+          "lag": 8,
+          "score": 0.3832706906117299
+        },
+        {
+          "lag": 56,
+          "score": 0.37777592807462623
+        }
+      ]
+    },
+    {
+      "preprocessing_version": "v1",
+      "fitted_split": "train",
+      "train_time_bounds": null,
+      "quantile_bounds": {
+        "lower": 0.005,
+        "upper": 0.995
+      },
+      "scaler_type": "robust",
+      "residual_lag_policy": [
+        8,
+        56
+      ],
+      "selected_residual_lag": 56,
+      "calendar_source": {
+        "library": "holidays",
+        "country": "FI",
+        "subdivision": "18"
+      },
+      "dynamic_feature_definitions": [],
+      "static_feature_definitions": [],
+      "sparse_feature_definitions": [],
+      "train_only_fit": true,
+      "aggregation": "community",
+      "residual_lag_scores": [
+        {
+          "lag": 8,
+          "score": 0.07974084027914645
+        },
+        {
+          "lag": 56,
+          "score": 0.07252685691293029
+        }
+      ]
+    }
+  ],
+  "run_metadata": {
+    "generated_at_utc": "2026-04-25T12:14:09.053149+00:00",
+    "git_commit": "2ab355d197b1c80ecd3af2dfd250af2fb26cec02",
+    "command": ".\\scripts\\train_eval_pipeline.py --graph-set SD,DE,DC,ATD --alpha-grid 0.0,0.05,0.1,0.15,0.2,0.25,0.3,0.35,0.4,0.45,0.5,0.55,0.6,0.65,0.7,0.75,0.8,0.85,0.9,0.95,1.0 --seasonal-lags 1,24,168,336 --linear-lag-candidates 1|1,24|1,2,24|1,24,168|1,2,24,168 --tree-lag-candidates 1,24|1,2,24|1,24,168|1,2,24,168 --tree-max-depths 8,12,16 --tree-estimators 300 --linear-max-samples 300000 --tree-max-samples 300000 --bootstrap-resamples 2000 --permutation-resamples 10000 --progress",
+    "script": "scripts/train_eval_pipeline.py",
+    "stage": "phase1_train_eval",
+    "python_version": "3.14.0",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "args": {
+      "train": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\prepared\\splits\\train\\train.csv",
+      "validation": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\prepared\\splits\\validation\\validation.csv",
+      "test": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\prepared\\splits\\test\\test.csv",
+      "graph_dir": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\graphs\\train",
+      "communities": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\network\\notebook\\communities.csv",
+      "stations_dir": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\primary\\stations",
+      "output_dir": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\experiments\\train_eval_3h",
+      "graph_set": "SD,DE,DC,ATD",
+      "alpha_grid": "0.0,0.05,0.1,0.15,0.2,0.25,0.3,0.35,0.4,0.45,0.5,0.55,0.6,0.65,0.7,0.75,0.8,0.85,0.9,0.95,1.0",
+      "sparse_quantile": 0.25,
+      "disable_community": false,
+      "seasonal_lags": "1,24,168,336",
+      "linear_lag_candidates": "1|1,24|1,2,24|1,24,168|1,2,24,168",
+      "tree_lag_candidates": "1,24|1,2,24|1,24,168|1,2,24,168",
+      "tree_max_depths": "8,12,16",
+      "tree_estimators": 300,
+      "linear_max_samples": 300000,
+      "tree_max_samples": 300000,
+      "preprocess_target": true,
+      "winsor_lower_quantile": 0.005,
+      "winsor_upper_quantile": 0.995,
+      "preprocess_scaler": "robust",
+      "residualize_target": true,
+      "residual_lag_candidates": "8,56",
+      "holiday_country": "FI",
+      "holiday_subdivision": "18",
+      "holiday_national_only": false,
+      "robustness_reference_model": "graph_propagation",
+      "bootstrap_resamples": 2000,
+      "permutation_resamples": 10000,
+      "bootstrap_batch_size": 2048,
+      "permutation_batch_size": 4096,
+      "ci_level": 0.95,
+      "random_state": 42,
+      "progress": true,
+      "strict_graph_source": true
+    },
+    "strict_graph_source": true,
+    "preprocess_target": true,
+    "preprocessing": {
+      "preprocessing_version": "v1",
+      "fitted_split": "train",
+      "train_time_bounds": null,
+      "quantile_bounds": {
+        "lower": 0.005,
+        "upper": 0.995
+      },
+      "scaler_type": "robust",
+      "residual_lag_policy": [
+        8,
+        56
+      ],
+      "selected_residual_lag": 56,
+      "calendar_source": {
+        "library": "holidays",
+        "country": "FI",
+        "subdivision": "18"
+      },
+      "dynamic_feature_definitions": [],
+      "static_feature_definitions": [],
+      "sparse_feature_definitions": [],
+      "train_only_fit": true,
+      "aggregation": "station",
+      "residual_lag_scores": [
+        {
+          "lag": 8,
+          "score": 0.3832706906117299
+        },
+        {
+          "lag": 56,
+          "score": 0.37777592807462623
+        }
+      ],
+      "aggregation_reports": [
+        {
+          "preprocessing_version": "v1",
+          "fitted_split": "train",
+          "train_time_bounds": null,
+          "quantile_bounds": {
+            "lower": 0.005,
+            "upper": 0.995
+          },
+          "scaler_type": "robust",
+          "residual_lag_policy": [
+            8,
+            56
+          ],
+          "selected_residual_lag": 56,
+          "calendar_source": {
+            "library": "holidays",
+            "country": "FI",
+            "subdivision": "18"
+          },
+          "dynamic_feature_definitions": [],
+          "static_feature_definitions": [],
+          "sparse_feature_definitions": [],
+          "train_only_fit": true,
+          "aggregation": "station",
+          "residual_lag_scores": [
+            {
+              "lag": 8,
+              "score": 0.3832706906117299
+            },
+            {
+              "lag": 56,
+              "score": 0.37777592807462623
+            }
+          ]
+        },
+        {
+          "preprocessing_version": "v1",
+          "fitted_split": "train",
+          "train_time_bounds": null,
+          "quantile_bounds": {
+            "lower": 0.005,
+            "upper": 0.995
+          },
+          "scaler_type": "robust",
+          "residual_lag_policy": [
+            8,
+            56
+          ],
+          "selected_residual_lag": 56,
+          "calendar_source": {
+            "library": "holidays",
+            "country": "FI",
+            "subdivision": "18"
+          },
+          "dynamic_feature_definitions": [],
+          "static_feature_definitions": [],
+          "sparse_feature_definitions": [],
+          "train_only_fit": true,
+          "aggregation": "community",
+          "residual_lag_scores": [
+            {
+              "lag": 8,
+              "score": 0.07974084027914645
+            },
+            {
+              "lag": 56,
+              "score": 0.07252685691293029
+            }
+          ]
+        }
+      ]
+    },
+    "preprocessing_reports": [
+      {
+        "preprocessing_version": "v1",
+        "fitted_split": "train",
+        "train_time_bounds": null,
+        "quantile_bounds": {
+          "lower": 0.005,
+          "upper": 0.995
+        },
+        "scaler_type": "robust",
+        "residual_lag_policy": [
+          8,
+          56
+        ],
+        "selected_residual_lag": 56,
+        "calendar_source": {
+          "library": "holidays",
+          "country": "FI",
+          "subdivision": "18"
+        },
+        "dynamic_feature_definitions": [],
+        "static_feature_definitions": [],
+        "sparse_feature_definitions": [],
+        "train_only_fit": true,
+        "aggregation": "station",
+        "residual_lag_scores": [
+          {
+            "lag": 8,
+            "score": 0.3832706906117299
+          },
+          {
+            "lag": 56,
+            "score": 0.37777592807462623
+          }
+        ]
+      },
+      {
+        "preprocessing_version": "v1",
+        "fitted_split": "train",
+        "train_time_bounds": null,
+        "quantile_bounds": {
+          "lower": 0.005,
+          "upper": 0.995
+        },
+        "scaler_type": "robust",
+        "residual_lag_policy": [
+          8,
+          56
+        ],
+        "selected_residual_lag": 56,
+        "calendar_source": {
+          "library": "holidays",
+          "country": "FI",
+          "subdivision": "18"
+        },
+        "dynamic_feature_definitions": [],
+        "static_feature_definitions": [],
+        "sparse_feature_definitions": [],
+        "train_only_fit": true,
+        "aggregation": "community",
+        "residual_lag_scores": [
+          {
+            "lag": 8,
+            "score": 0.07974084027914645
+          },
+          {
+            "lag": 56,
+            "score": 0.07252685691293029
+          }
+        ]
+      }
+    ]
+  }
+}

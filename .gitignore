@@ -40,10 +40,12 @@ htmlcov/
 .nox/
 
 # Data (large files — download from HSL)
-data/*
-data/primary/trips/*
-!data/primary/trips/.gitkeep
-!data/artifacts/experiments/*
+data/primary/*
+data/prepared/*
+data/graphs/*
+data/artifacts/*
+!data/artifacts/experiments/
+
 
 # Generated outputs
 **/station_map.html

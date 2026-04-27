@@ -1,0 +1,13 @@
+experiment_id,rq,aggregation,graph_set,description
+RQ1_SD_STATION,RQ1,station,SD,Geometric baseline: SD only
+RQ1_DE_STATION,RQ1,station,DE,Functional baseline: DE only
+RQ1_DC_STATION,RQ1,station,DC,Functional baseline: DC only
+RQ1_DE_DC_STATION,RQ1,station,DE+DC,Functional fusion: DE + DC
+RQ2_SD_DE_STATION,RQ2,station,SD+DE,Two-view fusion: SD + DE
+RQ2_SD_DC_STATION,RQ2,station,SD+DC,Two-view fusion: SD + DC
+RQ2_DE_DC_STATION,RQ2,station,DE+DC,Two-view fusion: DE + DC
+RQ2_ALL_STATION,RQ2,station,SD+DE+DC+ATD,All-view fusion: SD + DE + DC + ATD
+RQ3_ALL_STATION,RQ3,station,SD+DE+DC+ATD,All-view station-level baseline
+RQ3_ALL_COMMUNITY,RQ3,community,SD+DE+DC+ATD,All-view community-level baseline
+RQ3_FUNCTIONAL_STATION,RQ3,station,DE+DC,Functional station-level baseline
+RQ3_FUNCTIONAL_COMMUNITY,RQ3,community,DE+DC,Functional community-level baseline

@@ -1,0 +1,326 @@
+{
+  "generated_at_utc": "2026-04-25T12:31:04.593806+00:00",
+  "aggregation": "station",
+  "graph": "SD+DE+DC+ATD",
+  "graph_set": [
+    "SD",
+    "DE",
+    "DC",
+    "ATD"
+  ],
+  "fusion_mode": "learned",
+  "model": "A3T_GCN_graph_fusion",
+  "device": "cuda",
+  "history": 8,
+  "horizon": 1,
+  "input_channels": 11,
+  "hidden_dim": 64,
+  "dropout": 0.1,
+  "batch_size": 128,
+  "num_workers": 2,
+  "pin_memory": true,
+  "prefetch_factor": 2,
+  "persistent_workers": true,
+  "learning_rate": 0.001,
+  "weight_decay": 1e-05,
+  "loss_function": {
+    "name": "huber",
+    "delta": 1.0,
+    "masked": false,
+    "space": "transformed"
+  },
+  "selection_metric": {
+    "name": "validation_wmape",
+    "space": "original",
+    "mode": "min",
+    "min_delta": 0.001
+  },
+  "early_stopping": {
+    "monitor": "validation_wmape",
+    "mode": "min",
+    "patience": 10,
+    "min_delta": 0.001,
+    "start_epoch": 5
+  },
+  "optimizer": "adamw",
+  "lr_scheduler": "plateau",
+  "max_grad_norm": 1.0,
+  "epoch_progress": true,
+  "lr_decay_factor": 0.5,
+  "lr_decay_patience": 5,
+  "lr_decay_patience_requested": 5,
+  "lr_plateau_threshold": 0.001,
+  "lr_plateau_threshold_mode": "abs",
+  "lr_plateau_start_epoch": 5,
+  "min_learning_rate": 1e-05,
+  "epochs_requested": 120,
+  "epochs_ran": 14,
+  "best_epoch": 3,
+  "best_validation_wmape": 0.8791645918317137,
+  "best_validation_huber": 0.261395876961095,
+  "train_windows": 15813,
+  "validation_windows": 1704,
+  "test_windows": 4631,
+  "fusion_weights": {
+    "SD": 0.2812083959579468,
+    "DE": 0.2808563709259033,
+    "DC": 0.13678549230098724,
+    "ATD": 0.30114975571632385
+  },
+  "metrics": {
+    "validation": {
+      "wmape": 0.8791645918317137,
+      "mae": 2.7262897485936746,
+      "rmse": 6.350606192560187,
+      "mase": 1.798739186979486
+    },
+    "test": {
+      "wmape": 0.8781586772903249,
+      "mae": 2.05926053619051,
+      "rmse": 5.586923607481434,
+      "mase": 1.3586496536389654
+    },
+    "validation_model_space": {
+      "wmape": 1.4501338005065918,
+      "mae": 0.5491670370101929,
+      "rmse": 0.7815015316009521,
+      "mase": 2.8755485558468226
+    }
+  },
+  "covariates": {
+    "enabled": true,
+    "dynamic_feature_definitions": [
+      "hour_sin",
+      "hour_cos",
+      "dow_sin",
+      "dow_cos",
+      "is_weekend",
+      "is_holiday",
+      "recent_activity_mask"
+    ],
+    "static_feature_definitions": [
+      "train_mean",
+      "train_variance",
+      "train_zero_rate"
+    ],
+    "sparse_feature_definitions": [
+      "recent_activity_mask"
+    ],
+    "train_time_bounds": {
+      "start": "2016-05-02T09:00:00",
+      "end": "2021-09-30T21:00:00"
+    }
+  },
+  "preprocessing_cache": {
+    "enabled": true,
+    "hit": true,
+    "key": "eed0ff6d8e60333b041c",
+    "path": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\cache\\stgnn_preprocessed\\eed0ff6d8e60333b041c"
+  },
+  "paths": {
+    "training_curve": "data\\artifacts\\experiments\\stgnn_milestones_seed42\\runs\\leakage_leaky_fusion_learned_station\\training_curve.csv",
+    "results": "data\\artifacts\\experiments\\stgnn_milestones_seed42\\runs\\leakage_leaky_fusion_learned_station\\results.csv",
+    "metadata": "data\\artifacts\\experiments\\stgnn_milestones_seed42\\runs\\leakage_leaky_fusion_learned_station\\metadata.json"
+  },
+  "run_metadata": {
+    "generated_at_utc": "2026-04-25T12:31:04.593879+00:00",
+    "git_commit": "2ab355d197b1c80ecd3af2dfd250af2fb26cec02",
+    "command": ".\\scripts\\run_stgnn_milestones.py --single-graphs SD,DE,DC,ATD --fusion-graph-set SD,DE,DC,ATD --include-community --include-leakage-sensitivity --build-leaky-graphs --epochs 120 --patience 10 --hidden-dim 64 --dropout 0.1 --batch-size 128 --learning-rate 0.001 --weight-decay 1e-5 --optimizer adamw --lr-scheduler plateau --lr-decay-factor 0.5 --lr-decay-patience 5 --min-learning-rate 1e-5 --max-grad-norm 1.0 --max-train-windows 0 --device cuda --random-state 42 --output-dir data/artifacts/experiments/stgnn_milestones_seed42 --progress --epoch-progress --early-stop-min-delta 0.001 --early-stop-start-epoch 5 --lr-plateau-threshold 0.001",
+    "script": "scripts/train_stgnn_pipeline.py",
+    "stage": "phase3_stgnn",
+    "python_version": "3.14.0",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "args": {
+      "train": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\prepared\\splits\\train\\train.csv",
+      "validation": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\prepared\\splits\\validation\\validation.csv",
+      "test": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\prepared\\splits\\test\\test.csv",
+      "graph_dir": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\graphs\\leaky_full",
+      "communities": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\network\\notebook\\communities.csv",
+      "output_dir": "data\\artifacts\\experiments\\stgnn_milestones_seed42\\runs\\leakage_leaky_fusion_learned_station",
+      "aggregation": "station",
+      "graph": "DE",
+      "graph_set": "SD,DE,DC,ATD",
+      "fusion_mode": "learned",
+      "history": 8,
+      "horizon": 1,
+      "hidden_dim": 64,
+      "dropout": 0.1,
+      "epochs": 120,
+      "batch_size": 128,
+      "learning_rate": 0.001,
+      "weight_decay": 1e-05,
+      "patience": 10,
+      "early_stop_min_delta": 0.001,
+      "early_stop_start_epoch": 5,
+      "optimizer": "adamw",
+      "lr_scheduler": "plateau",
+      "lr_decay_factor": 0.5,
+      "lr_decay_patience": 5,
+      "lr_plateau_threshold": 0.001,
+      "min_learning_rate": 1e-05,
+      "max_grad_norm": 1.0,
+      "epoch_progress": true,
+      "max_train_windows": 0,
+      "preprocess_target": true,
+      "winsor_lower_quantile": 0.005,
+      "winsor_upper_quantile": 0.995,
+      "preprocess_scaler": "robust",
+      "residualize_target": true,
+      "residual_lag_candidates": "8,56",
+      "holiday_country": "FI",
+      "holiday_subdivision": "18",
+      "holiday_national_only": false,
+      "include_calendar_covariates": true,
+      "include_activity_mask": true,
+      "include_zero_run_indicator": false,
+      "zero_run_length": 2,
+      "include_static_features": true,
+      "num_workers": 2,
+      "prefetch_factor": 2,
+      "pin_memory": true,
+      "persistent_workers": true,
+      "lazy_windows": true,
+      "cache_preprocessed": true,
+      "refresh_preprocessed_cache": false,
+      "preprocessed_cache_dir": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\cache\\stgnn_preprocessed",
+      "device": "cuda",
+      "random_state": 42,
+      "strict_graph_source": true,
+      "allow_leaky_graph_source": true
+    },
+    "strict_graph_source": true,
+    "allow_leaky_graph_source": true,
+    "preprocessing_cache": {
+      "enabled": true,
+      "hit": true,
+      "key": "eed0ff6d8e60333b041c",
+      "path": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\cache\\stgnn_preprocessed\\eed0ff6d8e60333b041c"
+    },
+    "preprocessing": {
+      "preprocessing_version": "v1",
+      "fitted_split": "train",
+      "train_time_bounds": {
+        "start": "2016-05-02T09:00:00",
+        "end": "2021-09-30T21:00:00"
+      },
+      "quantile_bounds": {
+        "lower": 0.005,
+        "upper": 0.995
+      },
+      "scaler_type": "robust",
+      "residual_lag_policy": [
+        8,
+        56
+      ],
+      "selected_residual_lag": 56,
+      "calendar_source": {
+        "library": "holidays",
+        "country": "FI",
+        "subdivision": "18"
+      },
+      "dynamic_feature_definitions": [
+        "hour_sin",
+        "hour_cos",
+        "dow_sin",
+        "dow_cos",
+        "is_weekend",
+        "is_holiday",
+        "recent_activity_mask"
+      ],
+      "static_feature_definitions": [
+        "train_mean",
+        "train_variance",
+        "train_zero_rate"
+      ],
+      "sparse_feature_definitions": [
+        "recent_activity_mask"
+      ],
+      "train_only_fit": true
+    },
+    "residual_lag_scores": [
+      {
+        "lag": 8,
+        "score": 0.3832706906117299
+      },
+      {
+        "lag": 56,
+        "score": 0.37777592807462623
+      }
+    ],
+    "covariates": {
+      "enabled": true,
+      "dynamic_feature_definitions": [
+        "hour_sin",
+        "hour_cos",
+        "dow_sin",
+        "dow_cos",
+        "is_weekend",
+        "is_holiday",
+        "recent_activity_mask"
+      ],
+      "static_feature_definitions": [
+        "train_mean",
+        "train_variance",
+        "train_zero_rate"
+      ],
+      "sparse_feature_definitions": [
+        "recent_activity_mask"
+      ],
+      "train_time_bounds": {
+        "start": "2016-05-02T09:00:00",
+        "end": "2021-09-30T21:00:00"
+      }
+    }
+  },
+  "preprocessing": {
+    "preprocessing_version": "v1",
+    "fitted_split": "train",
+    "train_time_bounds": {
+      "start": "2016-05-02T09:00:00",
+      "end": "2021-09-30T21:00:00"
+    },
+    "quantile_bounds": {
+      "lower": 0.005,
+      "upper": 0.995
+    },
+    "scaler_type": "robust",
+    "residual_lag_policy": [
+      8,
+      56
+    ],
+    "selected_residual_lag": 56,
+    "calendar_source": {
+      "library": "holidays",
+      "country": "FI",
+      "subdivision": "18"
+    },
+    "dynamic_feature_definitions": [
+      "hour_sin",
+      "hour_cos",
+      "dow_sin",
+      "dow_cos",
+      "is_weekend",
+      "is_holiday",
+      "recent_activity_mask"
+    ],
+    "static_feature_definitions": [
+      "train_mean",
+      "train_variance",
+      "train_zero_rate"
+    ],
+    "sparse_feature_definitions": [
+      "recent_activity_mask"
+    ],
+    "train_only_fit": true,
+    "residual_lag_scores": [
+      {
+        "lag": 8,
+        "score": 0.3832706906117299
+      },
+      {
+        "lag": 56,
+        "score": 0.37777592807462623
+      }
+    ]
+  }
+}
