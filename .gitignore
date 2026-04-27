@@ -43,6 +43,7 @@ htmlcov/
 data/*
 data/primary/trips/*
 !data/primary/trips/.gitkeep
+!data/artifacts/experiments/*
 
 # Generated outputs
 **/station_map.html
