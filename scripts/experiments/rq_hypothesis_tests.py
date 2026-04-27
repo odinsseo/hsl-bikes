@@ -12,8 +12,10 @@ import numpy as np
 import pandas as pd
 
 from .config import (
+    DEFAULT_COMMUNITIES,
     DEFAULT_GRAPH_DIR,
     DEFAULT_OUTPUT_DIR,
+    DEFAULT_TEST,
     DEFAULT_TRAIN,
     DEFAULT_VALIDATION,
 )
