@@ -354,10 +354,21 @@ def run(args: argparse.Namespace) -> int:
         )
 
         if spec.aggregation not in baseline_cache:
+            baseline_tune_kwargs: dict[str, Any] = {}
+            if preprocess_bundle is not None:
+                baseline_tune_kwargs = {
+                    "val_series_raw": val_series_raw,
+                    "train_series_raw": train_series_raw,
+                    "inverse_state": preprocess_bundle["state"],
+                    "val_pre_residual": preprocess_bundle["val_pre_residual"],
+                    "history": 1,
+                    "horizon": 1,
+                }
             baseline_models, baseline_search = fit_best_baseline_models(
                 train_series=train_series,
                 val_series=val_series,
                 args=args,
+                **baseline_tune_kwargs,
             )
             baseline_cache[spec.aggregation] = baseline_models
             for row in baseline_search:
