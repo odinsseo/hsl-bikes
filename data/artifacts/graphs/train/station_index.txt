@@ -1,0 +1,449 @@
+A.I. Virtasen aukio
+Abraham Wetterin tie
+Agnetankuja
+Agronominkatu
+Ahertajantie
+Ajomiehentie
+Ala-Malmin tori
+Alakiventie
+Albertinkatu
+Alppikylä
+Annankatu
+Apollonkatu
+Arabian kauppakeskus
+Arabiankatu
+Arielinkatu
+Asentajanpuisto
+Aulangontie
+Auringonkatu
+Aurinkolahdenaukio
+Aurinkotuulenkatu
+Avaruuskatu
+Baana
+Bermudankuja
+Betonimies
+Brahen kenttä
+Brahen puistikko
+Cygnaeuksenkatu
+Derby Business Park
+Designmuseo
+Diakoniapuisto
+Eerikinkatu
+Ehrenströmintie
+Elfvik
+Elimäenkatu
+Eläinmuseo
+Erottajan aukio
+Eränkävijäntori
+Esterinportti
+Eteläesplanadi
+Eteläinen Hesperiankatu
+Etuniementie
+Etupellonpuisto
+Fleminginkatu
+Friisilänaukio
+Gallen-Kallelan tie
+Gebhardinaukio
+Golfpolku
+Gransinmäki
+Gunillantie
+Gyldenintie
+Haagan tori
+Haakoninlahdenkatu
+Haapaniemenkatu
+Haapasaarentie
+Hagalundinpuisto
+Hakalehto
+Hakaniemi (M)
+Hakuninmaa
+Halkaisijantie
+Halmetie
+Hanasaari
+Hankasuontie
+Hauenkallio
+Hauenkalliontie
+Haukilahdenaukio
+Haukilahdenkatu
+Haukilahdenranta
+Heikinlaakso
+Heikkilänaukio
+Heikkiläntie
+Helluntairaitti
+Hernepellontie
+Hernesaarenranta
+Hertanmäenkatu
+Herttoniemen kirkko
+Herttoniemenranta
+Herttoniemi (M)
+Hietalahdentori
+Hietaniemenkatu
+Hollolantie
+Honkasuo
+Huhtakuja
+Humalniementie
+Humikkalankuja
+Huopalahden asema
+Huopalahdentie
+Huovitie
+Hämeenlinnanväylä
+Ida Aalbergin tie
+Ilmalan asema
+Innopoli
+Intiankatu
+Isoisänsilta
+Isosaarentie
+Itäkeskus (M)
+Itäkeskus Metrovarikko
+Itälahdenkatu
+Itämerentori
+Itäportti
+Jakomäentie
+Jakomäki
+Jalavatie
+Jokipellontie
+Jollas
+Juhana Herttuan tie
+Jämeräntaival
+Jännetie
+Jätkäsaarenlaituri
+Jäähalli
+Kaapelitehdas
+Kaisaniemenpuisto
+Kaivonkatsojanpuisto
+Kaivopuisto
+Kalannintie
+Kalasatama (M)
+Kalevalantie
+Kalevankatu
+Kalkkihiekantie
+Kalkkipellonmäki
+Kamppi (M)
+Kanavaranta
+Kannelmäen asema
+Kannelmäen liikuntapuisto
+Kansallismuseo
+Kapteeninpuistikko
+Karhulantie
+Karhupuisto
+Karhusuontie
+Karviaistie
+Kasarmitori
+Katariina Saksilaisen katu
+Kauppakeskus Columbus
+Kauppakeskus Kaari
+Kauppakorkeakoulu
+Kaustisentie
+Keilalahti
+Keilaniemi (M)
+Keilaranta
+Kesäkatu
+Kiasma
+Kirjurinkuja
+Kirkkoherrantie
+Kiskontie
+Kivikon liikuntapuisto
+Kivikonkaari
+Kivikonlaita
+Koivu-Mankkaa
+Koivusaari (M)
+Komeetankatu
+Komentajankatu
+Kontula (M)
+Kontulankaari
+Korjaamo
+Korkeasaari
+Korppaanmäentie
+Koskelan varikko
+Koskelantie
+Kotinummentie
+Koukkusaarentie
+Kriikunakuja
+Kuikkarinne
+Kulosaari (M)
+Kulttuuriaukio
+Kuninkaantammi
+Kurkimäentie
+Kurkimäki
+Kustaankartano
+Kustaankatu
+Kutsuntatie
+Kuunkatu
+Kuusisaari
+Kuusitie
+Kylävoudintie
+Käpylän asema
+Käpyläntie
+Käskynhaltijantie
+Laajalahden aukio
+Laajalahden keskus
+Laajasalon ostoskeskus
+Laivalahden puistotie
+Laivasillankatu
+Lallukankuja
+Lastenlehto
+Laulurastaantie
+Lauttasaaren ostoskeskus
+Lauttasaarensilta
+Lehtisaarentie
+Leikosaarentie
+Lepolantie
+Leppäsuonaukio
+Leppävaaran uimahalli
+Leppävaaran urheilupuisto
+Leppävaaranaukio
+Leppävaarankäytävä
+Lettopolku
+Liisanpuistikko
+Linnakepolku
+Linnanmäki
+Linnuntie
+Lintulahdenkatu
+Lokitie
+Louhentori
+Lukutori
+Luoteisväylä
+Lystimäensilta
+Lystimäki
+Läkkitori
+Länsisatamankatu
+Länsisatamankuja
+Länsiterminaali
+Länsituuli
+Maarinranta
+Maatullinkuja
+Maistraatintori
+Majurinkulma
+Malmin asema
+Malmin sairaala
+Malminkartanon asema
+Malminkartanonhuippu
+Mamsellimyllynkatu
+Mankkaanaukio
+Mankkaanlaaksontie
+Mannerheimintie
+Margareetankuja
+Marian sairaala
+Marjaniementie
+Marjaniemi
+Marttila
+Mastokatu
+Matinkartanontie
+Matinkyläntie
+Matinlahdenranta
+Maunula
+Maununneva
+Meilahden sairaala
+Melkonkuja
+Mellstenintie
+Mellunmäki (M)
+Meri-Rastilan tori
+Merihaka
+Merisotilaantori
+Messeniuksenkatu
+Metsänneidonpolku
+Mikkolantie
+Mosaiikkitori
+Munkkiniemen aukio
+Muotoilijankatu
+Mustikkamaa
+Muurarinkuja
+Muusantori
+Myllypuro (M)
+Mäkelänkatu
+Mäkitorpantie
+Mäkkylän asema
+Mäntyviita
+Narinkka
+Nelikkotie
+Niittykumpu (M)
+Niittymaa
+Nokkala
+Nordenskiöldinaukio
+Nuottaniementie
+Näkinsilta
+Näyttelijäntie
+Olarinluoma
+Olympiastadion
+Ooppera
+Opastinsilta
+Oravannahkatori
+Orionintie
+Orpaanporras
+Otaranta
+Otsolahti
+Otto Brandtin tie
+Oulunkylän asema
+Paavalinpuisto
+Paciuksenkaari
+Paciuksenkatu
+Painiitty
+Pajamäki
+Pajupillintie
+Paloheinän kirjasto
+Paloheinän maja
+Paloheinäntie
+Pasilan asema
+Pernajantie
+Perämiehenkatu
+Petter Wetterin tie
+Peukaloisentie
+Pihlajamäki
+Piikintie
+Piispankallio
+Piispanportti
+Piispansilta
+Pirkkolan liikuntapuisto
+Pitäjänmäen asema
+Pohjankulma
+Pohjois-Haagan asema
+Pohjolanaukio
+Pohjolankatu
+Porolahden koulu
+Porthania
+Porvarintie
+Postipuisto
+Postipuun koulu
+Prinsessantie
+Puistokaari
+Puistolan VPK
+Puistolan asema
+Puistolantori
+Pukinmäen asema
+Pukinmäen liikuntapuisto
+Punakiventie
+Puotila (M)
+Puotilan ostoskeskus
+Puotilantie
+Puotinharju
+Puotinkylän kartano
+Purjetie
+Päijänteentie
+Radiokatu
+Rajasaarentie
+Ramsinniementie
+Rapakiventie
+Rastila (M)
+Ratapihantie
+Ratsutori
+Rautatieläisenkatu
+Rautatientori / itä
+Rautatientori / länsi
+Reiherintie
+Relanderinaukio
+Revontulentie
+Ritarikatu
+Roihupelto
+Rukatunturintie
+Rummunlyöjänkatu
+Ruomelantie
+Ruskeasuon varikko
+Ruutikatu
+Sallatunturintie
+Salmisaarenranta
+Sammonpuistikko
+Saniaiskuja
+Sateenkaarentie
+Sateentie
+Saunalahdentie
+Savela
+Senaatintori
+Sepetlahdentie
+Sepänkatu
+Seurasaari
+Siilitie (M)
+Siilitie 13
+Siilitie 9
+Siltamäki
+Siltavoudintie
+Sinkilätie
+Sofianlehdonkatu
+Sompasaari
+Stenbäckinkatu
+Sumukuja
+Suomenlahdentie
+Suurpellonaukio
+Syystie
+Sähkömies
+Säteri
+Säterinniitty
+Säterinrinne
+Sörnäinen (M)
+Takomotie
+Tammisalon aukio
+Tapanilan asema
+Tapiolan urheilupuisto
+Tapionaukio
+Teerisuontie
+Tekniikantie
+Teljäntie
+Tenholantie
+Teollisuuskatu
+Teurastamo
+Thalianaukio
+Tietäjä
+Tiistiläntie
+Tiistinkallio
+Tilkantori
+Tilkanvierto
+Tilketori
+Toinen linja
+Tollinpolku
+Tontunmäentie
+Toppelundinportti
+Toppelundintie
+Torpanranta
+Torpparinmäentie
+Trumpettikuja
+Tulisuontie
+Tunnelitie
+Tuohipolku
+Tupasaarentie
+Tuukkalantie
+Tuulimäki
+Tyynenmerenkatu
+Töyrynummentie
+Töyrynummi
+Töölönkatu
+Töölönlahden puisto
+Töölönlahdenkatu
+Töölöntori
+Töölöntulli
+Uimastadion
+Ulappasilta
+Ulvilantie
+Unioninkatu
+Upseerinkatu
+Urheilupuisto (M)
+Valimon asema
+Valimotie
+Vallikatu
+Vallipolku
+Vanha Kauppahalli
+Vanha Tapanilantie
+Vanha Viertotie
+Vanha kirkkopuisto
+Varsapuistikko
+Vartioharjuntie
+Varustuksentie
+Velodrominrinne
+Venttiilikuja
+Verkatehtaanpuisto
+Verkkosaari
+Vesakkotie
+Vihdintie
+Viikin normaalikoulu
+Viikin tiedepuisto
+Viiskulma
+Vilhonvuorenkatu
+Viljelijäntie
+Voikukantie
+Von Daehnin katu
+Vuosaaren liikuntapuisto
+Vuosaaren puistopolku
+Vähäntuvantie
+Välimerenkatu
+Väärämäentie
+Westendinasema
+Westendintie
+Yhdyskunnankuja
+Ympyrätalo

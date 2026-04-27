@@ -1,0 +1,26 @@
+{
+  "generated_at_utc": "2026-04-25T10:46:35.831958+00:00",
+  "input_csv": "data\\prepared\\splits\\train\\train.csv",
+  "rows_used": 14445965,
+  "rows_total": 14445965,
+  "cutoff_end": null,
+  "station_count": 449,
+  "graph_shapes": {
+    "SD": [
+      449,
+      449
+    ],
+    "DE": [
+      449,
+      449
+    ],
+    "DC": [
+      449,
+      449
+    ],
+    "ATD": [
+      449,
+      449
+    ]
+  }
+}
