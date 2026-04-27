@@ -665,6 +665,7 @@ def evaluate_aggregation(
         train_series=train_series,
         val_series=val_series,
         args=args,
+        **tune_kwargs,
     )
     for row in baseline_search_rows:
         baseline_search.append(
