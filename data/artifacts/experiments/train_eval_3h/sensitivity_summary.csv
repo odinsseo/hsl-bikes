@@ -1,93 +1,93 @@
 sensitivity_axis,scope,aggregation,model,setting,metric,value,reference_value,delta_vs_reference
-hyperparameter,graph_propagation_alpha,community,graph_propagation,alpha=0.0,validation_wmape,1.0689074197564286,0.9290525016742485,0.1398549180821801
-hyperparameter,graph_propagation_alpha,station,graph_propagation,alpha=0.0,validation_wmape,1.0350390730252488,1.0339549641943964,0.001084108830852415
-hyperparameter,graph_propagation_alpha,community,graph_propagation,alpha=0.05,validation_wmape,1.0532328463030818,0.9290525016742485,0.12418034462883332
-hyperparameter,graph_propagation_alpha,station,graph_propagation,alpha=0.05,validation_wmape,1.0339549641943964,1.0339549641943964,0.0
-hyperparameter,graph_propagation_alpha,community,graph_propagation,alpha=0.1,validation_wmape,1.0385279492691206,0.9290525016742485,0.10947544759487216
-hyperparameter,graph_propagation_alpha,station,graph_propagation,alpha=0.1,validation_wmape,1.0352073563591884,1.0339549641943964,0.0012523921647920044
-hyperparameter,graph_propagation_alpha,community,graph_propagation,alpha=0.15,validation_wmape,1.0246019632909822,0.9290525016742485,0.09554946161673372
-hyperparameter,graph_propagation_alpha,station,graph_propagation,alpha=0.15,validation_wmape,1.0382682218908166,1.0339549641943964,0.004313257696420214
-hyperparameter,graph_propagation_alpha,community,graph_propagation,alpha=0.2,validation_wmape,1.0117163670819984,0.9290525016742485,0.08266386540774995
-hyperparameter,graph_propagation_alpha,station,graph_propagation,alpha=0.2,validation_wmape,1.0427310898264834,1.0339549641943964,0.008776125632087073
-hyperparameter,graph_propagation_alpha,community,graph_propagation,alpha=0.25,validation_wmape,0.9999098068562994,0.9290525016742485,0.07085730518205091
-hyperparameter,graph_propagation_alpha,station,graph_propagation,alpha=0.25,validation_wmape,1.048274269646641,1.0339549641943964,0.01431930545224458
-hyperparameter,graph_propagation_alpha,community,graph_propagation,alpha=0.3,validation_wmape,0.9887606791949052,0.9290525016742485,0.05970817752065671
-hyperparameter,graph_propagation_alpha,station,graph_propagation,alpha=0.3,validation_wmape,1.05473274734831,1.0339549641943964,0.020777783153913543
-hyperparameter,graph_propagation_alpha,community,graph_propagation,alpha=0.35,validation_wmape,0.9782435339611067,0.9290525016742485,0.04919103228685828
-hyperparameter,graph_propagation_alpha,station,graph_propagation,alpha=0.35,validation_wmape,1.0620379236363793,1.0339549641943964,0.028082959441982913
-hyperparameter,graph_propagation_alpha,community,graph_propagation,alpha=0.4,validation_wmape,0.968623097171794,0.9290525016742485,0.03957059549754549
-hyperparameter,graph_propagation_alpha,station,graph_propagation,alpha=0.4,validation_wmape,1.0701661475192428,1.0339549641943964,0.03621118332484641
-hyperparameter,graph_propagation_alpha,community,graph_propagation,alpha=0.45,validation_wmape,0.9598597615598335,0.9290525016742485,0.03080725988558508
-hyperparameter,graph_propagation_alpha,station,graph_propagation,alpha=0.45,validation_wmape,1.079030781024495,1.0339549641943964,0.04507581683009865
-hyperparameter,graph_propagation_alpha,station,graph_propagation,alpha=0.5,validation_wmape,1.0886487772716889,1.0339549641943964,0.054693813077292486
-hyperparameter,graph_propagation_alpha,community,graph_propagation,alpha=0.5,validation_wmape,0.952173061977989,0.9290525016742485,0.023120560303740545
-hyperparameter,graph_propagation_alpha,station,graph_propagation,alpha=0.55,validation_wmape,1.0990009077968534,1.0339549641943964,0.06504594360245708
-hyperparameter,graph_propagation_alpha,community,graph_propagation,alpha=0.55,validation_wmape,0.9454631999064427,0.9290525016742485,0.01641069823219421
-hyperparameter,graph_propagation_alpha,station,graph_propagation,alpha=0.6,validation_wmape,1.1100808625759833,1.0339549641943964,0.0761258983815869
-hyperparameter,graph_propagation_alpha,community,graph_propagation,alpha=0.6,validation_wmape,0.9399451096588353,0.9290525016742485,0.0108926079845868
-hyperparameter,graph_propagation_alpha,community,graph_propagation,alpha=0.65,validation_wmape,0.9355734380519938,0.9290525016742485,0.006520936377745312
-hyperparameter,graph_propagation_alpha,station,graph_propagation,alpha=0.65,validation_wmape,1.1219931506716039,1.0339549641943964,0.08803818647720751
-hyperparameter,graph_propagation_alpha,community,graph_propagation,alpha=0.7,validation_wmape,0.932223055088264,0.9290525016742485,0.003170553414015509
-hyperparameter,graph_propagation_alpha,station,graph_propagation,alpha=0.7,validation_wmape,1.1347163409321286,1.0339549641943964,0.10076137673773222
-hyperparameter,graph_propagation_alpha,station,graph_propagation,alpha=0.75,validation_wmape,1.1479795469988943,1.0339549641943964,0.1140245828044979
-hyperparameter,graph_propagation_alpha,community,graph_propagation,alpha=0.75,validation_wmape,0.9299840576980718,0.9290525016742485,0.0009315560238233322
-hyperparameter,graph_propagation_alpha,station,graph_propagation,alpha=0.8,validation_wmape,1.1617077521067076,1.0339549641943964,0.12775278791231126
-hyperparameter,graph_propagation_alpha,community,graph_propagation,alpha=0.8,validation_wmape,0.9290525016742485,0.9290525016742485,0.0
-hyperparameter,graph_propagation_alpha,community,graph_propagation,alpha=0.85,validation_wmape,0.9291322426420092,0.9290525016742485,0.00007974096776075523
-hyperparameter,graph_propagation_alpha,station,graph_propagation,alpha=0.85,validation_wmape,1.1758794861754922,1.0339549641943964,0.14192452198109584
-hyperparameter,graph_propagation_alpha,community,graph_propagation,alpha=0.9,validation_wmape,0.930359136332987,0.9290525016742485,0.0013066346587384814
-hyperparameter,graph_propagation_alpha,station,graph_propagation,alpha=0.9,validation_wmape,1.1903813792023599,1.0339549641943964,0.1564264150079635
-hyperparameter,graph_propagation_alpha,community,graph_propagation,alpha=0.95,validation_wmape,0.9334403568105903,0.9290525016742485,0.004387855136341878
-hyperparameter,graph_propagation_alpha,station,graph_propagation,alpha=0.95,validation_wmape,1.205102374109772,1.0339549641943964,0.17114740991537558
-hyperparameter,graph_propagation_alpha,community,graph_propagation,alpha=1.0,validation_wmape,0.9383347850835022,0.9290525016742485,0.009282283409253744
-hyperparameter,graph_propagation_alpha,station,graph_propagation,alpha=1.0,validation_wmape,1.2199418854956632,1.0339549641943964,0.18598692130126682
-hyperparameter,baseline_hyperparameters,station,lagged_linear,"{""lags"": [1, 2, 24, 168], ""max_samples"": 300000}",validation_wmape,1.032128926326966,1.0286636472458681,0.0034652790810978384
-hyperparameter,baseline_hyperparameters,community,lagged_linear,"{""lags"": [1, 2, 24, 168], ""max_samples"": 300000}",validation_wmape,0.9021173302103174,0.9020223097072584,0.00009502050305898457
-hyperparameter,baseline_hyperparameters,community,lagged_linear,"{""lags"": [1, 2, 24], ""max_samples"": 300000}",validation_wmape,0.9020223097072584,0.9020223097072584,0.0
-hyperparameter,baseline_hyperparameters,station,lagged_linear,"{""lags"": [1, 2, 24], ""max_samples"": 300000}",validation_wmape,1.0330681079456927,1.0286636472458681,0.004404460699824586
-hyperparameter,baseline_hyperparameters,community,lagged_linear,"{""lags"": [1, 24, 168], ""max_samples"": 300000}",validation_wmape,0.9055007626826795,0.9020223097072584,0.0034784529754211535
-hyperparameter,baseline_hyperparameters,station,lagged_linear,"{""lags"": [1, 24, 168], ""max_samples"": 300000}",validation_wmape,1.0298261785560805,1.0286636472458681,0.001162531310212378
-hyperparameter,baseline_hyperparameters,community,lagged_linear,"{""lags"": [1, 24], ""max_samples"": 300000}",validation_wmape,0.9053296374291777,0.9020223097072584,0.0033073277219193287
-hyperparameter,baseline_hyperparameters,station,lagged_linear,"{""lags"": [1, 24], ""max_samples"": 300000}",validation_wmape,1.0306793301919974,1.0286636472458681,0.0020156829461293047
-hyperparameter,baseline_hyperparameters,community,lagged_linear,"{""lags"": [1], ""max_samples"": 300000}",validation_wmape,0.9084198322981755,0.9020223097072584,0.006397522590917082
-hyperparameter,baseline_hyperparameters,station,lagged_linear,"{""lags"": [1], ""max_samples"": 300000}",validation_wmape,1.0286636472458681,1.0286636472458681,0.0
-hyperparameter,baseline_hyperparameters,station,seasonal_naive,"{""seasonal_lag"": 168}",validation_wmape,1.2520615316718247,1.2199418854956632,0.032119646176161476
-hyperparameter,baseline_hyperparameters,community,seasonal_naive,"{""seasonal_lag"": 168}",validation_wmape,1.2271058206180734,0.9383347850835022,0.2887710355345712
-hyperparameter,baseline_hyperparameters,station,seasonal_naive,"{""seasonal_lag"": 1}",validation_wmape,1.2199418854956632,1.2199418854956632,0.0
-hyperparameter,baseline_hyperparameters,community,seasonal_naive,"{""seasonal_lag"": 1}",validation_wmape,0.9383347850835022,0.9383347850835022,0.0
-hyperparameter,baseline_hyperparameters,station,seasonal_naive,"{""seasonal_lag"": 24}",validation_wmape,1.2405220923202154,1.2199418854956632,0.020580206824552194
-hyperparameter,baseline_hyperparameters,community,seasonal_naive,"{""seasonal_lag"": 24}",validation_wmape,1.165978513043925,0.9383347850835022,0.22764372796042287
-hyperparameter,baseline_hyperparameters,community,seasonal_naive,"{""seasonal_lag"": 336}",validation_wmape,1.2187796385966472,0.9383347850835022,0.28044485351314496
-hyperparameter,baseline_hyperparameters,station,seasonal_naive,"{""seasonal_lag"": 336}",validation_wmape,1.2552496989404798,1.2199418854956632,0.035307813444816594
-hyperparameter,baseline_hyperparameters,community,tree_lagged,"{""lags"": [1, 2, 24, 168], ""max_depth"": 12, ""n_estimators"": 300, ""max_samples"": 300000}",validation_wmape,0.8820828664385953,0.8820828664385953,0.0
-hyperparameter,baseline_hyperparameters,station,tree_lagged,"{""lags"": [1, 2, 24, 168], ""max_depth"": 12, ""n_estimators"": 300, ""max_samples"": 300000}",validation_wmape,1.0236391921840564,1.0211964210707414,0.0024427711133150343
-hyperparameter,baseline_hyperparameters,station,tree_lagged,"{""lags"": [1, 2, 24, 168], ""max_depth"": 16, ""n_estimators"": 300, ""max_samples"": 300000}",validation_wmape,1.027493182902633,1.0211964210707414,0.006296761831891651
-hyperparameter,baseline_hyperparameters,community,tree_lagged,"{""lags"": [1, 2, 24, 168], ""max_depth"": 16, ""n_estimators"": 300, ""max_samples"": 300000}",validation_wmape,0.8857329327150786,0.8820828664385953,0.0036500662764832326
-hyperparameter,baseline_hyperparameters,community,tree_lagged,"{""lags"": [1, 2, 24, 168], ""max_depth"": 8, ""n_estimators"": 300, ""max_samples"": 300000}",validation_wmape,0.882794623300467,0.8820828664385953,0.0007117568618716374
-hyperparameter,baseline_hyperparameters,station,tree_lagged,"{""lags"": [1, 2, 24, 168], ""max_depth"": 8, ""n_estimators"": 300, ""max_samples"": 300000}",validation_wmape,1.0211964210707414,1.0211964210707414,0.0
-hyperparameter,baseline_hyperparameters,station,tree_lagged,"{""lags"": [1, 2, 24], ""max_depth"": 12, ""n_estimators"": 300, ""max_samples"": 300000}",validation_wmape,1.0247006237016323,1.0211964210707414,0.003504202630890907
-hyperparameter,baseline_hyperparameters,community,tree_lagged,"{""lags"": [1, 2, 24], ""max_depth"": 12, ""n_estimators"": 300, ""max_samples"": 300000}",validation_wmape,0.8862625624121299,0.8820828664385953,0.004179695973534514
-hyperparameter,baseline_hyperparameters,community,tree_lagged,"{""lags"": [1, 2, 24], ""max_depth"": 16, ""n_estimators"": 300, ""max_samples"": 300000}",validation_wmape,0.8901573732655622,0.8820828664385953,0.008074506826966865
-hyperparameter,baseline_hyperparameters,station,tree_lagged,"{""lags"": [1, 2, 24], ""max_depth"": 16, ""n_estimators"": 300, ""max_samples"": 300000}",validation_wmape,1.029226760422918,1.0211964210707414,0.008030339352176563
-hyperparameter,baseline_hyperparameters,station,tree_lagged,"{""lags"": [1, 2, 24], ""max_depth"": 8, ""n_estimators"": 300, ""max_samples"": 300000}",validation_wmape,1.0232311214206102,1.0211964210707414,0.0020347003498688565
-hyperparameter,baseline_hyperparameters,community,tree_lagged,"{""lags"": [1, 2, 24], ""max_depth"": 8, ""n_estimators"": 300, ""max_samples"": 300000}",validation_wmape,0.8858382502461882,0.8820828664385953,0.0037553838075928825
-hyperparameter,baseline_hyperparameters,station,tree_lagged,"{""lags"": [1, 24, 168], ""max_depth"": 12, ""n_estimators"": 300, ""max_samples"": 300000}",validation_wmape,1.0234198724298846,1.0211964210707414,0.002223451359143258
-hyperparameter,baseline_hyperparameters,community,tree_lagged,"{""lags"": [1, 24, 168], ""max_depth"": 12, ""n_estimators"": 300, ""max_samples"": 300000}",validation_wmape,0.8878712647726752,0.8820828664385953,0.005788398334079847
-hyperparameter,baseline_hyperparameters,community,tree_lagged,"{""lags"": [1, 24, 168], ""max_depth"": 16, ""n_estimators"": 300, ""max_samples"": 300000}",validation_wmape,0.8930149781996956,0.8820828664385953,0.010932111761100205
-hyperparameter,baseline_hyperparameters,station,tree_lagged,"{""lags"": [1, 24, 168], ""max_depth"": 16, ""n_estimators"": 300, ""max_samples"": 300000}",validation_wmape,1.0274584016830028,1.0211964210707414,0.006261980612261464
-hyperparameter,baseline_hyperparameters,community,tree_lagged,"{""lags"": [1, 24, 168], ""max_depth"": 8, ""n_estimators"": 300, ""max_samples"": 300000}",validation_wmape,0.8876368396958131,0.8820828664385953,0.005553973257217737
-hyperparameter,baseline_hyperparameters,station,tree_lagged,"{""lags"": [1, 24, 168], ""max_depth"": 8, ""n_estimators"": 300, ""max_samples"": 300000}",validation_wmape,1.022184232958174,1.0211964210707414,0.000987811887432688
-hyperparameter,baseline_hyperparameters,community,tree_lagged,"{""lags"": [1, 24], ""max_depth"": 12, ""n_estimators"": 300, ""max_samples"": 300000}",validation_wmape,0.8912816247903554,0.8820828664385953,0.009198758351760095
-hyperparameter,baseline_hyperparameters,station,tree_lagged,"{""lags"": [1, 24], ""max_depth"": 12, ""n_estimators"": 300, ""max_samples"": 300000}",validation_wmape,1.0216656345068191,1.0211964210707414,0.00046921343607775334
-hyperparameter,baseline_hyperparameters,community,tree_lagged,"{""lags"": [1, 24], ""max_depth"": 16, ""n_estimators"": 300, ""max_samples"": 300000}",validation_wmape,0.8999534248154455,0.8820828664385953,0.017870558376850143
-hyperparameter,baseline_hyperparameters,station,tree_lagged,"{""lags"": [1, 24], ""max_depth"": 16, ""n_estimators"": 300, ""max_samples"": 300000}",validation_wmape,1.0249868008975866,1.0211964210707414,0.0037903798268452693
-hyperparameter,baseline_hyperparameters,station,tree_lagged,"{""lags"": [1, 24], ""max_depth"": 8, ""n_estimators"": 300, ""max_samples"": 300000}",validation_wmape,1.02143769470053,1.0211964210707414,0.00024127362978854094
-hyperparameter,baseline_hyperparameters,community,tree_lagged,"{""lags"": [1, 24], ""max_depth"": 8, ""n_estimators"": 300, ""max_samples"": 300000}",validation_wmape,0.8886140526692828,0.8820828664385953,0.006531186230687491
-resolution,station_vs_community,station_community,graph_propagation,aggregation_resolution,test_wmape,0.8229282512774769,0.3197631080776469,0.5031651431998301
-resolution,station_vs_community,station_community,lagged_linear,aggregation_resolution,test_wmape,0.633278741502563,0.2692726494477887,0.3640060920547743
+hyperparameter,graph_propagation_alpha,community,graph_propagation,alpha=0.0,validation_wmape,0.7706323189898134,0.26143945651072653,0.5091928624790869
+hyperparameter,graph_propagation_alpha,station,graph_propagation,alpha=0.0,validation_wmape,0.7421958420628818,0.7006449404415366,0.041550901621345226
+hyperparameter,graph_propagation_alpha,community,graph_propagation,alpha=0.05,validation_wmape,0.6964813202701389,0.26143945651072653,0.43504186375941234
+hyperparameter,graph_propagation_alpha,station,graph_propagation,alpha=0.05,validation_wmape,0.7274676276330576,0.7006449404415366,0.026822687191521033
+hyperparameter,graph_propagation_alpha,community,graph_propagation,alpha=0.1,validation_wmape,0.6331035536829636,0.26143945651072653,0.37166409717223703
+hyperparameter,graph_propagation_alpha,station,graph_propagation,alpha=0.1,validation_wmape,0.7164103415439397,0.7006449404415366,0.015765401102403098
+hyperparameter,graph_propagation_alpha,community,graph_propagation,alpha=0.15,validation_wmape,0.5787395956131655,0.26143945651072653,0.3173001391024389
+hyperparameter,graph_propagation_alpha,station,graph_propagation,alpha=0.15,validation_wmape,0.708563260855228,0.7006449404415366,0.007918320413691449
+hyperparameter,graph_propagation_alpha,community,graph_propagation,alpha=0.2,validation_wmape,0.5319385297393423,0.26143945651072653,0.27049907322861577
+hyperparameter,graph_propagation_alpha,station,graph_propagation,alpha=0.2,validation_wmape,0.7035345420739435,0.7006449404415366,0.002889601632406924
+hyperparameter,graph_propagation_alpha,station,graph_propagation,alpha=0.25,validation_wmape,0.7009634500065628,0.7006449404415366,0.00031850956502621486
+hyperparameter,graph_propagation_alpha,community,graph_propagation,alpha=0.25,validation_wmape,0.49150671599035806,0.26143945651072653,0.23006725947963153
+hyperparameter,graph_propagation_alpha,station,graph_propagation,alpha=0.3,validation_wmape,0.7006449404415366,0.7006449404415366,0.0
+hyperparameter,graph_propagation_alpha,community,graph_propagation,alpha=0.3,validation_wmape,0.4564583625683661,0.26143945651072653,0.19501890605763955
+hyperparameter,graph_propagation_alpha,station,graph_propagation,alpha=0.35,validation_wmape,0.7024703488845384,0.7006449404415366,0.0018254084430018302
+hyperparameter,graph_propagation_alpha,community,graph_propagation,alpha=0.35,validation_wmape,0.42600700557446153,0.26143945651072653,0.164567549063735
+hyperparameter,graph_propagation_alpha,station,graph_propagation,alpha=0.4,validation_wmape,0.7063735669092944,0.7006449404415366,0.005728626467757847
+hyperparameter,graph_propagation_alpha,community,graph_propagation,alpha=0.4,validation_wmape,0.39948485981426346,0.26143945651072653,0.13804540330353693
+hyperparameter,graph_propagation_alpha,station,graph_propagation,alpha=0.45,validation_wmape,0.7121949977798949,0.7006449404415366,0.011550057338358344
+hyperparameter,graph_propagation_alpha,community,graph_propagation,alpha=0.45,validation_wmape,0.3763002406214746,0.26143945651072653,0.11486078411074807
+hyperparameter,graph_propagation_alpha,community,graph_propagation,alpha=0.5,validation_wmape,0.3561123010428344,0.26143945651072653,0.09467284453210789
+hyperparameter,graph_propagation_alpha,station,graph_propagation,alpha=0.5,validation_wmape,0.7199319548287806,0.7006449404415366,0.019287014387244006
+hyperparameter,graph_propagation_alpha,community,graph_propagation,alpha=0.55,validation_wmape,0.3384375482048782,0.26143945651072653,0.07699809169415167
+hyperparameter,graph_propagation_alpha,station,graph_propagation,alpha=0.55,validation_wmape,0.7295615545544633,0.7006449404415366,0.028916614112926675
+hyperparameter,graph_propagation_alpha,community,graph_propagation,alpha=0.6,validation_wmape,0.32305618429523053,0.26143945651072653,0.061616727784504
+hyperparameter,graph_propagation_alpha,station,graph_propagation,alpha=0.6,validation_wmape,0.7410985550407568,0.7006449404415366,0.040453614599220256
+hyperparameter,graph_propagation_alpha,community,graph_propagation,alpha=0.65,validation_wmape,0.30971525701427594,0.26143945651072653,0.048275800503549404
+hyperparameter,graph_propagation_alpha,station,graph_propagation,alpha=0.65,validation_wmape,0.7545674411921729,0.7006449404415366,0.053922500750636315
+hyperparameter,graph_propagation_alpha,community,graph_propagation,alpha=0.7,validation_wmape,0.29826864709466044,0.26143945651072653,0.03682919058393391
+hyperparameter,graph_propagation_alpha,station,graph_propagation,alpha=0.7,validation_wmape,0.7699987433635143,0.7006449404415366,0.06935380292197768
+hyperparameter,graph_propagation_alpha,station,graph_propagation,alpha=0.75,validation_wmape,0.7873582498590819,0.7006449404415366,0.08671330941754529
+hyperparameter,graph_propagation_alpha,community,graph_propagation,alpha=0.75,validation_wmape,0.2885165180484747,0.26143945651072653,0.027077061537748193
+hyperparameter,graph_propagation_alpha,station,graph_propagation,alpha=0.8,validation_wmape,0.8066751314920119,0.7006449404415366,0.10603019105047529
+hyperparameter,graph_propagation_alpha,community,graph_propagation,alpha=0.8,validation_wmape,0.28031559856850785,0.26143945651072653,0.01887614205778132
+hyperparameter,graph_propagation_alpha,community,graph_propagation,alpha=0.85,validation_wmape,0.27344028021206773,0.26143945651072653,0.012000823701341201
+hyperparameter,graph_propagation_alpha,station,graph_propagation,alpha=0.85,validation_wmape,0.8280521840442345,0.7006449404415366,0.12740724360269795
+hyperparameter,graph_propagation_alpha,community,graph_propagation,alpha=0.9,validation_wmape,0.2678648893843314,0.26143945651072653,0.006425432873604864
+hyperparameter,graph_propagation_alpha,station,graph_propagation,alpha=0.9,validation_wmape,0.8515111055590823,0.7006449404415366,0.1508661651175457
+hyperparameter,graph_propagation_alpha,station,graph_propagation,alpha=0.95,validation_wmape,0.8770292878286792,0.7006449404415366,0.1763843473871426
+hyperparameter,graph_propagation_alpha,community,graph_propagation,alpha=0.95,validation_wmape,0.2639164769010851,0.26143945651072653,0.0024770203903585752
+hyperparameter,graph_propagation_alpha,community,graph_propagation,alpha=1.0,validation_wmape,0.26143945651072653,0.26143945651072653,0.0
+hyperparameter,graph_propagation_alpha,station,graph_propagation,alpha=1.0,validation_wmape,0.9046125343800294,0.7006449404415366,0.20396759393849284
+hyperparameter,baseline_hyperparameters,station,lagged_linear,"{""lags"": [1, 2, 8, 56], ""max_samples"": 300000}",validation_wmape,0.5982942522009541,0.5981801624367697,0.00011408976418436634
+hyperparameter,baseline_hyperparameters,community,lagged_linear,"{""lags"": [1, 2, 8, 56], ""max_samples"": 300000}",validation_wmape,0.2318082937964284,0.2318082937964284,0.0
+hyperparameter,baseline_hyperparameters,community,lagged_linear,"{""lags"": [1, 2, 8], ""max_samples"": 300000}",validation_wmape,0.2376853552544247,0.2318082937964284,0.0058770614579962965
+hyperparameter,baseline_hyperparameters,station,lagged_linear,"{""lags"": [1, 2, 8], ""max_samples"": 300000}",validation_wmape,0.6258544390950743,0.5981801624367697,0.027674276658304575
+hyperparameter,baseline_hyperparameters,community,lagged_linear,"{""lags"": [1, 8, 56], ""max_samples"": 300000}",validation_wmape,0.2328441284612214,0.2318082937964284,0.0010358346647930117
+hyperparameter,baseline_hyperparameters,station,lagged_linear,"{""lags"": [1, 8, 56], ""max_samples"": 300000}",validation_wmape,0.5981801624367697,0.5981801624367697,0.0
+hyperparameter,baseline_hyperparameters,community,lagged_linear,"{""lags"": [1, 8], ""max_samples"": 300000}",validation_wmape,0.23867744745977446,0.2318082937964284,0.0068691536633460615
+hyperparameter,baseline_hyperparameters,station,lagged_linear,"{""lags"": [1, 8], ""max_samples"": 300000}",validation_wmape,0.6253724335009978,0.5981801624367697,0.027192271064228057
+hyperparameter,baseline_hyperparameters,community,lagged_linear,"{""lags"": [1], ""max_samples"": 300000}",validation_wmape,0.24331706984610896,0.2318082937964284,0.011508776049680564
+hyperparameter,baseline_hyperparameters,station,lagged_linear,"{""lags"": [1], ""max_samples"": 300000}",validation_wmape,0.623916787441179,0.5981801624367697,0.025736625004409208
+hyperparameter,baseline_hyperparameters,community,seasonal_naive,"{""seasonal_lag"": 112}",validation_wmape,0.48500829653139566,0.26143945651072653,0.22356884002066912
+hyperparameter,baseline_hyperparameters,station,seasonal_naive,"{""seasonal_lag"": 112}",validation_wmape,1.0999735742290342,0.9046125343800294,0.19536103984900477
+hyperparameter,baseline_hyperparameters,station,seasonal_naive,"{""seasonal_lag"": 1}",validation_wmape,0.9046125343800294,0.9046125343800294,0.0
+hyperparameter,baseline_hyperparameters,community,seasonal_naive,"{""seasonal_lag"": 1}",validation_wmape,0.26143945651072653,0.26143945651072653,0.0
+hyperparameter,baseline_hyperparameters,station,seasonal_naive,"{""seasonal_lag"": 56}",validation_wmape,1.3926217073559508,0.9046125343800294,0.4880091729759214
+hyperparameter,baseline_hyperparameters,community,seasonal_naive,"{""seasonal_lag"": 56}",validation_wmape,0.48186571918391824,0.26143945651072653,0.2204262626731917
+hyperparameter,baseline_hyperparameters,station,seasonal_naive,"{""seasonal_lag"": 8}",validation_wmape,0.962676784740495,0.9046125343800294,0.058064250360465586
+hyperparameter,baseline_hyperparameters,community,seasonal_naive,"{""seasonal_lag"": 8}",validation_wmape,0.33377320204693933,0.26143945651072653,0.0723337455362128
+hyperparameter,baseline_hyperparameters,community,tree_lagged,"{""lags"": [1, 2, 8, 56], ""max_depth"": 12, ""n_estimators"": 300, ""max_samples"": 300000}",validation_wmape,0.21423479304875462,0.21410919134707881,0.00012560170167580376
+hyperparameter,baseline_hyperparameters,station,tree_lagged,"{""lags"": [1, 2, 8, 56], ""max_depth"": 12, ""n_estimators"": 300, ""max_samples"": 300000}",validation_wmape,0.5986025209807027,0.5984251322621114,0.00017738871859129812
+hyperparameter,baseline_hyperparameters,station,tree_lagged,"{""lags"": [1, 2, 8, 56], ""max_depth"": 16, ""n_estimators"": 300, ""max_samples"": 300000}",validation_wmape,0.6006674782853355,0.5984251322621114,0.002242346023224151
+hyperparameter,baseline_hyperparameters,community,tree_lagged,"{""lags"": [1, 2, 8, 56], ""max_depth"": 16, ""n_estimators"": 300, ""max_samples"": 300000}",validation_wmape,0.21410919134707881,0.21410919134707881,0.0
+hyperparameter,baseline_hyperparameters,community,tree_lagged,"{""lags"": [1, 2, 8, 56], ""max_depth"": 8, ""n_estimators"": 300, ""max_samples"": 300000}",validation_wmape,0.21920457298572782,0.21410919134707881,0.005095381638649005
+hyperparameter,baseline_hyperparameters,station,tree_lagged,"{""lags"": [1, 2, 8, 56], ""max_depth"": 8, ""n_estimators"": 300, ""max_samples"": 300000}",validation_wmape,0.6002385059639098,0.5984251322621114,0.0018133737017984597
+hyperparameter,baseline_hyperparameters,station,tree_lagged,"{""lags"": [1, 2, 8], ""max_depth"": 12, ""n_estimators"": 300, ""max_samples"": 300000}",validation_wmape,0.6244227203298777,0.5984251322621114,0.02599758806776631
+hyperparameter,baseline_hyperparameters,community,tree_lagged,"{""lags"": [1, 2, 8], ""max_depth"": 12, ""n_estimators"": 300, ""max_samples"": 300000}",validation_wmape,0.228412872754588,0.21410919134707881,0.014303681407509178
+hyperparameter,baseline_hyperparameters,community,tree_lagged,"{""lags"": [1, 2, 8], ""max_depth"": 16, ""n_estimators"": 300, ""max_samples"": 300000}",validation_wmape,0.23080587557824983,0.21410919134707881,0.016696684231171016
+hyperparameter,baseline_hyperparameters,station,tree_lagged,"{""lags"": [1, 2, 8], ""max_depth"": 16, ""n_estimators"": 300, ""max_samples"": 300000}",validation_wmape,0.6318227756321235,0.5984251322621114,0.033397643370012164
+hyperparameter,baseline_hyperparameters,station,tree_lagged,"{""lags"": [1, 2, 8], ""max_depth"": 8, ""n_estimators"": 300, ""max_samples"": 300000}",validation_wmape,0.6211124960552223,0.5984251322621114,0.02268736379311098
+hyperparameter,baseline_hyperparameters,community,tree_lagged,"{""lags"": [1, 2, 8], ""max_depth"": 8, ""n_estimators"": 300, ""max_samples"": 300000}",validation_wmape,0.22756072431075436,0.21410919134707881,0.013451532963675544
+hyperparameter,baseline_hyperparameters,station,tree_lagged,"{""lags"": [1, 8, 56], ""max_depth"": 12, ""n_estimators"": 300, ""max_samples"": 300000}",validation_wmape,0.5984251322621114,0.5984251322621114,0.0
+hyperparameter,baseline_hyperparameters,community,tree_lagged,"{""lags"": [1, 8, 56], ""max_depth"": 12, ""n_estimators"": 300, ""max_samples"": 300000}",validation_wmape,0.2153370785643067,0.21410919134707881,0.0012278872172278854
+hyperparameter,baseline_hyperparameters,community,tree_lagged,"{""lags"": [1, 8, 56], ""max_depth"": 16, ""n_estimators"": 300, ""max_samples"": 300000}",validation_wmape,0.21602106112195346,0.21410919134707881,0.0019118697748746472
+hyperparameter,baseline_hyperparameters,station,tree_lagged,"{""lags"": [1, 8, 56], ""max_depth"": 16, ""n_estimators"": 300, ""max_samples"": 300000}",validation_wmape,0.6025173764767815,0.5984251322621114,0.004092244214670138
+hyperparameter,baseline_hyperparameters,community,tree_lagged,"{""lags"": [1, 8, 56], ""max_depth"": 8, ""n_estimators"": 300, ""max_samples"": 300000}",validation_wmape,0.21921372536525732,0.21410919134707881,0.005104534018178508
+hyperparameter,baseline_hyperparameters,station,tree_lagged,"{""lags"": [1, 8, 56], ""max_depth"": 8, ""n_estimators"": 300, ""max_samples"": 300000}",validation_wmape,0.5984702029486539,0.5984251322621114,0.00004507068654258095
+hyperparameter,baseline_hyperparameters,community,tree_lagged,"{""lags"": [1, 8], ""max_depth"": 12, ""n_estimators"": 300, ""max_samples"": 300000}",validation_wmape,0.23139174974097326,0.21410919134707881,0.017282558393894448
+hyperparameter,baseline_hyperparameters,station,tree_lagged,"{""lags"": [1, 8], ""max_depth"": 12, ""n_estimators"": 300, ""max_samples"": 300000}",validation_wmape,0.6266943119836841,0.5984251322621114,0.028269179721572724
+hyperparameter,baseline_hyperparameters,community,tree_lagged,"{""lags"": [1, 8], ""max_depth"": 16, ""n_estimators"": 300, ""max_samples"": 300000}",validation_wmape,0.23595336742541692,0.21410919134707881,0.021844176078338107
+hyperparameter,baseline_hyperparameters,station,tree_lagged,"{""lags"": [1, 8], ""max_depth"": 16, ""n_estimators"": 300, ""max_samples"": 300000}",validation_wmape,0.6362057601596203,0.5984251322621114,0.03778062789750891
+hyperparameter,baseline_hyperparameters,station,tree_lagged,"{""lags"": [1, 8], ""max_depth"": 8, ""n_estimators"": 300, ""max_samples"": 300000}",validation_wmape,0.6229817231327361,0.5984251322621114,0.024556590870624784
+hyperparameter,baseline_hyperparameters,community,tree_lagged,"{""lags"": [1, 8], ""max_depth"": 8, ""n_estimators"": 300, ""max_samples"": 300000}",validation_wmape,0.22971032975508418,0.21410919134707881,0.015601138408005366
+resolution,station_vs_community,station_community,graph_propagation,aggregation_resolution,test_wmape,0.7407998303329394,0.292019150395529,0.4487806799374104
+resolution,station_vs_community,station_community,lagged_linear,aggregation_resolution,test_wmape,0.6078302078890315,0.2585757732809207,0.34925443460811084
 resolution,station_vs_community,station_community,seasonal_naive,aggregation_resolution,test_wmape,0.9092318876256152,0.292019150395529,0.6172127372300862
-resolution,station_vs_community,station_community,tree_lagged,aggregation_resolution,test_wmape,0.6284663947563739,0.2632412713190234,0.3652251234373505
-threshold,sparse_vs_dense,station,graph_propagation,sparse_quantile=0.25,test_wmape,0.9475098910356147,0.8134360367978705,0.1340738542377442
-threshold,sparse_vs_dense,station,lagged_linear,sparse_quantile=0.25,test_wmape,0.9504495274372624,0.6091126353844993,0.3413368920527631
+resolution,station_vs_community,station_community,tree_lagged,aggregation_resolution,test_wmape,0.6081432203629648,0.2329011929366663,0.3752420274262984
+threshold,sparse_vs_dense,station,graph_propagation,sparse_quantile=0.25,test_wmape,0.9869475706967247,0.7220451635157454,0.26490240718097924
+threshold,sparse_vs_dense,station,lagged_linear,sparse_quantile=0.25,test_wmape,0.9300641366965513,0.5832783271240533,0.34678580957249805
 threshold,sparse_vs_dense,station,seasonal_naive,sparse_quantile=0.25,test_wmape,1.3448148332294387,0.8760436365208998,0.46877119670853895
-threshold,sparse_vs_dense,station,tree_lagged,sparse_quantile=0.25,test_wmape,0.9369239974226821,0.604964169805264,0.33195982761741805
+threshold,sparse_vs_dense,station,tree_lagged,sparse_quantile=0.25,test_wmape,0.9385951145776407,0.582965190428798,0.35562992414884265
