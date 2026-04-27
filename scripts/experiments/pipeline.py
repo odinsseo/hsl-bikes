@@ -21,6 +21,7 @@ from .config import (
     DEFAULT_TEST,
     DEFAULT_TRAIN,
     DEFAULT_VALIDATION,
+    ExperimentSpec,
     build_experiment_specs,
     parse_alpha_grid,
     parse_int_grid,
@@ -42,6 +43,7 @@ from .models import (
     predict_graph_propagation,
     tune_graph_alpha,
 )
+from .train_eval import station_wmape_vector
 from .preprocessing import (
     TargetPreprocessingConfig,
     apply_target_preprocessing,
@@ -70,6 +72,85 @@ def _resolve_holiday_subdivision(args: argparse.Namespace) -> str | None:
     if getattr(args, "holiday_national_only", False):
         return None
     return args.holiday_subdivision
+
+
+def _broadcast_community_pred_to_stations(
+    graph_test_pred: np.ndarray,
+    *,
+    station_index: list[str],
+    station_to_group: dict[str, str],
+    groups: list[str],
+) -> np.ndarray:
+    """Expand community-level predictions to station columns for paired WMAPE vs station actuals."""
+    group_to_j = {g: j for j, g in enumerate(groups)}
+    n_s = len(station_index)
+    t_steps, n_g = graph_test_pred.shape
+    if n_g != len(groups):
+        raise ValueError(
+            f"graph_test_pred has {n_g} columns but groups has length {len(groups)}"
+        )
+    out = np.zeros((t_steps, n_s), dtype=float)
+    default_g = groups[0]
+    for si, sid in enumerate(station_index):
+        g = station_to_group.get(sid, default_g)
+        j = int(group_to_j.get(g, 0))
+        out[:, si] = graph_test_pred[:, j]
+    return out
+
+
+def _write_graph_station_scores(
+    *,
+    spec: ExperimentSpec,
+    graph_test_pred: np.ndarray,
+    station_index: list[str],
+    station_to_group: dict[str, str] | None,
+    groups: list[str] | None,
+    station_test_raw: np.ndarray,
+    scores_dir: Path,
+    sparse_quantile: float,
+) -> None:
+    """Persist per-station test WMAPE for graph_propagation (station or broadcast-community pred)."""
+    scores_dir.mkdir(parents=True, exist_ok=True)
+    all_idx = np.arange(station_test_raw.shape[1], dtype=int)
+    actual = station_test_raw[1:]
+
+    if spec.aggregation == "station":
+        pred = graph_test_pred
+    elif spec.aggregation == "community":
+        if station_to_group is None or groups is None:
+            raise ValueError("Community aggregation requires station_to_group and groups")
+        pred = _broadcast_community_pred_to_stations(
+            graph_test_pred,
+            station_index=station_index,
+            station_to_group=station_to_group,
+            groups=groups,
+        )
+    else:
+        raise ValueError(f"Unknown aggregation: {spec.aggregation}")
+
+    if pred.shape != actual.shape:
+        raise ValueError(
+            f"Pred/actual shape mismatch for {spec.experiment_id}: pred {pred.shape} vs actual {actual.shape}"
+        )
+
+    wmape_vec = station_wmape_vector(
+        actual=actual,
+        pred=pred,
+        indices=all_idx,
+    )
+    out_npz = scores_dir / f"{spec.experiment_id}.npz"
+    np.savez_compressed(out_npz, wmape_by_station=wmape_vec.astype(np.float64))
+    meta = {
+        "experiment_id": spec.experiment_id,
+        "rq": spec.rq,
+        "aggregation": spec.aggregation,
+        "graph_set": "+".join(spec.graph_set),
+        "sparse_quantile": float(sparse_quantile),
+        "n_nodes_used": int(np.isfinite(wmape_vec).sum()),
+        "n_stations": len(station_index),
+    }
+    meta_path = scores_dir / f"{spec.experiment_id}.meta.json"
+    meta_path.write_text(json.dumps(meta, indent=2), encoding="utf-8")
 
 
 def run(args: argparse.Namespace) -> int:
@@ -229,6 +310,9 @@ def run(args: argparse.Namespace) -> int:
         preprocessing_reports.append(preprocessing_metadata)
         return bundle
 
+    station_test_raw_for_scores = get_series("test", "station")
+    scores_dir = args.output_dir / "station_scores"
+
     spec_iter = _iter_with_progress(
         list(specs),
         enabled=bool(args.progress),
@@ -351,6 +435,17 @@ def run(args: argparse.Namespace) -> int:
                 "preprocessing_enabled": bool(args.preprocess_target),
                 "selected_residual_lag": selected_residual_lag,
             }
+        )
+
+        _write_graph_station_scores(
+            spec=spec,
+            graph_test_pred=graph_test_pred,
+            station_index=station_index,
+            station_to_group=station_to_group,
+            groups=groups,
+            station_test_raw=station_test_raw_for_scores,
+            scores_dir=scores_dir,
+            sparse_quantile=float(getattr(args, "sparse_quantile", 0.25)),
         )
 
         if spec.aggregation not in baseline_cache:
@@ -483,6 +578,7 @@ def run(args: argparse.Namespace) -> int:
             "alpha_search": str(alpha_search_path),
             "baseline_search": str(baseline_search_path),
             "results": str(results_path),
+            "station_scores": str(scores_dir),
         },
         "best_by_rq": best_by_rq.to_dict(orient="records"),
         "best_graph_by_rq": best_graph_by_rq.to_dict(orient="records"),
@@ -504,6 +600,7 @@ def run(args: argparse.Namespace) -> int:
         extra={
             "strict_graph_source": bool(args.strict_graph_source),
             "preprocess_target": bool(args.preprocess_target),
+            "sparse_quantile": float(getattr(args, "sparse_quantile", 0.25)),
             "preprocessing": metadata_preprocessing,
             "preprocessing_reports": preprocessing_reports,
         },
@@ -519,6 +616,7 @@ def run(args: argparse.Namespace) -> int:
     print(f"Wrote graph alpha search: {alpha_search_path}")
     print(f"Wrote baseline search: {baseline_search_path}")
     print(f"Wrote results: {results_path}")
+    print(f"Wrote station scores: {scores_dir}")
     print(f"Wrote summary: {summary_path}")
     return 0
 
@@ -568,6 +666,12 @@ def parse_args() -> argparse.Namespace:
         help="Use national-only FI holidays (ignore subdivision) for sensitivity checks.",
     )
     parser.add_argument("--random-state", type=int, default=42)
+    parser.add_argument(
+        "--sparse-quantile",
+        type=float,
+        default=0.25,
+        help="Quantile for sparse cohort definition (must match rq_hypothesis_tests / train_eval).",
+    )
     parser.add_argument(
         "--progress",
         action=argparse.BooleanOptionalAction,

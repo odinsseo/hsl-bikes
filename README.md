@@ -55,6 +55,7 @@ Full methodology and reviewer checklist: `docs/target_preprocessing_methodology.
 ├── docs/
 │   └── phase_0_1_implementation.md
 │   └── reproducibility_runbook.md
+│   └── statistical_inference_rq.md  # Assumptions and limits for RQ hypothesis tests
 ├── config/
 │   └── constants.py           # Station renames and cleaning rules
 ├── data/
@@ -164,6 +165,15 @@ This writes experiment outputs to `data/artifacts/experiments/rq_runner/`:
 - `baseline_search.csv` (seasonal/linear/tree baseline tuning table)
 - `results.csv` (side-by-side validation/test metrics across all models)
 - `summary.json` (best overall and best graph-only configuration per RQ)
+- `station_scores/` (per-experiment `*.npz` with `wmape_by_station` for graph_propagation; used for paired tests)
+
+**Post-hoc RQ hypothesis tests** (paired station-level WMAPE, Holm multiplicity within each RQ×cohort family; see `docs/statistical_inference_rq.md`):
+
+```bash
+python -m scripts.experiments.rq_hypothesis_tests --output-dir data/artifacts/experiments/rq_runner
+```
+
+This reads `results.csv` and `station_scores/*.npz` from the same directory and writes `rq_hypothesis_tests.csv` plus `rq_hypothesis_summary.json`. Run it **after** `experiment_runners.py` completes.
 
 **Run 1-hour train/eval pipeline (station + community + station cohorts):**
 
