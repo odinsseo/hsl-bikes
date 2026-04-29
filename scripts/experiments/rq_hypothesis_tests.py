@@ -19,7 +19,7 @@ from .config import (
     DEFAULT_TRAIN,
     DEFAULT_VALIDATION,
 )
-from .data import load_graph_bundle, load_split, build_station_series
+from .data import build_station_series, load_graph_bundle, load_split
 from .train_eval import (
     bootstrap_mean_ci,
     build_station_cohort_indices,
@@ -70,17 +70,14 @@ class ContrastSpec:
     label_b: str
 
 
-def _graph_propagation_station_rows(results: pd.DataFrame) -> pd.DataFrame:
-    g = results[
-        (results["model"] == "graph_propagation")
-        & (results["aggregation"] == "station")
-    ].copy()
+def _graph_propagation_rows(results: pd.DataFrame) -> pd.DataFrame:
+    g = results[results["model"] == "graph_propagation"].copy()
     return g
 
 
 def build_contrast_specs(results: pd.DataFrame, *, rqs: set[str]) -> list[ContrastSpec]:
     """Define planned contrasts for selected RQs; verifies experiment_ids exist."""
-    g = _graph_propagation_station_rows(results)
+    g = _graph_propagation_rows(results)
     ids = set(g["experiment_id"].astype(str))
 
     specs: list[ContrastSpec] = []
@@ -88,7 +85,7 @@ def build_contrast_specs(results: pd.DataFrame, *, rqs: set[str]) -> list[Contra
     def need(eid: str) -> None:
         if eid not in ids:
             raise ValueError(
-                f"Required experiment_id {eid!r} not found in results.csv graph_propagation station rows"
+                f"Required experiment_id {eid!r} not found in results.csv graph_propagation rows"
             )
 
     if "RQ1" in rqs:
@@ -248,7 +245,11 @@ def run_one_contrast(
 def run(args: argparse.Namespace) -> int:
     rng = np.random.default_rng(args.random_state)
     output_dir: Path = args.output_dir
-    scores_dir: Path = args.scores_dir if args.scores_dir is not None else output_dir / "station_scores"
+    scores_dir: Path = (
+        args.scores_dir
+        if args.scores_dir is not None
+        else output_dir / "station_scores"
+    )
     results_path = output_dir / "results.csv"
     if not results_path.is_file():
         raise FileNotFoundError(f"Missing {results_path}")
@@ -289,7 +290,8 @@ def run(args: argparse.Namespace) -> int:
                 )
                 batch.append(row)
             pvals = [
-                float(r["p_value"]) if np.isfinite(r["p_value"]) else np.nan for r in batch
+                float(r["p_value"]) if np.isfinite(r["p_value"]) else np.nan
+                for r in batch
             ]
             finite_mask = [np.isfinite(p) for p in pvals]
             finite_ps = [p for p, ok in zip(pvals, finite_mask) if ok]
