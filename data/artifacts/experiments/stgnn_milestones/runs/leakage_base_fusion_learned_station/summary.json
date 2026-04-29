@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-04-25T12:30:10.100323+00:00",
+  "generated_at_utc": "2026-04-29T18:13:01.878366+00:00",
   "aggregation": "station",
   "graph": "SD+DE+DC+ATD",
   "graph_set": [
@@ -14,7 +14,7 @@
   "history": 8,
   "horizon": 1,
   "input_channels": 11,
-  "hidden_dim": 64,
+  "hidden_dim": 32,
   "dropout": 0.1,
   "batch_size": 128,
   "num_workers": 2,
@@ -53,38 +53,38 @@
   "lr_plateau_threshold_mode": "abs",
   "lr_plateau_start_epoch": 5,
   "min_learning_rate": 1e-05,
-  "epochs_requested": 120,
+  "epochs_requested": 40,
   "epochs_ran": 14,
-  "best_epoch": 3,
-  "best_validation_wmape": 0.8792471986412176,
-  "best_validation_huber": 0.26141938673598425,
+  "best_epoch": 1,
+  "best_validation_wmape": 0.8688531177605873,
+  "best_validation_huber": 0.2625777114714895,
   "train_windows": 15813,
   "validation_windows": 1704,
   "test_windows": 4631,
   "fusion_weights": {
-    "SD": 0.2845311164855957,
-    "DE": 0.2778073251247406,
-    "DC": 0.1344132423400879,
-    "ATD": 0.3032483160495758
+    "SD": 0.2675877511501312,
+    "DE": 0.26612433791160583,
+    "DC": 0.198232963681221,
+    "ATD": 0.26805493235588074
   },
   "metrics": {
     "validation": {
-      "wmape": 0.8792471986412176,
-      "mae": 2.726545912342769,
-      "rmse": 6.35469744084369,
-      "mase": 1.7989081975455923
+      "wmape": 0.8688531177605873,
+      "mae": 2.694313863401994,
+      "rmse": 6.288988556882416,
+      "mase": 1.7776422812810722
     },
     "test": {
-      "wmape": 0.8781868001464389,
-      "mae": 2.0593264835975766,
-      "rmse": 5.5885265626535094,
-      "mase": 1.3586931641225566
+      "wmape": 0.865387073210056,
+      "mae": 2.0293114382125683,
+      "rmse": 5.483015434027184,
+      "mase": 1.3388899724915746
     },
     "validation_model_space": {
-      "wmape": 1.4500113725662231,
-      "mae": 0.5491206049919128,
-      "rmse": 0.7815458178520203,
-      "mase": 2.8753054285028417
+      "wmape": 1.4513081312179565,
+      "mae": 0.5496117472648621,
+      "rmse": 0.7835392951965332,
+      "mase": 2.8778771477767866
     }
   },
   "covariates": {
@@ -118,14 +118,14 @@
     "path": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\cache\\stgnn_preprocessed\\cabbf6c0d344e4dd06b2"
   },
   "paths": {
-    "training_curve": "data\\artifacts\\experiments\\stgnn_milestones_seed42\\runs\\leakage_base_fusion_learned_station\\training_curve.csv",
-    "results": "data\\artifacts\\experiments\\stgnn_milestones_seed42\\runs\\leakage_base_fusion_learned_station\\results.csv",
-    "metadata": "data\\artifacts\\experiments\\stgnn_milestones_seed42\\runs\\leakage_base_fusion_learned_station\\metadata.json"
+    "training_curve": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\experiments\\stgnn_milestones\\runs\\leakage_base_fusion_learned_station\\training_curve.csv",
+    "results": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\experiments\\stgnn_milestones\\runs\\leakage_base_fusion_learned_station\\results.csv",
+    "metadata": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\experiments\\stgnn_milestones\\runs\\leakage_base_fusion_learned_station\\metadata.json"
   },
   "run_metadata": {
-    "generated_at_utc": "2026-04-25T12:30:10.100390+00:00",
-    "git_commit": "2ab355d197b1c80ecd3af2dfd250af2fb26cec02",
-    "command": ".\\scripts\\run_stgnn_milestones.py --single-graphs SD,DE,DC,ATD --fusion-graph-set SD,DE,DC,ATD --include-community --include-leakage-sensitivity --build-leaky-graphs --epochs 120 --patience 10 --hidden-dim 64 --dropout 0.1 --batch-size 128 --learning-rate 0.001 --weight-decay 1e-5 --optimizer adamw --lr-scheduler plateau --lr-decay-factor 0.5 --lr-decay-patience 5 --min-learning-rate 1e-5 --max-grad-norm 1.0 --max-train-windows 0 --device cuda --random-state 42 --output-dir data/artifacts/experiments/stgnn_milestones_seed42 --progress --epoch-progress --early-stop-min-delta 0.001 --early-stop-start-epoch 5 --lr-plateau-threshold 0.001",
+    "generated_at_utc": "2026-04-29T18:13:01.878448+00:00",
+    "git_commit": "23b87e9742354e0f5475ce15e957d6661bd0cdcb",
+    "command": "scripts/run_stgnn_milestones.py --include-community --include-leakage-sensitivity --build-leaky-graphs --epoch-progress",
     "script": "scripts/train_stgnn_pipeline.py",
     "stage": "phase3_stgnn",
     "python_version": "3.14.0",
@@ -136,16 +136,16 @@
       "test": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\prepared\\splits\\test\\test.csv",
       "graph_dir": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\graphs\\train",
       "communities": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\network\\notebook\\communities.csv",
-      "output_dir": "data\\artifacts\\experiments\\stgnn_milestones_seed42\\runs\\leakage_base_fusion_learned_station",
+      "output_dir": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\experiments\\stgnn_milestones\\runs\\leakage_base_fusion_learned_station",
       "aggregation": "station",
       "graph": "DE",
       "graph_set": "SD,DE,DC,ATD",
       "fusion_mode": "learned",
       "history": 8,
       "horizon": 1,
-      "hidden_dim": 64,
+      "hidden_dim": 32,
       "dropout": 0.1,
-      "epochs": 120,
+      "epochs": 40,
       "batch_size": 128,
       "learning_rate": 0.001,
       "weight_decay": 1e-05,
@@ -156,7 +156,7 @@
       "lr_scheduler": "plateau",
       "lr_decay_factor": 0.5,
       "lr_decay_patience": 5,
-      "lr_plateau_threshold": 0.001,
+      "lr_plateau_threshold": null,
       "min_learning_rate": 1e-05,
       "max_grad_norm": 1.0,
       "epoch_progress": true,
@@ -183,7 +183,7 @@
       "cache_preprocessed": true,
       "refresh_preprocessed_cache": false,
       "preprocessed_cache_dir": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\cache\\stgnn_preprocessed",
-      "device": "cuda",
+      "device": "auto",
       "random_state": 42,
       "strict_graph_source": true,
       "allow_leaky_graph_source": false

@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-04-25T12:22:48.355900+00:00",
+  "generated_at_utc": "2026-04-29T18:04:54.841216+00:00",
   "aggregation": "station",
   "graph": "SD+DE+DC+ATD",
   "graph_set": [
@@ -14,7 +14,7 @@
   "history": 8,
   "horizon": 1,
   "input_channels": 11,
-  "hidden_dim": 64,
+  "hidden_dim": 32,
   "dropout": 0.1,
   "batch_size": 128,
   "num_workers": 2,
@@ -53,11 +53,11 @@
   "lr_plateau_threshold_mode": "abs",
   "lr_plateau_start_epoch": 5,
   "min_learning_rate": 1e-05,
-  "epochs_requested": 120,
+  "epochs_requested": 40,
   "epochs_ran": 14,
   "best_epoch": 1,
-  "best_validation_wmape": 0.881357176449492,
-  "best_validation_huber": 0.2623763307929039,
+  "best_validation_wmape": 0.8694841989721391,
+  "best_validation_huber": 0.26276945429188864,
   "train_windows": 15813,
   "validation_windows": 1704,
   "test_windows": 4631,
@@ -69,22 +69,22 @@
   },
   "metrics": {
     "validation": {
-      "wmape": 0.881357176449492,
-      "mae": 2.7330889543645975,
-      "rmse": 6.412686211205864,
-      "mase": 1.80322513637896
+      "wmape": 0.8694841989721391,
+      "mae": 2.696270846489768,
+      "rmse": 6.301822244060814,
+      "mase": 1.7789334507798573
     },
     "test": {
-      "wmape": 0.8782948785766597,
-      "mae": 2.0595799248627173,
-      "rmse": 5.599595726605881,
-      "mase": 1.358860378460446
+      "wmape": 0.8660064069121549,
+      "mae": 2.0307637605370488,
+      "rmse": 5.492914865679127,
+      "mase": 1.33984817918201
     },
     "validation_model_space": {
-      "wmape": 1.450265884399414,
-      "mae": 0.5492170453071594,
-      "rmse": 0.7831541299819946,
-      "mase": 2.8758104093020216
+      "wmape": 1.451490044593811,
+      "mae": 0.5496805906295776,
+      "rmse": 0.7838848829269409,
+      "mase": 2.878237625417734
     }
   },
   "covariates": {
@@ -118,14 +118,14 @@
     "path": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\cache\\stgnn_preprocessed\\cabbf6c0d344e4dd06b2"
   },
   "paths": {
-    "training_curve": "data\\artifacts\\experiments\\stgnn_milestones_seed42\\runs\\m32_fusion_equal_station\\training_curve.csv",
-    "results": "data\\artifacts\\experiments\\stgnn_milestones_seed42\\runs\\m32_fusion_equal_station\\results.csv",
-    "metadata": "data\\artifacts\\experiments\\stgnn_milestones_seed42\\runs\\m32_fusion_equal_station\\metadata.json"
+    "training_curve": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\experiments\\stgnn_milestones\\runs\\m32_fusion_equal_station\\training_curve.csv",
+    "results": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\experiments\\stgnn_milestones\\runs\\m32_fusion_equal_station\\results.csv",
+    "metadata": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\experiments\\stgnn_milestones\\runs\\m32_fusion_equal_station\\metadata.json"
   },
   "run_metadata": {
-    "generated_at_utc": "2026-04-25T12:22:48.356059+00:00",
-    "git_commit": "2ab355d197b1c80ecd3af2dfd250af2fb26cec02",
-    "command": ".\\scripts\\run_stgnn_milestones.py --single-graphs SD,DE,DC,ATD --fusion-graph-set SD,DE,DC,ATD --include-community --include-leakage-sensitivity --build-leaky-graphs --epochs 120 --patience 10 --hidden-dim 64 --dropout 0.1 --batch-size 128 --learning-rate 0.001 --weight-decay 1e-5 --optimizer adamw --lr-scheduler plateau --lr-decay-factor 0.5 --lr-decay-patience 5 --min-learning-rate 1e-5 --max-grad-norm 1.0 --max-train-windows 0 --device cuda --random-state 42 --output-dir data/artifacts/experiments/stgnn_milestones_seed42 --progress --epoch-progress --early-stop-min-delta 0.001 --early-stop-start-epoch 5 --lr-plateau-threshold 0.001",
+    "generated_at_utc": "2026-04-29T18:04:54.841285+00:00",
+    "git_commit": "23b87e9742354e0f5475ce15e957d6661bd0cdcb",
+    "command": "scripts/run_stgnn_milestones.py --include-community --include-leakage-sensitivity --build-leaky-graphs --epoch-progress",
     "script": "scripts/train_stgnn_pipeline.py",
     "stage": "phase3_stgnn",
     "python_version": "3.14.0",
@@ -136,16 +136,16 @@
       "test": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\prepared\\splits\\test\\test.csv",
       "graph_dir": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\graphs\\train",
       "communities": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\network\\notebook\\communities.csv",
-      "output_dir": "data\\artifacts\\experiments\\stgnn_milestones_seed42\\runs\\m32_fusion_equal_station",
+      "output_dir": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\experiments\\stgnn_milestones\\runs\\m32_fusion_equal_station",
       "aggregation": "station",
       "graph": "DE",
       "graph_set": "SD,DE,DC,ATD",
       "fusion_mode": "equal",
       "history": 8,
       "horizon": 1,
-      "hidden_dim": 64,
+      "hidden_dim": 32,
       "dropout": 0.1,
-      "epochs": 120,
+      "epochs": 40,
       "batch_size": 128,
       "learning_rate": 0.001,
       "weight_decay": 1e-05,
@@ -156,7 +156,7 @@
       "lr_scheduler": "plateau",
       "lr_decay_factor": 0.5,
       "lr_decay_patience": 5,
-      "lr_plateau_threshold": 0.001,
+      "lr_plateau_threshold": null,
       "min_learning_rate": 1e-05,
       "max_grad_norm": 1.0,
       "epoch_progress": true,
@@ -183,7 +183,7 @@
       "cache_preprocessed": true,
       "refresh_preprocessed_cache": false,
       "preprocessed_cache_dir": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\cache\\stgnn_preprocessed",
-      "device": "cuda",
+      "device": "auto",
       "random_state": 42,
       "strict_graph_source": true,
       "allow_leaky_graph_source": false

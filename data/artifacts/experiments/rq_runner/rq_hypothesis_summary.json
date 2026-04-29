@@ -1,0 +1,20 @@
+{
+  "alpha": 0.05,
+  "ci_level": 0.95,
+  "two_sided": true,
+  "permutation_resamples": 9999,
+  "bootstrap_resamples": 2000,
+  "random_state": 42,
+  "sparse_quantile": 0.25,
+  "rqs": [
+    "RQ1",
+    "RQ2",
+    "RQ3"
+  ],
+  "rows_written": 56,
+  "paths": {
+    "rq_hypothesis_tests": "data\\artifacts\\experiments\\rq_runner\\rq_hypothesis_tests.csv",
+    "station_scores": "data\\artifacts\\experiments\\rq_runner\\station_scores",
+    "results": "data\\artifacts\\experiments\\rq_runner\\results.csv"
+  }
+}

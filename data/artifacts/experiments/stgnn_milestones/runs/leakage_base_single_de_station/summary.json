@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-04-25T12:27:32.638346+00:00",
+  "generated_at_utc": "2026-04-29T18:10:05.884398+00:00",
   "aggregation": "station",
   "graph": "DE",
   "graph_set": [
@@ -11,7 +11,7 @@
   "history": 8,
   "horizon": 1,
   "input_channels": 11,
-  "hidden_dim": 64,
+  "hidden_dim": 32,
   "dropout": 0.1,
   "batch_size": 128,
   "num_workers": 2,
@@ -50,11 +50,11 @@
   "lr_plateau_threshold_mode": "abs",
   "lr_plateau_start_epoch": 5,
   "min_learning_rate": 1e-05,
-  "epochs_requested": 120,
+  "epochs_requested": 40,
   "epochs_ran": 14,
   "best_epoch": 1,
-  "best_validation_wmape": 0.8790293992102493,
-  "best_validation_huber": 0.26149656836475643,
+  "best_validation_wmape": 0.8672205305060954,
+  "best_validation_huber": 0.2619228597198214,
   "train_windows": 15813,
   "validation_windows": 1704,
   "test_windows": 4631,
@@ -63,22 +63,22 @@
   },
   "metrics": {
     "validation": {
-      "wmape": 0.8790293992102493,
-      "mae": 2.7258705162207963,
-      "rmse": 6.371548552733768,
-      "mase": 1.798462587730292
+      "wmape": 0.8672205305060954,
+      "mae": 2.68925120967713,
+      "rmse": 6.255096945465562,
+      "mase": 1.7743020663792195
     },
     "test": {
-      "wmape": 0.8759245753880001,
-      "mae": 2.0540216220850525,
-      "rmse": 5.56560516241995,
-      "mase": 1.3551931464560563
+      "wmape": 0.8636892718133063,
+      "mae": 2.025330135624517,
+      "rmse": 5.4532988590065345,
+      "mase": 1.3362632065786537
     },
     "validation_model_space": {
-      "wmape": 1.4498158693313599,
-      "mae": 0.5490466356277466,
-      "rmse": 0.7815610766410828,
-      "mase": 2.8749181101024814
+      "wmape": 1.4510421752929688,
+      "mae": 0.5495110154151917,
+      "rmse": 0.7823552489280701,
+      "mase": 2.877349695644145
     }
   },
   "covariates": {
@@ -112,14 +112,14 @@
     "path": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\cache\\stgnn_preprocessed\\cabbf6c0d344e4dd06b2"
   },
   "paths": {
-    "training_curve": "data\\artifacts\\experiments\\stgnn_milestones_seed42\\runs\\leakage_base_single_de_station\\training_curve.csv",
-    "results": "data\\artifacts\\experiments\\stgnn_milestones_seed42\\runs\\leakage_base_single_de_station\\results.csv",
-    "metadata": "data\\artifacts\\experiments\\stgnn_milestones_seed42\\runs\\leakage_base_single_de_station\\metadata.json"
+    "training_curve": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\experiments\\stgnn_milestones\\runs\\leakage_base_single_de_station\\training_curve.csv",
+    "results": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\experiments\\stgnn_milestones\\runs\\leakage_base_single_de_station\\results.csv",
+    "metadata": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\experiments\\stgnn_milestones\\runs\\leakage_base_single_de_station\\metadata.json"
   },
   "run_metadata": {
-    "generated_at_utc": "2026-04-25T12:27:32.638420+00:00",
-    "git_commit": "2ab355d197b1c80ecd3af2dfd250af2fb26cec02",
-    "command": ".\\scripts\\run_stgnn_milestones.py --single-graphs SD,DE,DC,ATD --fusion-graph-set SD,DE,DC,ATD --include-community --include-leakage-sensitivity --build-leaky-graphs --epochs 120 --patience 10 --hidden-dim 64 --dropout 0.1 --batch-size 128 --learning-rate 0.001 --weight-decay 1e-5 --optimizer adamw --lr-scheduler plateau --lr-decay-factor 0.5 --lr-decay-patience 5 --min-learning-rate 1e-5 --max-grad-norm 1.0 --max-train-windows 0 --device cuda --random-state 42 --output-dir data/artifacts/experiments/stgnn_milestones_seed42 --progress --epoch-progress --early-stop-min-delta 0.001 --early-stop-start-epoch 5 --lr-plateau-threshold 0.001",
+    "generated_at_utc": "2026-04-29T18:10:05.884476+00:00",
+    "git_commit": "23b87e9742354e0f5475ce15e957d6661bd0cdcb",
+    "command": "scripts/run_stgnn_milestones.py --include-community --include-leakage-sensitivity --build-leaky-graphs --epoch-progress",
     "script": "scripts/train_stgnn_pipeline.py",
     "stage": "phase3_stgnn",
     "python_version": "3.14.0",
@@ -130,16 +130,16 @@
       "test": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\prepared\\splits\\test\\test.csv",
       "graph_dir": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\graphs\\train",
       "communities": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\network\\notebook\\communities.csv",
-      "output_dir": "data\\artifacts\\experiments\\stgnn_milestones_seed42\\runs\\leakage_base_single_de_station",
+      "output_dir": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\experiments\\stgnn_milestones\\runs\\leakage_base_single_de_station",
       "aggregation": "station",
       "graph": "DE",
       "graph_set": "DE",
       "fusion_mode": "single",
       "history": 8,
       "horizon": 1,
-      "hidden_dim": 64,
+      "hidden_dim": 32,
       "dropout": 0.1,
-      "epochs": 120,
+      "epochs": 40,
       "batch_size": 128,
       "learning_rate": 0.001,
       "weight_decay": 1e-05,
@@ -150,7 +150,7 @@
       "lr_scheduler": "plateau",
       "lr_decay_factor": 0.5,
       "lr_decay_patience": 5,
-      "lr_plateau_threshold": 0.001,
+      "lr_plateau_threshold": null,
       "min_learning_rate": 1e-05,
       "max_grad_norm": 1.0,
       "epoch_progress": true,
@@ -177,7 +177,7 @@
       "cache_preprocessed": true,
       "refresh_preprocessed_cache": false,
       "preprocessed_cache_dir": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\cache\\stgnn_preprocessed",
-      "device": "cuda",
+      "device": "auto",
       "random_state": 42,
       "strict_graph_source": true,
       "allow_leaky_graph_source": false
