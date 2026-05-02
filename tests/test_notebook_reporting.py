@@ -46,7 +46,7 @@ def test_require_csv_and_optional_csv(tmp_path: Path) -> None:
 
 
 def test_primary_cohort_and_headline_constants() -> None:
-    assert PRIMARY_COHORT_BY_RQ["RQ3"] == "sparse_espoo"
+    assert PRIMARY_COHORT_BY_RQ["RQ3"] == "sparse"
     assert HEADLINE_CONTRAST_BY_RQ["RQ1"] == "SD_vs_DC"
 
 

@@ -96,7 +96,7 @@ def add_graph_set_column(frame: pl.DataFrame, *, fallback: str = "") -> pl.DataF
 PRIMARY_COHORT_BY_RQ: dict[str, str] = {
     "RQ1": "all",
     "RQ2": "all",
-    "RQ3": "sparse_espoo",
+    "RQ3": "sparse",
 }
 
 # One headline contrast per RQ for distribution plots (must exist in rq_hypothesis_tests.csv).

@@ -57,7 +57,7 @@ This document is the canonical reference for **what the hypothesis tests assume*
 
 ## Primary analysis cohort (notebooks)
 
-For reporting tables and synthesis, the **primary** cohort is pre-specified in `scripts/notebook_reporting.py` as `PRIMARY_COHORT_BY_RQ`: **all** stations for RQ1 and RQ2, **sparse_espoo** for RQ3 (sparse-by-train-demand ∩ Espoo). Other cohort rows remain exploratory unless you promote them explicitly in text.
+For reporting tables and synthesis, the **primary** cohort is pre-specified in `scripts/notebook_reporting.py` as `PRIMARY_COHORT_BY_RQ`: **all** stations for RQ1 and RQ2, **sparse** for RQ3 (sparse-by-train-demand across the full system). Other cohort rows remain exploratory unless you promote them explicitly in text.
 
 ## Evidence map: `train_eval` vs `rq_hypothesis_tests`
 
