@@ -270,6 +270,133 @@ def paired_sign_permutation_pvalue(
     return float((extreme_count + 1) / (n_permutations + 1))
 
 
+def cluster_paired_sign_permutation_pvalue(
+    sample: np.ndarray,
+    reference: np.ndarray,
+    cluster_labels: np.ndarray,
+    *,
+    rng: np.random.Generator,
+    n_permutations: int,
+    batch_size: int = 4096,
+) -> float:
+    """Paired sign permutation p-value that flips entire clusters together.
+
+    This preserves within-cluster dependence by assigning a single ±1 sign
+    to all stations in the same cluster for each permutation. The test
+    statistic is the absolute mean of station-level differences.
+    """
+    sample_arr = np.asarray(sample, dtype=float)
+    reference_arr = np.asarray(reference, dtype=float)
+    cluster_arr = np.asarray(cluster_labels, dtype=object)
+
+    mask = np.isfinite(sample_arr) & np.isfinite(reference_arr)
+    if mask.size == 0 or mask.sum() == 0:
+        return np.nan
+
+    diff = sample_arr[mask] - reference_arr[mask]
+    clusters = cluster_arr[mask]
+
+    observed = float(np.abs(np.mean(diff)))
+    if observed == 0.0:
+        return 1.0
+
+    # Precompute cluster sums (sum of diffs within each cluster)
+    unique, inv = np.unique(clusters, return_inverse=True)
+    n_clusters = int(unique.size)
+    cluster_sums = np.zeros(n_clusters, dtype=float)
+    cluster_sizes = np.zeros(n_clusters, dtype=int)
+    for i in range(n_clusters):
+        m = inv == i
+        cluster_sums[i] = float(np.sum(diff[m]))
+        cluster_sizes[i] = int(np.sum(m))
+
+    total_stations = int(diff.size)
+    n_permutations = max(int(n_permutations), 1)
+    batch_size = max(int(batch_size), 1)
+
+    extreme_count = 0
+    processed = 0
+    while processed < n_permutations:
+        chunk = min(batch_size, n_permutations - processed)
+        # signs per-cluster: shape (chunk, n_clusters)
+        signs = rng.integers(0, 2, size=(chunk, n_clusters), dtype=np.int8)
+        signs = signs.astype(np.int8) * 2 - 1
+        # fast dot: each permuted sum = signs_row dot cluster_sums
+        permuted_sum = signs.astype(np.int64).dot(cluster_sums)
+        permuted_mean = np.abs(permuted_sum / float(total_stations))
+        extreme_count += int(np.sum(permuted_mean >= observed))
+        processed += chunk
+
+    return float((extreme_count + 1) / (n_permutations + 1))
+
+
+def cluster_bootstrap_mean_ci(
+    values: np.ndarray,
+    cluster_labels: np.ndarray,
+    *,
+    rng: np.random.Generator,
+    n_bootstrap: int,
+    ci_level: float,
+    batch_size: int = 2048,
+) -> tuple[float, float]:
+    """Cluster bootstrap CI for the mean of `values` where clusters are defined
+    by `cluster_labels`.
+
+    The procedure resamples clusters with replacement and computes the
+    overall station-level mean for each bootstrap replicate by including all
+    stations belonging to the selected clusters (duplicates allowed). The
+    CI is formed by the percentile interval of the bootstrap replicates.
+    """
+    vals = np.asarray(values, dtype=float)
+    cluster_arr = np.asarray(cluster_labels, dtype=object)
+    mask = np.isfinite(vals) & (cluster_arr != None)
+    if mask.size == 0 or mask.sum() == 0:
+        return (np.nan, np.nan)
+
+    diff = vals[mask]
+    clusters = cluster_arr[mask]
+
+    unique, inv = np.unique(clusters, return_inverse=True)
+    n_clusters = int(unique.size)
+    cluster_sums = np.zeros(n_clusters, dtype=float)
+    cluster_sizes = np.zeros(n_clusters, dtype=int)
+    for i in range(n_clusters):
+        m = inv == i
+        cluster_sums[i] = float(np.sum(diff[m]))
+        cluster_sizes[i] = int(np.sum(m))
+
+    if n_clusters == 0:
+        return (np.nan, np.nan)
+    if n_clusters == 1:
+        value = float(cluster_sums[0] / cluster_sizes[0])
+        return (value, value)
+
+    n_bootstrap = max(int(n_bootstrap), 1)
+    batch_size = max(int(batch_size), 1)
+    alpha = (1.0 - float(ci_level)) / 2.0
+
+    reps = np.empty(n_bootstrap, dtype=float)
+    written = 0
+    while written < n_bootstrap:
+        chunk = min(batch_size, n_bootstrap - written)
+        # draw cluster indices with replacement: shape (chunk, n_clusters)
+        draws = rng.integers(0, n_clusters, size=(chunk, n_clusters))
+        for j in range(chunk):
+            idxs = draws[j]
+            sampled_sums = cluster_sums[idxs]
+            sampled_sizes = cluster_sizes[idxs]
+            denom = float(np.sum(sampled_sizes))
+            if denom == 0.0:
+                reps[written + j] = np.nan
+            else:
+                reps[written + j] = float(np.sum(sampled_sums) / denom)
+        written += chunk
+
+    lower = float(np.quantile(reps, alpha))
+    upper = float(np.quantile(reps, 1.0 - alpha))
+    return (lower, upper)
+
+
 def build_station_robustness_rows(
     *,
     actual: np.ndarray,

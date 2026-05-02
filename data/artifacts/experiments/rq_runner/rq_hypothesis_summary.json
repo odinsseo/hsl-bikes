@@ -2,6 +2,7 @@
   "alpha": 0.05,
   "ci_level": 0.95,
   "two_sided": true,
+  "cluster_aware": true,
   "permutation_resamples": 9999,
   "bootstrap_resamples": 2000,
   "random_state": 42,

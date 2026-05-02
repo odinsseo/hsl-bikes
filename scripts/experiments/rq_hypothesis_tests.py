@@ -19,9 +19,11 @@ from .config import (
     DEFAULT_TRAIN,
     DEFAULT_VALIDATION,
 )
-from .data import build_station_series, load_graph_bundle, load_split
+from .data import build_station_series, load_graph_bundle, load_split, load_communities
 from .train_eval import (
     bootstrap_mean_ci,
+    cluster_bootstrap_mean_ci,
+    cluster_paired_sign_permutation_pvalue,
     build_station_cohort_indices,
     load_station_city_lookup,
     paired_sign_permutation_pvalue,
@@ -166,6 +168,8 @@ def run_one_contrast(
     ci_level: float,
     alpha: float,
     two_sided: bool,
+    cluster_aware: bool = False,
+    cluster_labels: np.ndarray | None = None,
 ) -> dict[str, Any]:
     va = _load_wmape_vector(scores_dir, spec.experiment_a)
     vb = _load_wmape_vector(scores_dir, spec.experiment_b)
@@ -201,25 +205,61 @@ def run_one_contrast(
     b_sub = vb[idx]
     mask = np.isfinite(a_sub) & np.isfinite(b_sub)
     diff = a_sub[mask] - b_sub[mask]
+    # If cluster labels were supplied for all stations, restrict them to the
+    # cohort indices so boolean masks align with the subset arrays below.
+    cluster_labels_sub: np.ndarray | None = None
+    if cluster_labels is not None:
+        try:
+            cluster_labels_sub = np.asarray(cluster_labels)[idx]
+        except Exception:
+            # If subsetting fails, leave as None and proceed with station-level methods
+            cluster_labels_sub = None
     if diff.size == 0:
         mean_delta = np.nan
         ci_lo, ci_hi = (np.nan, np.nan)
         p_raw = np.nan
+        p_cluster = np.nan
     else:
         mean_delta = float(np.nanmean(diff))
-        ci_lo, ci_hi = bootstrap_mean_ci(
-            diff,
-            rng=rng,
-            n_bootstrap=n_bootstrap,
-            ci_level=ci_level,
-        )
-        # sample = A, reference = B => diff A-B matches our vector definition
-        p_raw = paired_sign_permutation_pvalue(
-            a_sub[mask],
-            b_sub[mask],
-            rng=rng,
-            n_permutations=n_permutations,
-        )
+        if cluster_aware and cluster_labels_sub is not None:
+            # cluster-aware bootstrap CI
+            ci_lo, ci_hi = cluster_bootstrap_mean_ci(
+                diff,
+                cluster_labels=cluster_labels_sub[mask],
+                rng=rng,
+                n_bootstrap=n_bootstrap,
+                ci_level=ci_level,
+            )
+            # cluster-aware permutation p-value
+            p_cluster = cluster_paired_sign_permutation_pvalue(
+                a_sub[mask],
+                b_sub[mask],
+                cluster_labels=cluster_labels_sub[mask],
+                rng=rng,
+                n_permutations=n_permutations,
+            )
+            # also compute the raw station-level permutation for reference
+            p_raw = paired_sign_permutation_pvalue(
+                a_sub[mask],
+                b_sub[mask],
+                rng=rng,
+                n_permutations=n_permutations,
+            )
+        else:
+            ci_lo, ci_hi = bootstrap_mean_ci(
+                diff,
+                rng=rng,
+                n_bootstrap=n_bootstrap,
+                ci_level=ci_level,
+            )
+            # sample = A, reference = B => diff A-B matches our vector definition
+            p_raw = paired_sign_permutation_pvalue(
+                a_sub[mask],
+                b_sub[mask],
+                rng=rng,
+                n_permutations=n_permutations,
+            )
+            p_cluster = np.nan
 
     return {
         "rq": spec.rq,
@@ -231,10 +271,12 @@ def run_one_contrast(
         "ci_upper": ci_hi,
         "p_value": p_raw,
         "p_holm": np.nan,
+        "p_cluster": p_cluster,
         "alpha": alpha,
         "reject_H0": False,
         "n_stations_used": int(diff.size) if np.isfinite(mean_delta) else 0,
         "two_sided": two_sided,
+        "cluster_aware": bool(cluster_aware),
         "label_a": spec.label_a,
         "label_b": spec.label_b,
         "experiment_a": spec.experiment_a,
@@ -269,6 +311,14 @@ def run(args: argparse.Namespace) -> int:
         float(args.sparse_quantile),
     )
 
+    # Optional cluster mapping used for cluster-aware resampling
+    cluster_labels: np.ndarray | None = None
+    if bool(getattr(args, "cluster_aware", False)):
+        station_to_group = load_communities(args.communities, station_index)
+        cluster_labels = np.array(
+            [station_to_group[s] for s in station_index], dtype=object
+        )
+
     rows: list[dict[str, Any]] = []
     for cohort_name, cohort_idx in cohorts.items():
         for rq in sorted(rqs_set):
@@ -287,12 +337,33 @@ def run(args: argparse.Namespace) -> int:
                     ci_level=float(args.ci_level),
                     alpha=float(args.alpha),
                     two_sided=bool(args.two_sided),
+                    cluster_aware=bool(getattr(args, "cluster_aware", False)),
+                    cluster_labels=cluster_labels,
                 )
                 batch.append(row)
-            pvals = [
-                float(r["p_value"]) if np.isfinite(r["p_value"]) else np.nan
-                for r in batch
-            ]
+            # Select which p-values to use for multiple-comparison adjustment.
+            if bool(getattr(args, "cluster_aware", False)):
+                pvals = [
+                    (
+                        float(
+                            r.get("p_cluster")
+                            if r.get("p_cluster") is not None
+                            else np.nan
+                        )
+                        if np.isfinite(
+                            r.get("p_cluster")
+                            if r.get("p_cluster") is not None
+                            else np.nan
+                        )
+                        else np.nan
+                    )
+                    for r in batch
+                ]
+            else:
+                pvals = [
+                    float(r["p_value"]) if np.isfinite(r["p_value"]) else np.nan
+                    for r in batch
+                ]
             finite_mask = [np.isfinite(p) for p in pvals]
             finite_ps = [p for p, ok in zip(pvals, finite_mask) if ok]
             adj_finite = holm_bonferroni(finite_ps) if finite_ps else []
@@ -315,6 +386,7 @@ def run(args: argparse.Namespace) -> int:
         "alpha": float(args.alpha),
         "ci_level": float(args.ci_level),
         "two_sided": bool(args.two_sided),
+        "cluster_aware": bool(getattr(args, "cluster_aware", False)),
         "permutation_resamples": int(args.permutation_resamples),
         "bootstrap_resamples": int(args.bootstrap_resamples),
         "random_state": int(args.random_state),
@@ -364,6 +436,12 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         action=argparse.BooleanOptionalAction,
         default=True,
         help="Report two-sided sign permutation (current train_eval helper is two-sided on mean|diff|).",
+    )
+    parser.add_argument(
+        "--cluster-aware",
+        action=argparse.BooleanOptionalAction,
+        default=False,
+        help="Enable cluster-aware resampling (use community clusters for permutation/bootstrap).",
     )
     parser.add_argument("--permutation-resamples", type=int, default=9999)
     parser.add_argument("--bootstrap-resamples", type=int, default=2000)
