@@ -1,0 +1,7 @@
+{
+  "modularity_point_estimate":0.4008620767,
+  "modularity_bootstrap_mean":0.4014593921,
+  "modularity_bootstrap_low":0.3934031341,
+  "modularity_bootstrap_high":0.4060994574,
+  "n_bootstrap_success":100.0
+}

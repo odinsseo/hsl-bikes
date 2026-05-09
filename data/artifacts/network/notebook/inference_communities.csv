@@ -1,0 +1,450 @@
+station_name,community
+Abraham Wetterin tie,inf_0
+Agnetankuja,inf_0
+Alakiventie,inf_0
+Asentajanpuisto,inf_0
+Aurinkolahdenaukio,inf_0
+Aurinkotuulenkatu,inf_0
+Eränkävijäntori,inf_0
+Gunillantie,inf_0
+Haakoninlahdenkatu,inf_0
+Haapasaarentie,inf_0
+Halkaisijantie,inf_0
+Herttoniemen kirkko,inf_0
+Herttoniemenranta,inf_0
+Herttoniemi (M),inf_0
+Humalniementie,inf_0
+Humikkalankuja,inf_0
+Isosaarentie,inf_0
+Itäkeskus (M),inf_0
+Itäkeskus Metrovarikko,inf_0
+Jollas,inf_0
+Kaivonkatsojanpuisto,inf_0
+Kalkkihiekantie,inf_0
+Karhulantie,inf_0
+Kauppakeskus Columbus,inf_0
+Kivikonkaari,inf_0
+Kontula (M),inf_0
+Kontulankaari,inf_0
+Koukkusaarentie,inf_0
+Kulosaari (M),inf_0
+Kurkimäentie,inf_0
+Kurkimäki,inf_0
+Laajasalon ostoskeskus,inf_0
+Laivalahden puistotie,inf_0
+Lallukankuja,inf_0
+Leikosaarentie,inf_0
+Lettopolku,inf_0
+Lokitie,inf_0
+Mamsellimyllynkatu,inf_0
+Margareetankuja,inf_0
+Marjaniementie,inf_0
+Marjaniemi,inf_0
+Mellunmäki (M),inf_0
+Meri-Rastilan tori,inf_0
+Mosaiikkitori,inf_0
+Mustikkamaa,inf_0
+Myllypuro (M),inf_0
+Orpaanporras,inf_0
+Petter Wetterin tie,inf_0
+Peukaloisentie,inf_0
+Porolahden koulu,inf_0
+Prinsessantie,inf_0
+Punakiventie,inf_0
+Puotila (M),inf_0
+Puotilan ostoskeskus,inf_0
+Puotilantie,inf_0
+Puotinharju,inf_0
+Puotinkylän kartano,inf_0
+Purjetie,inf_0
+Ramsinniementie,inf_0
+Rastila (M),inf_0
+Reiherintie,inf_0
+Relanderinaukio,inf_0
+Roihupelto,inf_0
+Rukatunturintie,inf_0
+Sallatunturintie,inf_0
+Siilitie (M),inf_0
+Siilitie 13,inf_0
+Siilitie 9,inf_0
+Sinkilätie,inf_0
+Sumukuja,inf_0
+Tammisalon aukio,inf_0
+Tulisuontie,inf_0
+Tupasaarentie,inf_0
+Tuukkalantie,inf_0
+Ulappasilta,inf_0
+Vartioharjuntie,inf_0
+Varustuksentie,inf_0
+Voikukantie,inf_0
+Vuosaaren liikuntapuisto,inf_0
+Vuosaaren puistopolku,inf_0
+Arielinkatu,inf_1
+Designmuseo,inf_1
+Ehrenströmintie,inf_1
+Eteläesplanadi,inf_1
+Haapaniemenkatu,inf_1
+Hakaniemi (M),inf_1
+Isoisänsilta,inf_1
+Kaisaniemenpuisto,inf_1
+Kaivopuisto,inf_1
+Kanavaranta,inf_1
+Kasarmitori,inf_1
+Korkeasaari,inf_1
+Laivasillankatu,inf_1
+Liisanpuistikko,inf_1
+Lintulahdenkatu,inf_1
+Mastokatu,inf_1
+Merihaka,inf_1
+Merisotilaantori,inf_1
+Näkinsilta,inf_1
+Porthania,inf_1
+Rautatientori / itä,inf_1
+Ritarikatu,inf_1
+Senaatintori,inf_1
+Sompasaari,inf_1
+Toinen linja,inf_1
+Unioninkatu,inf_1
+Vanha Kauppahalli,inf_1
+Varsapuistikko,inf_1
+Vilhonvuorenkatu,inf_1
+Ympyrätalo,inf_1
+Cygnaeuksenkatu,inf_2
+Eläinmuseo,inf_2
+Kansallismuseo,inf_2
+Korjaamo,inf_2
+Narinkka,inf_2
+Rautatientori / länsi,inf_2
+Töölönkatu,inf_2
+Töölöntori,inf_2
+Gyldenintie,inf_3
+Hanasaari,inf_3
+Heikkilänaukio,inf_3
+Heikkiläntie,inf_3
+Itälahdenkatu,inf_3
+Koivusaari (M),inf_3
+Kuikkarinne,inf_3
+Lauttasaaren ostoskeskus,inf_3
+Luoteisväylä,inf_3
+Melkonkuja,inf_3
+Puistokaari,inf_3
+Brahen kenttä,inf_4
+Brahen puistikko,inf_4
+Diakoniapuisto,inf_4
+Elimäenkatu,inf_4
+Esterinportti,inf_4
+Fleminginkatu,inf_4
+Gebhardinaukio,inf_4
+Hertanmäenkatu,inf_4
+Ilmalan asema,inf_4
+Jäähalli,inf_4
+Karhupuisto,inf_4
+Kiasma,inf_4
+Kustaankatu,inf_4
+Linnanmäki,inf_4
+Maistraatintori,inf_4
+Messeniuksenkatu,inf_4
+Olympiastadion,inf_4
+Ooppera,inf_4
+Opastinsilta,inf_4
+Pasilan asema,inf_4
+Pernajantie,inf_4
+Radiokatu,inf_4
+Ratapihantie,inf_4
+Sörnäinen (M),inf_4
+Teollisuuskatu,inf_4
+Töölönlahden puisto,inf_4
+Uimastadion,inf_4
+Venttiilikuja,inf_4
+Derby Business Park,inf_5
+Elfvik,inf_5
+Gallen-Kallelan tie,inf_5
+Gransinmäki,inf_5
+Kalkkipellonmäki,inf_5
+Kirjurinkuja,inf_5
+Komentajankatu,inf_5
+Kutsuntatie,inf_5
+Laajalahden keskus,inf_5
+Leppävaaran uimahalli,inf_5
+Leppävaaran urheilupuisto,inf_5
+Leppävaaranaukio,inf_5
+Leppävaarankäytävä,inf_5
+Linnuntie,inf_5
+Läkkitori,inf_5
+Majurinkulma,inf_5
+Muurarinkuja,inf_5
+Mäkkylän asema,inf_5
+Painiitty,inf_5
+Postipuun koulu,inf_5
+Ratsutori,inf_5
+Rummunlyöjänkatu,inf_5
+Ruutikatu,inf_5
+Säteri,inf_5
+Säterinniitty,inf_5
+Säterinrinne,inf_5
+Upseerinkatu,inf_5
+Vallikatu,inf_5
+Vallipolku,inf_5
+Yhdyskunnankuja,inf_5
+Ahertajantie,inf_6
+Auringonkatu,inf_6
+Avaruuskatu,inf_6
+Betonimies,inf_6
+Etuniementie,inf_6
+Friisilänaukio,inf_6
+Golfpolku,inf_6
+Hagalundinpuisto,inf_6
+Hakalehto,inf_6
+Hauenkallio,inf_6
+Hauenkalliontie,inf_6
+Haukilahdenaukio,inf_6
+Haukilahdenranta,inf_6
+Innopoli,inf_6
+Itäportti,inf_6
+Jämeräntaival,inf_6
+Kalevalantie,inf_6
+Keilalahti,inf_6
+Keilaniemi (M),inf_6
+Keilaranta,inf_6
+Koivu-Mankkaa,inf_6
+Komeetankatu,inf_6
+Kulttuuriaukio,inf_6
+Kuunkatu,inf_6
+Linnakepolku,inf_6
+Louhentori,inf_6
+Lukutori,inf_6
+Lystimäensilta,inf_6
+Lystimäki,inf_6
+Länsituuli,inf_6
+Maarinranta,inf_6
+Mankkaanaukio,inf_6
+Mankkaanlaaksontie,inf_6
+Matinkartanontie,inf_6
+Matinkyläntie,inf_6
+Matinlahdenranta,inf_6
+Mellstenintie,inf_6
+Metsänneidonpolku,inf_6
+Mäntyviita,inf_6
+Nelikkotie,inf_6
+Niittykumpu (M),inf_6
+Niittymaa,inf_6
+Nokkala,inf_6
+Nuottaniementie,inf_6
+Olarinluoma,inf_6
+Oravannahkatori,inf_6
+Orionintie,inf_6
+Otaranta,inf_6
+Otsolahti,inf_6
+Piispankallio,inf_6
+Piispanportti,inf_6
+Piispansilta,inf_6
+Pohjankulma,inf_6
+Revontulentie,inf_6
+Ruomelantie,inf_6
+Sateentie,inf_6
+Sepetlahdentie,inf_6
+Suomenlahdentie,inf_6
+Suurpellonaukio,inf_6
+Sähkömies,inf_6
+Tapiolan urheilupuisto,inf_6
+Tapionaukio,inf_6
+Tekniikantie,inf_6
+Tietäjä,inf_6
+Tiistiläntie,inf_6
+Tiistinkallio,inf_6
+Tontunmäentie,inf_6
+Toppelundinportti,inf_6
+Toppelundintie,inf_6
+Tuulimäki,inf_6
+Urheilupuisto (M),inf_6
+Westendinasema,inf_6
+Westendintie,inf_6
+Albertinkatu,inf_7
+Annankatu,inf_7
+Apollonkatu,inf_7
+Baana,inf_7
+Bermudankuja,inf_7
+Eerikinkatu,inf_7
+Erottajan aukio,inf_7
+Hernesaarenranta,inf_7
+Hietalahdentori,inf_7
+Hietaniemenkatu,inf_7
+Itämerentori,inf_7
+Jätkäsaarenlaituri,inf_7
+Kaapelitehdas,inf_7
+Kalevankatu,inf_7
+Kamppi (M),inf_7
+Kapteeninpuistikko,inf_7
+Kauppakorkeakoulu,inf_7
+Lastenlehto,inf_7
+Lauttasaarensilta,inf_7
+Leppäsuonaukio,inf_7
+Länsisatamankatu,inf_7
+Länsisatamankuja,inf_7
+Länsiterminaali,inf_7
+Mannerheimintie,inf_7
+Marian sairaala,inf_7
+Perämiehenkatu,inf_7
+Salmisaarenranta,inf_7
+Sammonpuistikko,inf_7
+Sepänkatu,inf_7
+Tyynenmerenkatu,inf_7
+Töölönlahdenkatu,inf_7
+Vanha kirkkopuisto,inf_7
+Viiskulma,inf_7
+Välimerenkatu,inf_7
+A.I. Virtasen aukio,inf_8
+Agronominkatu,inf_8
+Ala-Malmin tori,inf_8
+Alppikylä,inf_8
+Arabian kauppakeskus,inf_8
+Arabiankatu,inf_8
+Aulangontie,inf_8
+Etupellonpuisto,inf_8
+Halmetie,inf_8
+Haukilahdenkatu,inf_8
+Heikinlaakso,inf_8
+Helluntairaitti,inf_8
+Hernepellontie,inf_8
+Hollolantie,inf_8
+Huhtakuja,inf_8
+Intiankatu,inf_8
+Jakomäentie,inf_8
+Jakomäki,inf_8
+Jokipellontie,inf_8
+Juhana Herttuan tie,inf_8
+Kalasatama (M),inf_8
+Karhusuontie,inf_8
+Karviaistie,inf_8
+Katariina Saksilaisen katu,inf_8
+Kirkkoherrantie,inf_8
+Kivikon liikuntapuisto,inf_8
+Kivikonlaita,inf_8
+Koskelan varikko,inf_8
+Koskelantie,inf_8
+Kotinummentie,inf_8
+Kustaankartano,inf_8
+Kylävoudintie,inf_8
+Käpylän asema,inf_8
+Käpyläntie,inf_8
+Käskynhaltijantie,inf_8
+Laulurastaantie,inf_8
+Lepolantie,inf_8
+Maatullinkuja,inf_8
+Malmin asema,inf_8
+Malmin sairaala,inf_8
+Maunula,inf_8
+Mikkolantie,inf_8
+Muotoilijankatu,inf_8
+Mäkelänkatu,inf_8
+Mäkitorpantie,inf_8
+Otto Brandtin tie,inf_8
+Oulunkylän asema,inf_8
+Paavalinpuisto,inf_8
+Paloheinän kirjasto,inf_8
+Paloheinän maja,inf_8
+Paloheinäntie,inf_8
+Pihlajamäki,inf_8
+Piikintie,inf_8
+Pohjolanaukio,inf_8
+Pohjolankatu,inf_8
+Porvarintie,inf_8
+Postipuisto,inf_8
+Puistolan VPK,inf_8
+Puistolan asema,inf_8
+Puistolantori,inf_8
+Pukinmäen asema,inf_8
+Pukinmäen liikuntapuisto,inf_8
+Päijänteentie,inf_8
+Rapakiventie,inf_8
+Rautatieläisenkatu,inf_8
+Saniaiskuja,inf_8
+Sateenkaarentie,inf_8
+Savela,inf_8
+Siltamäki,inf_8
+Siltavoudintie,inf_8
+Sofianlehdonkatu,inf_8
+Syystie,inf_8
+Tapanilan asema,inf_8
+Teerisuontie,inf_8
+Teurastamo,inf_8
+Tilketori,inf_8
+Torpparinmäentie,inf_8
+Töyrynummentie,inf_8
+Töyrynummi,inf_8
+Vanha Tapanilantie,inf_8
+Velodrominrinne,inf_8
+Verkatehtaanpuisto,inf_8
+Verkkosaari,inf_8
+Vesakkotie,inf_8
+Viikin normaalikoulu,inf_8
+Viikin tiedepuisto,inf_8
+Von Daehnin katu,inf_8
+Väärämäentie,inf_8
+Ajomiehentie,inf_9
+Eteläinen Hesperiankatu,inf_9
+Haagan tori,inf_9
+Hakuninmaa,inf_9
+Hankasuontie,inf_9
+Honkasuo,inf_9
+Huopalahden asema,inf_9
+Huopalahdentie,inf_9
+Huovitie,inf_9
+Hämeenlinnanväylä,inf_9
+Ida Aalbergin tie,inf_9
+Jalavatie,inf_9
+Jännetie,inf_9
+Kalannintie,inf_9
+Kannelmäen asema,inf_9
+Kannelmäen liikuntapuisto,inf_9
+Kauppakeskus Kaari,inf_9
+Kaustisentie,inf_9
+Kesäkatu,inf_9
+Kiskontie,inf_9
+Korppaanmäentie,inf_9
+Kriikunakuja,inf_9
+Kuninkaantammi,inf_9
+Kuusisaari,inf_9
+Kuusitie,inf_9
+Laajalahden aukio,inf_9
+Lehtisaarentie,inf_9
+Malminkartanon asema,inf_9
+Malminkartanonhuippu,inf_9
+Marttila,inf_9
+Maununneva,inf_9
+Meilahden sairaala,inf_9
+Munkkiniemen aukio,inf_9
+Muusantori,inf_9
+Nordenskiöldinaukio,inf_9
+Näyttelijäntie,inf_9
+Paciuksenkaari,inf_9
+Paciuksenkatu,inf_9
+Pajamäki,inf_9
+Pajupillintie,inf_9
+Pirkkolan liikuntapuisto,inf_9
+Pitäjänmäen asema,inf_9
+Pohjois-Haagan asema,inf_9
+Rajasaarentie,inf_9
+Ruskeasuon varikko,inf_9
+Saunalahdentie,inf_9
+Seurasaari,inf_9
+Stenbäckinkatu,inf_9
+Takomotie,inf_9
+Teljäntie,inf_9
+Tenholantie,inf_9
+Thalianaukio,inf_9
+Tilkantori,inf_9
+Tilkanvierto,inf_9
+Tollinpolku,inf_9
+Torpanranta,inf_9
+Trumpettikuja,inf_9
+Tunnelitie,inf_9
+Tuohipolku,inf_9
+Töölöntulli,inf_9
+Ulvilantie,inf_9
+Valimon asema,inf_9
+Valimotie,inf_9
+Vanha Viertotie,inf_9
+Vihdintie,inf_9
+Viljelijäntie,inf_9
+Vähäntuvantie,inf_9

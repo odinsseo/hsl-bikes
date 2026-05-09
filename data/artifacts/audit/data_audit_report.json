@@ -1,0 +1,239 @@
+{
+  "generated_at_utc": "2026-04-25T10:29:08.574013+00:00",
+  "inputs": {
+    "merged": "data/prepared/merged/trips_merged.csv",
+    "train": "data/prepared/splits/train/train.csv",
+    "validation": "data/prepared/splits/validation/validation.csv",
+    "test": "data/prepared/splits/test/test.csv",
+    "timestamp_col": "departure",
+    "train_end": "2022-01-01",
+    "validation_end": "2023-01-01"
+  },
+  "datasets": {
+    "merged": {
+      "rows": 21699966,
+      "columns": 16,
+      "column_names": [
+        "departure",
+        "return",
+        "departure_id",
+        "departure_name",
+        "return_id",
+        "return_name",
+        "distance_m",
+        "duration_sec",
+        "_year",
+        "_month",
+        "speed_kmh",
+        "duration_min",
+        "departure_latitude",
+        "departure_longitude",
+        "return_latitude",
+        "return_longitude"
+      ],
+      "null_rate_percent": {
+        "departure": 0.0,
+        "return": 0.0,
+        "departure_id": 0.0,
+        "departure_name": 0.0,
+        "return_id": 0.0,
+        "return_name": 0.0,
+        "distance_m": 0.0,
+        "duration_sec": 0.0,
+        "_year": 0.0,
+        "_month": 0.0,
+        "speed_kmh": 0.0,
+        "duration_min": 0.0,
+        "departure_latitude": 0.0,
+        "departure_longitude": 0.0,
+        "return_latitude": 0.0,
+        "return_longitude": 0.0
+      },
+      "duplicate_rows": 169,
+      "timestamp_column": "departure",
+      "timestamp_missing": 0,
+      "timestamp_min": "2016-05-02T09:31:00",
+      "timestamp_max": "2024-10-31T23:59:57",
+      "timestamp_is_monotonic_increasing": true
+    },
+    "train": {
+      "rows": 14445965,
+      "columns": 16,
+      "column_names": [
+        "departure",
+        "return",
+        "departure_id",
+        "departure_name",
+        "return_id",
+        "return_name",
+        "distance_m",
+        "duration_sec",
+        "_year",
+        "_month",
+        "speed_kmh",
+        "duration_min",
+        "departure_latitude",
+        "departure_longitude",
+        "return_latitude",
+        "return_longitude"
+      ],
+      "null_rate_percent": {
+        "departure": 0.0,
+        "return": 0.0,
+        "departure_id": 0.0,
+        "departure_name": 0.0,
+        "return_id": 0.0,
+        "return_name": 0.0,
+        "distance_m": 0.0,
+        "duration_sec": 0.0,
+        "_year": 0.0,
+        "_month": 0.0,
+        "speed_kmh": 0.0,
+        "duration_min": 0.0,
+        "departure_latitude": 0.0,
+        "departure_longitude": 0.0,
+        "return_latitude": 0.0,
+        "return_longitude": 0.0
+      },
+      "duplicate_rows": 165,
+      "timestamp_column": "departure",
+      "timestamp_missing": 0,
+      "timestamp_min": "2016-05-02T09:31:00",
+      "timestamp_max": "2021-09-30T23:58:41",
+      "timestamp_is_monotonic_increasing": true
+    },
+    "validation": {
+      "rows": 2374822,
+      "columns": 16,
+      "column_names": [
+        "departure",
+        "return",
+        "departure_id",
+        "departure_name",
+        "return_id",
+        "return_name",
+        "distance_m",
+        "duration_sec",
+        "_year",
+        "_month",
+        "speed_kmh",
+        "duration_min",
+        "departure_latitude",
+        "departure_longitude",
+        "return_latitude",
+        "return_longitude"
+      ],
+      "null_rate_percent": {
+        "departure": 0.0,
+        "return": 0.0,
+        "departure_id": 0.0,
+        "departure_name": 0.0,
+        "return_id": 0.0,
+        "return_name": 0.0,
+        "distance_m": 0.0,
+        "duration_sec": 0.0,
+        "_year": 0.0,
+        "_month": 0.0,
+        "speed_kmh": 0.0,
+        "duration_min": 0.0,
+        "departure_latitude": 0.0,
+        "departure_longitude": 0.0,
+        "return_latitude": 0.0,
+        "return_longitude": 0.0
+      },
+      "duplicate_rows": 1,
+      "timestamp_column": "departure",
+      "timestamp_missing": 0,
+      "timestamp_min": "2022-04-01T00:08:53",
+      "timestamp_max": "2022-10-31T23:58:11",
+      "timestamp_is_monotonic_increasing": true
+    },
+    "test": {
+      "rows": 4879179,
+      "columns": 16,
+      "column_names": [
+        "departure",
+        "return",
+        "departure_id",
+        "departure_name",
+        "return_id",
+        "return_name",
+        "distance_m",
+        "duration_sec",
+        "_year",
+        "_month",
+        "speed_kmh",
+        "duration_min",
+        "departure_latitude",
+        "departure_longitude",
+        "return_latitude",
+        "return_longitude"
+      ],
+      "null_rate_percent": {
+        "departure": 0.0,
+        "return": 0.0,
+        "departure_id": 0.0,
+        "departure_name": 0.0,
+        "return_id": 0.0,
+        "return_name": 0.0,
+        "distance_m": 0.0,
+        "duration_sec": 0.0,
+        "_year": 0.0,
+        "_month": 0.0,
+        "speed_kmh": 0.0,
+        "duration_min": 0.0,
+        "departure_latitude": 0.0,
+        "departure_longitude": 0.0,
+        "return_latitude": 0.0,
+        "return_longitude": 0.0
+      },
+      "duplicate_rows": 3,
+      "timestamp_column": "departure",
+      "timestamp_missing": 0,
+      "timestamp_min": "2023-04-01T05:52:34",
+      "timestamp_max": "2024-10-31T23:59:57",
+      "timestamp_is_monotonic_increasing": true
+    }
+  },
+  "checks": {
+    "split_boundaries": {
+      "train_before_train_end": true,
+      "validation_in_range": true,
+      "test_after_validation_end": true,
+      "all_passed": true
+    },
+    "temporal_overlap": {
+      "train_max": "2021-09-30T23:58:41",
+      "validation_min": "2022-04-01T00:08:53",
+      "validation_max": "2022-10-31T23:58:11",
+      "test_min": "2023-04-01T05:52:34",
+      "train_validation_non_overlap": true,
+      "validation_test_non_overlap": true,
+      "all_passed": true
+    }
+  },
+  "warnings": [
+    {
+      "type": "duplicate_rows",
+      "split": "merged",
+      "count": 169
+    },
+    {
+      "type": "duplicate_rows",
+      "split": "train",
+      "count": 165
+    },
+    {
+      "type": "duplicate_rows",
+      "split": "validation",
+      "count": 1
+    },
+    {
+      "type": "duplicate_rows",
+      "split": "test",
+      "count": 3
+    }
+  ],
+  "errors": [],
+  "status": "pass"
+}
