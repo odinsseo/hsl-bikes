@@ -1,0 +1,49 @@
+{
+  "generated_at_utc": "2026-04-19T11:27:41.211791+00:00",
+  "check_only": false,
+  "timeout_seconds": 1800,
+  "output_dir": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\notebooks\\executed",
+  "notebooks": [
+    {
+      "notebook": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\notebooks\\rq1_functional_vs_geometric.ipynb",
+      "executed_output": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\notebooks\\executed\\executed_rq1_functional_vs_geometric.ipynb",
+      "status": "passed",
+      "started_at_utc": "2026-04-19T11:27:18.189238+00:00",
+      "finished_at_utc": "2026-04-19T11:27:27.435443+00:00",
+      "return_code": 0,
+      "stdout_tail": "Executed with nbclient: C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\notebooks\\rq1_functional_vs_geometric.ipynb",
+      "stderr_tail": ""
+    },
+    {
+      "notebook": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\notebooks\\rq2_fusion_heterogeneity.ipynb",
+      "executed_output": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\notebooks\\executed\\executed_rq2_fusion_heterogeneity.ipynb",
+      "status": "passed",
+      "started_at_utc": "2026-04-19T11:27:27.435487+00:00",
+      "finished_at_utc": "2026-04-19T11:27:32.010852+00:00",
+      "return_code": 0,
+      "stdout_tail": "Executed with nbclient: C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\notebooks\\rq2_fusion_heterogeneity.ipynb",
+      "stderr_tail": ""
+    },
+    {
+      "notebook": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\notebooks\\rq3_cluster_robustness.ipynb",
+      "executed_output": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\notebooks\\executed\\executed_rq3_cluster_robustness.ipynb",
+      "status": "passed",
+      "started_at_utc": "2026-04-19T11:27:32.010895+00:00",
+      "finished_at_utc": "2026-04-19T11:27:36.685634+00:00",
+      "return_code": 0,
+      "stdout_tail": "Executed with nbclient: C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\notebooks\\rq3_cluster_robustness.ipynb",
+      "stderr_tail": ""
+    },
+    {
+      "notebook": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\notebooks\\rq_synthesis.ipynb",
+      "executed_output": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\notebooks\\executed\\executed_rq_synthesis.ipynb",
+      "status": "passed",
+      "started_at_utc": "2026-04-19T11:27:36.685677+00:00",
+      "finished_at_utc": "2026-04-19T11:27:41.211739+00:00",
+      "return_code": 0,
+      "stdout_tail": "Executed with nbclient: C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\notebooks\\rq_synthesis.ipynb",
+      "stderr_tail": ""
+    }
+  ],
+  "overall_status": "passed"
+}

@@ -43,9 +43,7 @@ htmlcov/
 data/primary/*
 data/prepared/*
 data/graphs/*
-data/artifacts/*
-!data/artifacts/experiments/
-!data/artifacts/graphs/
+!data/artifacts/*
 
 
 # Generated outputs

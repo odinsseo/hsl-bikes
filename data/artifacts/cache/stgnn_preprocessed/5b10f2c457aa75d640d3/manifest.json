@@ -1,0 +1,173 @@
+{
+  "cache_schema_version": "stgnn-preprocessed-v1",
+  "created_at_utc": "2026-04-29T18:06:38.675859+00:00",
+  "key_payload": {
+    "cache_schema_version": "stgnn-preprocessed-v1",
+    "aggregation": "community",
+    "splits": {
+      "train": {
+        "path": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\prepared\\splits\\train\\train.csv",
+        "size": 2994195927,
+        "mtime_ns": 1777111018027822100
+      },
+      "validation": {
+        "path": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\prepared\\splits\\validation\\validation.csv",
+        "size": 493460270,
+        "mtime_ns": 1777111018770966100
+      },
+      "test": {
+        "path": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\prepared\\splits\\test\\test.csv",
+        "size": 1014357163,
+        "mtime_ns": 1777111036156787700
+      }
+    },
+    "graph_dir": {
+      "path": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\graphs\\train\\station_index.txt",
+      "size": 6938,
+      "mtime_ns": 1777113995846766900
+    },
+    "communities": {
+      "path": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\network\\notebook\\communities.csv",
+      "size": 7862,
+      "mtime_ns": 1777114761728168500
+    },
+    "settings": {
+      "history": 8,
+      "horizon": 1,
+      "max_train_windows": 0,
+      "random_state": 42,
+      "preprocess_target": true,
+      "winsor_lower_quantile": 0.005,
+      "winsor_upper_quantile": 0.995,
+      "preprocess_scaler": "robust",
+      "residualize_target": true,
+      "residual_lag_candidates": "8,56",
+      "holiday_country": "FI",
+      "holiday_subdivision": "18",
+      "holiday_national_only": false,
+      "include_calendar_covariates": true,
+      "include_activity_mask": true,
+      "include_zero_run_indicator": false,
+      "zero_run_length": 2,
+      "include_static_features": true
+    }
+  },
+  "sample_indices_present": false,
+  "train_time_bounds": [
+    "2016-05-02T09:00:00",
+    "2021-09-30T21:00:00"
+  ],
+  "dynamic_feature_names": [
+    "hour_sin",
+    "hour_cos",
+    "dow_sin",
+    "dow_cos",
+    "is_weekend",
+    "is_holiday",
+    "recent_activity_mask"
+  ],
+  "sparse_feature_names": [
+    "recent_activity_mask"
+  ],
+  "static_feature_names": [
+    "train_mean",
+    "train_variance",
+    "train_zero_rate"
+  ],
+  "preprocessing_metadata": {
+    "preprocessing_version": "v1",
+    "fitted_split": "train",
+    "train_time_bounds": {
+      "start": "2016-05-02T09:00:00",
+      "end": "2021-09-30T21:00:00"
+    },
+    "quantile_bounds": {
+      "lower": 0.005,
+      "upper": 0.995
+    },
+    "scaler_type": "robust",
+    "residual_lag_policy": [
+      8,
+      56
+    ],
+    "selected_residual_lag": 56,
+    "calendar_source": {
+      "library": "holidays",
+      "country": "FI",
+      "subdivision": "18"
+    },
+    "dynamic_feature_definitions": [
+      "hour_sin",
+      "hour_cos",
+      "dow_sin",
+      "dow_cos",
+      "is_weekend",
+      "is_holiday",
+      "recent_activity_mask"
+    ],
+    "static_feature_definitions": [
+      "train_mean",
+      "train_variance",
+      "train_zero_rate"
+    ],
+    "sparse_feature_definitions": [
+      "recent_activity_mask"
+    ],
+    "train_only_fit": true
+  },
+  "preprocessing_state": {
+    "version": "v1",
+    "lower_bounds": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "upper_bounds": [
+      798.7999999999993,
+      628.8999999999996,
+      2013.8999999999996,
+      2875.2999999999975,
+      438.0
+    ],
+    "center": [
+      1.0986122886681098,
+      0.0,
+      4.07753744390572,
+      4.30406509320417,
+      0.0
+    ],
+    "scale": [
+      5.0369526024136295,
+      4.61512051684126,
+      6.2166061010848646,
+      6.455198563340122,
+      2.9444389791664403
+    ],
+    "selected_residual_lag": 56,
+    "config": {
+      "winsor_lower_quantile": 0.005,
+      "winsor_upper_quantile": 0.995,
+      "enable_log1p": true,
+      "scaler": "robust",
+      "enable_residualization": true,
+      "residual_lag_candidates": [
+        8,
+        56
+      ],
+      "holiday_country": "FI",
+      "holiday_subdivision": "18"
+    }
+  },
+  "residual_lag_scores": [
+    {
+      "lag": 8,
+      "score": 0.07974084027914645
+    },
+    {
+      "lag": 56,
+      "score": 0.07252685691293029
+    }
+  ]
+}
