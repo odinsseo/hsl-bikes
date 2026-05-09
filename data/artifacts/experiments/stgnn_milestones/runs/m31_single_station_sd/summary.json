@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-04-29T18:01:34.508716+00:00",
+  "generated_at_utc": "2026-05-09T10:54:25.160524+00:00",
   "aggregation": "station",
   "graph": "SD",
   "graph_set": [
@@ -107,7 +107,7 @@
   },
   "preprocessing_cache": {
     "enabled": true,
-    "hit": false,
+    "hit": true,
     "key": "cabbf6c0d344e4dd06b2",
     "path": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\cache\\stgnn_preprocessed\\cabbf6c0d344e4dd06b2"
   },
@@ -117,9 +117,9 @@
     "metadata": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\experiments\\stgnn_milestones\\runs\\m31_single_station_sd\\metadata.json"
   },
   "run_metadata": {
-    "generated_at_utc": "2026-04-29T18:01:34.508799+00:00",
-    "git_commit": "23b87e9742354e0f5475ce15e957d6661bd0cdcb",
-    "command": "scripts/run_stgnn_milestones.py --include-community --include-leakage-sensitivity --build-leaky-graphs --epoch-progress",
+    "generated_at_utc": "2026-05-09T10:54:25.160598+00:00",
+    "git_commit": "46d3afebc79e255cab469232f3bcef27b49526bc",
+    "command": "scripts/run_stgnn_milestones.py --include-community --epoch-progress --communities .\\data\\artifacts\\network\\notebook\\inference_communities.csv --progress --build-leaky-graphs",
     "script": "scripts/train_stgnn_pipeline.py",
     "stage": "phase3_stgnn",
     "python_version": "3.14.0",
@@ -129,7 +129,7 @@
       "validation": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\prepared\\splits\\validation\\validation.csv",
       "test": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\prepared\\splits\\test\\test.csv",
       "graph_dir": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\graphs\\train",
-      "communities": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\network\\notebook\\communities.csv",
+      "communities": "data\\artifacts\\network\\notebook\\inference_communities.csv",
       "output_dir": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\experiments\\stgnn_milestones\\runs\\m31_single_station_sd",
       "aggregation": "station",
       "graph": "DE",
@@ -186,7 +186,7 @@
     "allow_leaky_graph_source": false,
     "preprocessing_cache": {
       "enabled": true,
-      "hit": false,
+      "hit": true,
       "key": "cabbf6c0d344e4dd06b2",
       "path": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\cache\\stgnn_preprocessed\\cabbf6c0d344e4dd06b2"
     },

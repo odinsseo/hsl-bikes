@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-04-29T18:09:15.436615+00:00",
+  "generated_at_utc": "2026-05-09T11:01:12.006394+00:00",
   "aggregation": "community",
   "graph": "SD+DE+DC+ATD",
   "graph_set": [
@@ -54,37 +54,37 @@
   "lr_plateau_start_epoch": 5,
   "min_learning_rate": 1e-05,
   "epochs_requested": 40,
-  "epochs_ran": 20,
-  "best_epoch": 10,
-  "best_validation_wmape": 0.2160624776870117,
-  "best_validation_huber": 0.0057581840249310645,
+  "epochs_ran": 24,
+  "best_epoch": 14,
+  "best_validation_wmape": 0.2484004520913594,
+  "best_validation_huber": 0.031190751320017234,
   "train_windows": 15813,
   "validation_windows": 1704,
   "test_windows": 4631,
   "fusion_weights": {
-    "SD": 0.23544609546661377,
-    "DE": 0.20953775942325592,
-    "DC": 0.3327881991863251,
-    "ATD": 0.22222794592380524
+    "SD": 0.22740349173545837,
+    "DE": 0.18542581796646118,
+    "DC": 0.36796700954437256,
+    "ATD": 0.21920368075370789
   },
   "metrics": {
     "validation": {
-      "wmape": 0.2160624776870117,
-      "mae": 60.16688265827812,
-      "rmse": 126.72277166010639,
-      "mase": 0.5917862211346695
+      "wmape": 0.2484004520913594,
+      "mae": 34.58601653845258,
+      "rmse": 71.67610728387726,
+      "mase": 0.6729967279949756
     },
     "test": {
-      "wmape": 0.23420278937543806,
-      "mae": 49.31814119027191,
-      "rmse": 151.4336686688623,
-      "mase": 0.4850807473962015
+      "wmape": 0.26691262807428495,
+      "mae": 28.103069805313446,
+      "rmse": 78.80794266387112,
+      "mase": 0.5468474232805228
     },
     "validation_model_space": {
-      "wmape": 0.9239598512649536,
-      "mae": 0.06663691997528076,
-      "rmse": 0.10788243263959885,
-      "mase": 1.6966084497952774
+      "wmape": 1.0892705917358398,
+      "mae": 0.13142015039920807,
+      "rmse": 0.2633339464664459,
+      "mase": 2.688560571489582
     }
   },
   "covariates": {
@@ -114,8 +114,8 @@
   "preprocessing_cache": {
     "enabled": true,
     "hit": true,
-    "key": "5b10f2c457aa75d640d3",
-    "path": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\cache\\stgnn_preprocessed\\5b10f2c457aa75d640d3"
+    "key": "9214bc0277538cd35490",
+    "path": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\cache\\stgnn_preprocessed\\9214bc0277538cd35490"
   },
   "paths": {
     "training_curve": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\experiments\\stgnn_milestones\\runs\\m32_fusion_learned_community\\training_curve.csv",
@@ -123,9 +123,9 @@
     "metadata": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\experiments\\stgnn_milestones\\runs\\m32_fusion_learned_community\\metadata.json"
   },
   "run_metadata": {
-    "generated_at_utc": "2026-04-29T18:09:15.436695+00:00",
-    "git_commit": "23b87e9742354e0f5475ce15e957d6661bd0cdcb",
-    "command": "scripts/run_stgnn_milestones.py --include-community --include-leakage-sensitivity --build-leaky-graphs --epoch-progress",
+    "generated_at_utc": "2026-05-09T11:01:12.006477+00:00",
+    "git_commit": "46d3afebc79e255cab469232f3bcef27b49526bc",
+    "command": "scripts/run_stgnn_milestones.py --include-community --epoch-progress --communities .\\data\\artifacts\\network\\notebook\\inference_communities.csv --progress --build-leaky-graphs",
     "script": "scripts/train_stgnn_pipeline.py",
     "stage": "phase3_stgnn",
     "python_version": "3.14.0",
@@ -135,7 +135,7 @@
       "validation": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\prepared\\splits\\validation\\validation.csv",
       "test": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\prepared\\splits\\test\\test.csv",
       "graph_dir": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\graphs\\train",
-      "communities": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\network\\notebook\\communities.csv",
+      "communities": "data\\artifacts\\network\\notebook\\inference_communities.csv",
       "output_dir": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\experiments\\stgnn_milestones\\runs\\m32_fusion_learned_community",
       "aggregation": "community",
       "graph": "DE",
@@ -193,8 +193,8 @@
     "preprocessing_cache": {
       "enabled": true,
       "hit": true,
-      "key": "5b10f2c457aa75d640d3",
-      "path": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\cache\\stgnn_preprocessed\\5b10f2c457aa75d640d3"
+      "key": "9214bc0277538cd35490",
+      "path": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\cache\\stgnn_preprocessed\\9214bc0277538cd35490"
     },
     "preprocessing": {
       "preprocessing_version": "v1",
@@ -240,11 +240,11 @@
     "residual_lag_scores": [
       {
         "lag": 8,
-        "score": 0.07974084027914645
+        "score": 0.12969128809170533
       },
       {
         "lag": 56,
-        "score": 0.07252685691293029
+        "score": 0.12104184289291757
       }
     ],
     "covariates": {
@@ -315,11 +315,11 @@
     "residual_lag_scores": [
       {
         "lag": 8,
-        "score": 0.07974084027914645
+        "score": 0.12969128809170533
       },
       {
         "lag": 56,
-        "score": 0.07252685691293029
+        "score": 0.12104184289291757
       }
     ]
   }

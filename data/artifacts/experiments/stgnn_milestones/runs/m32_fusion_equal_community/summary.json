@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-04-29T18:08:49.103235+00:00",
+  "generated_at_utc": "2026-05-09T11:00:47.444778+00:00",
   "aggregation": "community",
   "graph": "SD+DE+DC+ATD",
   "graph_set": [
@@ -54,10 +54,10 @@
   "lr_plateau_start_epoch": 5,
   "min_learning_rate": 1e-05,
   "epochs_requested": 40,
-  "epochs_ran": 20,
-  "best_epoch": 10,
-  "best_validation_wmape": 0.21607742872402433,
-  "best_validation_huber": 0.005758052276048277,
+  "epochs_ran": 24,
+  "best_epoch": 14,
+  "best_validation_wmape": 0.2484047936857464,
+  "best_validation_huber": 0.031190923415124416,
   "train_windows": 15813,
   "validation_windows": 1704,
   "test_windows": 4631,
@@ -69,22 +69,22 @@
   },
   "metrics": {
     "validation": {
-      "wmape": 0.21607742872402433,
-      "mae": 60.17104607109828,
-      "rmse": 126.75505770599639,
-      "mase": 0.5918271714088238
+      "wmape": 0.2484047936857464,
+      "mae": 34.58662103999035,
+      "rmse": 71.69315711671152,
+      "mase": 0.6730084907707359
     },
     "test": {
-      "wmape": 0.23421795843205895,
-      "mae": 49.32133547193758,
-      "rmse": 151.4897649520886,
-      "mase": 0.4851121655417435
+      "wmape": 0.26692336874996025,
+      "mae": 28.10420068458446,
+      "rmse": 78.83668587572369,
+      "mase": 0.5468694286493199
     },
     "validation_model_space": {
-      "wmape": 0.9239367842674255,
-      "mae": 0.06663525849580765,
-      "rmse": 0.10788113623857498,
-      "mase": 1.6965661477183762
+      "wmape": 1.089255690574646,
+      "mae": 0.1314183473587036,
+      "rmse": 0.2633349895477295,
+      "mase": 2.688523685337844
     }
   },
   "covariates": {
@@ -114,8 +114,8 @@
   "preprocessing_cache": {
     "enabled": true,
     "hit": true,
-    "key": "5b10f2c457aa75d640d3",
-    "path": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\cache\\stgnn_preprocessed\\5b10f2c457aa75d640d3"
+    "key": "9214bc0277538cd35490",
+    "path": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\cache\\stgnn_preprocessed\\9214bc0277538cd35490"
   },
   "paths": {
     "training_curve": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\experiments\\stgnn_milestones\\runs\\m32_fusion_equal_community\\training_curve.csv",
@@ -123,9 +123,9 @@
     "metadata": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\experiments\\stgnn_milestones\\runs\\m32_fusion_equal_community\\metadata.json"
   },
   "run_metadata": {
-    "generated_at_utc": "2026-04-29T18:08:49.103344+00:00",
-    "git_commit": "23b87e9742354e0f5475ce15e957d6661bd0cdcb",
-    "command": "scripts/run_stgnn_milestones.py --include-community --include-leakage-sensitivity --build-leaky-graphs --epoch-progress",
+    "generated_at_utc": "2026-05-09T11:00:47.444871+00:00",
+    "git_commit": "46d3afebc79e255cab469232f3bcef27b49526bc",
+    "command": "scripts/run_stgnn_milestones.py --include-community --epoch-progress --communities .\\data\\artifacts\\network\\notebook\\inference_communities.csv --progress --build-leaky-graphs",
     "script": "scripts/train_stgnn_pipeline.py",
     "stage": "phase3_stgnn",
     "python_version": "3.14.0",
@@ -135,7 +135,7 @@
       "validation": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\prepared\\splits\\validation\\validation.csv",
       "test": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\prepared\\splits\\test\\test.csv",
       "graph_dir": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\graphs\\train",
-      "communities": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\network\\notebook\\communities.csv",
+      "communities": "data\\artifacts\\network\\notebook\\inference_communities.csv",
       "output_dir": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\experiments\\stgnn_milestones\\runs\\m32_fusion_equal_community",
       "aggregation": "community",
       "graph": "DE",
@@ -193,8 +193,8 @@
     "preprocessing_cache": {
       "enabled": true,
       "hit": true,
-      "key": "5b10f2c457aa75d640d3",
-      "path": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\cache\\stgnn_preprocessed\\5b10f2c457aa75d640d3"
+      "key": "9214bc0277538cd35490",
+      "path": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\cache\\stgnn_preprocessed\\9214bc0277538cd35490"
     },
     "preprocessing": {
       "preprocessing_version": "v1",
@@ -240,11 +240,11 @@
     "residual_lag_scores": [
       {
         "lag": 8,
-        "score": 0.07974084027914645
+        "score": 0.12969128809170533
       },
       {
         "lag": 56,
-        "score": 0.07252685691293029
+        "score": 0.12104184289291757
       }
     ],
     "covariates": {
@@ -315,11 +315,11 @@
     "residual_lag_scores": [
       {
         "lag": 8,
-        "score": 0.07974084027914645
+        "score": 0.12969128809170533
       },
       {
         "lag": 56,
-        "score": 0.07252685691293029
+        "score": 0.12104184289291757
       }
     ]
   }

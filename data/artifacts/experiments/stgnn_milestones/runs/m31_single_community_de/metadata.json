@@ -1,7 +1,7 @@
 {
-  "generated_at_utc": "2026-04-29T18:07:41.311765+00:00",
-  "git_commit": "23b87e9742354e0f5475ce15e957d6661bd0cdcb",
-  "command": "scripts/run_stgnn_milestones.py --include-community --include-leakage-sensitivity --build-leaky-graphs --epoch-progress",
+  "generated_at_utc": "2026-05-09T10:59:38.805999+00:00",
+  "git_commit": "46d3afebc79e255cab469232f3bcef27b49526bc",
+  "command": "scripts/run_stgnn_milestones.py --include-community --epoch-progress --communities .\\data\\artifacts\\network\\notebook\\inference_communities.csv --progress --build-leaky-graphs",
   "script": "scripts/train_stgnn_pipeline.py",
   "stage": "phase3_stgnn",
   "python_version": "3.14.0",
@@ -11,7 +11,7 @@
     "validation": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\prepared\\splits\\validation\\validation.csv",
     "test": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\prepared\\splits\\test\\test.csv",
     "graph_dir": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\graphs\\train",
-    "communities": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\network\\notebook\\communities.csv",
+    "communities": "data\\artifacts\\network\\notebook\\inference_communities.csv",
     "output_dir": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\experiments\\stgnn_milestones\\runs\\m31_single_community_de",
     "aggregation": "community",
     "graph": "DE",
@@ -69,8 +69,8 @@
   "preprocessing_cache": {
     "enabled": true,
     "hit": true,
-    "key": "5b10f2c457aa75d640d3",
-    "path": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\cache\\stgnn_preprocessed\\5b10f2c457aa75d640d3"
+    "key": "9214bc0277538cd35490",
+    "path": "C:\\Users\\stefa\\OneDrive\\Documents\\uni\\master's\\EIT\\Aalto\\multidisciplinary_research\\data\\artifacts\\cache\\stgnn_preprocessed\\9214bc0277538cd35490"
   },
   "preprocessing": {
     "preprocessing_version": "v1",
@@ -116,11 +116,11 @@
   "residual_lag_scores": [
     {
       "lag": 8,
-      "score": 0.07974084027914645
+      "score": 0.12969128809170533
     },
     {
       "lag": 56,
-      "score": 0.07252685691293029
+      "score": 0.12104184289291757
     }
   ],
   "covariates": {
